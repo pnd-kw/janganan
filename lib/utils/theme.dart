@@ -21,6 +21,7 @@ final theme = ThemeData().copyWith(
         fontSize: 12,
       ),
       bodySmall: GoogleFonts.mPlus1p(
+        fontWeight: FontWeight.bold,
         fontSize: 10,
       )),
 );

@@ -8,9 +8,12 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // BackgroundBody in Widget Directory
       body: BackgroundBody(
+        // AppBarScroll in Widget Directory
         widget: AppBarScroll(
           title: 'Hello!',
+          //Cart Button
           actions: TextButton.icon(
             onPressed: () {},
             icon: Image.asset('assets/images/ic-cart.png'),
@@ -29,34 +32,6 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ),
-        // body: Container(
-        //   decoration: const BoxDecoration(
-        //     image: DecorationImage(
-        //       image: AssetImage('assets/images/bg-img.png'),
-        //       fit: BoxFit.cover,
-        //     ),
-        //   ),
-        //   child: AppBarScroll(
-        //     title: 'Hello!',
-        //     actions: TextButton.icon(
-        //       onPressed: () {},
-        //       icon: Image.asset('assets/images/ic-cart.png'),
-        //       label: Text(
-        //         'Cart',
-        //         style: Theme.of(context).textTheme.titleSmall!.copyWith(
-        //               color: Theme.of(context).colorScheme.onBackground,
-        //             ),
-        //       ),
-        //       style: ButtonStyle(
-        //         elevation: const MaterialStatePropertyAll(3),
-        //         backgroundColor: const MaterialStatePropertyAll(Colors.white),
-        //         shadowColor: MaterialStatePropertyAll(
-        //           Colors.black.withOpacity(0.8),
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
       ),
     );
   }

@@ -4,7 +4,7 @@ import 'package:janganan/screens/home_screen.dart';
 import 'package:janganan/utils/theme.dart';
 
 void main() {
-  debugRepaintRainbowEnabled = true;
+  debugRepaintRainbowEnabled = false;
   runApp(const Janganan());
 }
 
