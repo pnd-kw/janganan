@@ -8,20 +8,31 @@ final theme = ThemeData().copyWith(
   useMaterial3: true,
   colorScheme: colorScheme,
   textTheme: GoogleFonts.mPlus1pTextTheme().copyWith(
-      titleLarge: GoogleFonts.mPlus1p(
-        fontWeight: FontWeight.bold,
-        fontSize: 24,
+    titleLarge: GoogleFonts.mPlus1p(
+      fontWeight: FontWeight.bold,
+      fontSize: 24,
+    ),
+    titleMedium: GoogleFonts.mPlus1p(
+      fontWeight: FontWeight.bold,
+      fontSize: 14,
+    ),
+    titleSmall: GoogleFonts.mPlus1p(
+      fontWeight: FontWeight.bold,
+      fontSize: 12,
+    ),
+    bodySmall: GoogleFonts.mPlus1p(
+      fontWeight: FontWeight.bold,
+      fontSize: 10,
+    ),
+  ),
+  iconButtonTheme: IconButtonThemeData(
+    style: IconButton.styleFrom(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
       ),
-      titleMedium: GoogleFonts.mPlus1p(
-        fontWeight: FontWeight.bold,
-        fontSize: 14,
-      ),
-      titleSmall: GoogleFonts.mPlus1p(
-        fontWeight: FontWeight.bold,
-        fontSize: 12,
-      ),
-      bodySmall: GoogleFonts.mPlus1p(
-        fontWeight: FontWeight.bold,
-        fontSize: 10,
-      )),
+      backgroundColor: Colors.white,
+      elevation: 2,
+      shadowColor: Colors.grey,
+    ),
+  ),
 );
