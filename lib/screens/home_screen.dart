@@ -33,6 +33,24 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Beranda',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.note),
+            label: 'Pesanan',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profil',
+          ),
+        ],
+        selectedLabelStyle: Theme.of(context).textTheme.titleSmall,
+        unselectedLabelStyle: Theme.of(context).textTheme.titleSmall,
+      ),
     );
   }
 }

@@ -25,7 +25,7 @@ class CampaignBanner extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           child: Card(
             surfaceTintColor: Colors.transparent,
-            elevation: 10,
+            elevation: 5,
             child: Padding(
               padding: const EdgeInsets.all(10),
               child: Column(
