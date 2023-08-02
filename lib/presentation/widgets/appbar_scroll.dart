@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:janganan/utils/colors.dart';
-// import 'package:janganan/widgets/campaign_banner.dart';
-// import 'package:janganan/widgets/campaign_slider.dart';
-// import 'package:janganan/widgets/category_item.dart';
-// import 'package:janganan/widgets/div_title.dart';
+import 'package:janganan/utils/constants/colors.dart';
 
 class AppBarScroll extends StatelessWidget {
   const AppBarScroll({
@@ -31,7 +27,7 @@ class AppBarScroll extends StatelessWidget {
               title,
               style: Theme.of(context)
                   .textTheme
-                  .titleLarge!
+                  .titleMedium!
                   .copyWith(color: Theme.of(context).colorScheme.background),
             ),
           ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:janganan/widgets/appbar_scroll.dart';
-import 'package:janganan/widgets/home_screen_widgets/campaign_banner.dart';
-import 'package:janganan/widgets/home_screen_widgets/campaign_slider.dart';
-import 'package:janganan/widgets/home_screen_widgets/category_item.dart';
-import 'package:janganan/widgets/home_screen_widgets/div_title.dart';
+import 'package:janganan/presentation/widgets/appbar_scroll.dart';
+import 'package:janganan/presentation/widgets/home_screen_widgets/campaign_banner.dart';
+import 'package:janganan/presentation/widgets/home_screen_widgets/campaign_slider.dart';
+import 'package:janganan/presentation/widgets/home_screen_widgets/category_item.dart';
+import 'package:janganan/presentation/widgets/home_screen_widgets/div_title.dart';
 
 class HomeAppBarBody extends StatelessWidget {
   const HomeAppBarBody({super.key});
@@ -32,7 +32,7 @@ class HomeAppBarBody extends StatelessWidget {
       ),
       sliverChildListDelegate: SliverChildListDelegate(
         [
-          // CampaignBanner in Widget Directory
+          // CampaignBanner in home screen widgets directory
           CampaignBanner(
             title: 'Ayo makan sayuran dan rasakan manfaat kesehatannya',
             subtitle: '“ Badan Kesehatan Dunia (WHO) secara umum menganjurkan'
@@ -47,30 +47,33 @@ class HomeAppBarBody extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                // CategoryItem in Widget Directory
+                // CategoryItem in home screen widgets directory
                 CategoryItem(
-                  catImage: Image.asset(
-                    'assets/images/ic-vegetables.png',
-                  ),
-                  catTitle: 'Vegetables',
-                ),
+                    catImage: Image.asset(
+                      'assets/images/ic-vegetables.png',
+                    ),
+                    catTitle: 'Vegetables',
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed('/vegetables-screen')),
                 CategoryItem(
                   catImage: Image.asset(
                     'assets/images/ic-fruits.png',
                   ),
                   catTitle: 'Fruits',
+                  onPressed: () {},
                 ),
                 CategoryItem(
                   catImage: Image.asset(
                     'assets/images/ic-spices.png',
                   ),
                   catTitle: 'Spices',
+                  onPressed: () {},
                 ),
               ],
             ),
           ),
           const DivTitle(title: 'CAMPAIGN'),
-          // Campaign Slider in Widget Directory
+          // Campaign Slider in home screen widgets directory
           const CampaignSlider(),
         ],
       ),

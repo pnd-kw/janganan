@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 class CategoryItem extends StatelessWidget {
-  const CategoryItem({
-    super.key,
-    required this.catImage,
-    required this.catTitle,
-  });
+  const CategoryItem(
+      {super.key,
+      required this.catImage,
+      required this.catTitle,
+      required this.onPressed});
 
   final Image catImage;
   final String catTitle;
+  final void Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class CategoryItem extends StatelessWidget {
         SizedBox(
           height: 50,
           child: IconButton.filled(
-            onPressed: () {},
+            onPressed: onPressed,
             style: Theme.of(context).iconButtonTheme.style,
             icon: catImage,
           ),

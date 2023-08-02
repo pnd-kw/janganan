@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:janganan/utils/colors.dart';
+import 'package:janganan/utils/constants/colors.dart';
 
 final colorScheme = ColorScheme.fromSeed(seedColor: AppColor.primaryColor);
 
