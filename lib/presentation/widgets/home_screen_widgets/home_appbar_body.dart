@@ -75,19 +75,19 @@ class HomeAppBarBody extends StatelessWidget {
                         onPressed: () => Navigator.of(context)
                             .pushNamed('/vegetables-screen')),
                     CategoryItem(
-                      catImage: Image.asset(
-                        'assets/images/ic-fruits.png',
-                      ),
-                      catTitle: 'Fruits',
-                      onPressed: () {},
-                    ),
+                        catImage: Image.asset(
+                          'assets/images/ic-fruits.png',
+                        ),
+                        catTitle: 'Fruits',
+                        onPressed: () =>
+                            Navigator.of(context).pushNamed('/fruits-screen')),
                     CategoryItem(
-                      catImage: Image.asset(
-                        'assets/images/ic-spices.png',
-                      ),
-                      catTitle: 'Spices',
-                      onPressed: () {},
-                    ),
+                        catImage: Image.asset(
+                          'assets/images/ic-spices.png',
+                        ),
+                        catTitle: 'Spices',
+                        onPressed: () =>
+                            Navigator.of(context).pushNamed('/spices-screen')),
                   ],
                 ),
               ),

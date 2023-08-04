@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:janganan/config/theme.dart';
 import 'package:janganan/presentation/screens/add_vegetable_screen.dart';
+import 'package:janganan/presentation/screens/fruits_screen.dart';
 import 'package:janganan/presentation/screens/home_screen.dart';
+import 'package:janganan/presentation/screens/spices_screen.dart';
 import 'package:janganan/presentation/screens/vegetables_screen.dart';
 
 void main() {
@@ -23,6 +25,8 @@ class Janganan extends StatelessWidget {
       routes: {
         '/': (ctx) => const HomeScreen(),
         '/vegetables-screen': (ctx) => const VegetablesScreen(),
+        '/fruits-screen': (ctx) => const FruitsScreen(),
+        '/spices-screen': (ctx) => const SpicesScreen(),
         '/add-vegetable-screen': (ctx) => const AddVegetableScreen(),
       },
     );

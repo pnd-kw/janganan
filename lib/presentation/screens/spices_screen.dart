@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:janganan/presentation/widgets/bottom_navigation.dart';
 
-class VegetablesScreen extends StatelessWidget {
-  const VegetablesScreen({super.key});
+class SpicesScreen extends StatelessWidget {
+  const SpicesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,29 +23,11 @@ class VegetablesScreen extends StatelessWidget {
           ),
         ),
         title: Text(
-          'Vegetables',
-          style: Theme.of(context)
-              .textTheme
-              .titleMedium!
-              .copyWith(color: Theme.of(context).colorScheme.background),
+          'Spices',
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                color: Theme.of(context).colorScheme.background,
+              ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed('/add-vegetable-screen');
-            },
-            icon: const Icon(Icons.add),
-            style: ButtonStyle(
-              iconSize: const MaterialStatePropertyAll(20),
-              backgroundColor: MaterialStatePropertyAll(
-                Theme.of(context).colorScheme.primary,
-              ),
-              iconColor: MaterialStatePropertyAll(
-                Theme.of(context).colorScheme.background,
-              ),
-            ),
-          ),
-        ],
       ),
       body: const Center(
         child: Text('Under Construction!'),
