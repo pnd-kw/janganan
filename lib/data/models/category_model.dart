@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 enum Categories {
@@ -6,12 +7,15 @@ enum Categories {
   spices,
 }
 
-class Category {
+class Category extends Equatable {
   final String title;
   final Image catIcon;
 
-  Category({
+  const Category({
     required this.title,
     required this.catIcon,
   });
+
+  @override
+  List<Object> get props => [title, catIcon];
 }

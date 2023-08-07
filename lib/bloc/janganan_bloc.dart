@@ -1,0 +1,17 @@
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:janganan/data/models/janganan_items.dart';
+
+import '../data/models/janganan_item_model.dart';
+
+part 'janganan_event.dart';
+part 'janganan_state.dart';
+
+class JangananBloc extends Bloc<JangananEvent, JangananState> {
+  JangananBloc() : super(JangananInitial()) {
+    on<JangananLoaded>((event, emit) async {
+      await Future<void>.delayed(const Duration(seconds: 1));
+      emit(JangananLoad(jangananItems: jangananItems));
+    });
+  }
+}

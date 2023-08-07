@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:janganan/bloc/janganan_bloc.dart';
 import 'package:janganan/presentation/widgets/bottom_navigation.dart';
 
 class VegetablesScreen extends StatelessWidget {
@@ -47,8 +49,43 @@ class VegetablesScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: const Center(
-        child: Text('Under Construction!'),
+      body: BlocBuilder<JangananBloc, JangananState>(
+        builder: (context, state) {
+          if (state is JangananInitial) {
+            return CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.primary,
+            );
+          }
+          if (state is JangananLoad) {
+            return ListView.builder(
+              itemCount: state.jangananItems.length,
+              itemBuilder: (ctx, index) => Card(
+                child: Column(
+                  children: [
+                    Text(state.jangananItems[index].itemName),
+                    Text(state.jangananItems[index].category.title),
+                    Text(state.jangananItems[index].stock.toString()),
+                    Text(state.jangananItems[index].price.toString()),
+                  ],
+                ),
+              ),
+            );
+            // if (state is JangananLoad) {
+            //   return ListView.builder(
+            //     itemCount: state.jangananItems.length,
+            //     itemBuilder: (ctx, index) => Card(
+            //       child: Column(
+            //         children: [
+            //           Text(state.jangananItems[index].itemName),
+            //           // Text(state.jangananItems[index].category.toString()),
+            //         ],
+            //       ),
+            //     ),
+            //   );
+          } else {
+            return const Text('Something went wrong!');
+          }
+        },
       ),
       bottomNavigationBar: const BottomNavigation(),
     );

@@ -1,17 +1,21 @@
+import 'package:equatable/equatable.dart';
 import 'package:janganan/data/models/category_model.dart';
 
-class JangananItem {
+class JangananItem extends Equatable {
   final String id;
   final String itemName;
   final Category category;
   final double stock;
   final double price;
 
-  JangananItem({
+  const JangananItem({
     required this.id,
     required this.itemName,
     required this.category,
     required this.stock,
     required this.price,
   });
+
+  @override
+  List<Object> get props => [id, itemName, category, stock, price];
 }

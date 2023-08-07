@@ -24,4 +24,11 @@ final jangananItems = [
     stock: 10.0,
     price: 40000.0,
   ),
+  JangananItem(
+    id: '3',
+    itemName: 'Bayam',
+    category: categories[Categories.vegetable]!,
+    stock: 15.0,
+    price: 3500.0,
+  ),
 ];
