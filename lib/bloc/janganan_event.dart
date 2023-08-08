@@ -8,3 +8,12 @@ sealed class JangananEvent extends Equatable {
 }
 
 class JangananLoaded extends JangananEvent {}
+
+class LoadByCategoryEvent extends JangananEvent {
+  final Category selectedCat;
+
+  const LoadByCategoryEvent({required this.selectedCat});
+
+  @override
+  List<Object> get props => [selectedCat];
+}

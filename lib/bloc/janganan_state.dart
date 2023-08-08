@@ -17,3 +17,12 @@ final class JangananLoad extends JangananState {
   @override
   List<Object> get props => [jangananItems];
 }
+
+final class LoadByCategory extends JangananState {
+  final List<JangananItem> filteredItems;
+
+  const LoadByCategory({required this.filteredItems});
+
+  @override
+  List<Object> get props => [filteredItems];
+}

@@ -22,7 +22,7 @@ class Janganan extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => JangananBloc()..add(JangananLoaded()),
+          create: (context) => JangananBloc(), //..add(JangananLoaded()),
         ),
       ],
       child: MaterialApp(

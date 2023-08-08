@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:janganan/bloc/janganan_bloc.dart';
+import 'package:janganan/data/models/categories.dart';
+import 'package:janganan/data/models/category_model.dart';
 import 'package:janganan/presentation/widgets/home_screen_widgets/campaign_banner.dart';
 import 'package:janganan/presentation/widgets/home_screen_widgets/campaign_slider.dart';
-import 'package:janganan/presentation/widgets/home_screen_widgets/category_item.dart';
+import 'package:janganan/presentation/widgets/home_screen_widgets/category_button.dart';
 import 'package:janganan/presentation/widgets/home_screen_widgets/div_title.dart';
 
 class HomeAppBarBody extends StatelessWidget {
@@ -9,6 +13,10 @@ class HomeAppBarBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Category vegetableCat = categories[Categories.vegetable]!;
+    final Category fruitCat = categories[Categories.fruit]!;
+    final Category spicesCat = categories[Categories.spices]!;
+
     return CustomScrollView(
       slivers: [
         SliverAppBar(
@@ -67,27 +75,41 @@ class HomeAppBarBody extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     // CategoryItem in home screen widgets directory
-                    CategoryItem(
-                        catImage: Image.asset(
-                          'assets/images/ic-vegetables.png',
-                        ),
-                        catTitle: 'Vegetables',
-                        onPressed: () => Navigator.of(context)
-                            .pushNamed('/vegetables-screen')),
-                    CategoryItem(
-                        catImage: Image.asset(
-                          'assets/images/ic-fruits.png',
-                        ),
-                        catTitle: 'Fruits',
-                        onPressed: () =>
-                            Navigator.of(context).pushNamed('/fruits-screen')),
-                    CategoryItem(
-                        catImage: Image.asset(
-                          'assets/images/ic-spices.png',
-                        ),
-                        catTitle: 'Spices',
-                        onPressed: () =>
-                            Navigator.of(context).pushNamed('/spices-screen')),
+                    CategoryButton(
+                      catImage: Image.asset(
+                        'assets/images/ic-vegetables.png',
+                      ),
+                      catTitle: 'Vegetables',
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/vegetables-screen');
+                        context.read<JangananBloc>().add(
+                            LoadByCategoryEvent(selectedCat: vegetableCat));
+                      },
+                    ),
+                    CategoryButton(
+                      catImage: Image.asset(
+                        'assets/images/ic-fruits.png',
+                      ),
+                      catTitle: 'Fruits',
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/fruits-screen');
+                        context
+                            .read<JangananBloc>()
+                            .add(LoadByCategoryEvent(selectedCat: fruitCat));
+                      },
+                    ),
+                    CategoryButton(
+                      catImage: Image.asset(
+                        'assets/images/ic-spices.png',
+                      ),
+                      catTitle: 'Spices',
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/spices-screen');
+                        context
+                            .read<JangananBloc>()
+                            .add(LoadByCategoryEvent(selectedCat: spicesCat));
+                      },
+                    ),
                   ],
                 ),
               ),

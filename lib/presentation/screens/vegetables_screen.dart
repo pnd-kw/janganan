@@ -56,32 +56,62 @@ class VegetablesScreen extends StatelessWidget {
               color: Theme.of(context).colorScheme.primary,
             );
           }
-          if (state is JangananLoad) {
+          // if (state is JangananLoad) {
+          //   return ListView.builder(
+          //     itemCount: state.jangananItems.length,
+          //     itemBuilder: (ctx, index) => Card(
+          //       child: Column(
+          //         children: [
+          //           Text(state.jangananItems[index].itemName),
+          //           Text(state.jangananItems[index].category.title),
+          //           Text(state.jangananItems[index].stock.toString()),
+          //           Text(state.jangananItems[index].price.toString()),
+          //         ],
+          //       ),
+          //     ),
+          //   );
+          //   // if (state is JangananLoad) {
+          //   //   return ListView.builder(
+          //   //     itemCount: state.jangananItems.length,
+          //   //     itemBuilder: (ctx, index) => Card(
+          //   //       child: Column(
+          //   //         children: [
+          //   //           Text(state.jangananItems[index].itemName),
+          //   //           // Text(state.jangananItems[index].category.toString()),
+          //   //         ],
+          //   //       ),
+          //   //     ),
+          //   //   );
+          // }
+          if (state is LoadByCategory) {
             return ListView.builder(
-              itemCount: state.jangananItems.length,
+              itemCount: state.filteredItems.length,
               itemBuilder: (ctx, index) => Card(
                 child: Column(
                   children: [
-                    Text(state.jangananItems[index].itemName),
-                    Text(state.jangananItems[index].category.title),
-                    Text(state.jangananItems[index].stock.toString()),
-                    Text(state.jangananItems[index].price.toString()),
+                    Text(
+                      state.filteredItems[index].itemName,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.onBackground),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(state.filteredItems[index].category.title),
+                        SizedBox(
+                          height: 20,
+                          child: state.filteredItems[index].category.catIcon,
+                        )
+                      ],
+                    ),
+                    Text(
+                        'stok: ${state.filteredItems[index].stock.toString()}'),
+                    Text(
+                        'harga: ${state.filteredItems[index].price.toString()} /ikat'),
                   ],
                 ),
               ),
             );
-            // if (state is JangananLoad) {
-            //   return ListView.builder(
-            //     itemCount: state.jangananItems.length,
-            //     itemBuilder: (ctx, index) => Card(
-            //       child: Column(
-            //         children: [
-            //           Text(state.jangananItems[index].itemName),
-            //           // Text(state.jangananItems[index].category.toString()),
-            //         ],
-            //       ),
-            //     ),
-            //   );
           } else {
             return const Text('Something went wrong!');
           }
