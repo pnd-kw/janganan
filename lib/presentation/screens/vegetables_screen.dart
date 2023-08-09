@@ -56,33 +56,6 @@ class VegetablesScreen extends StatelessWidget {
               color: Theme.of(context).colorScheme.primary,
             );
           }
-          // if (state is JangananLoad) {
-          //   return ListView.builder(
-          //     itemCount: state.jangananItems.length,
-          //     itemBuilder: (ctx, index) => Card(
-          //       child: Column(
-          //         children: [
-          //           Text(state.jangananItems[index].itemName),
-          //           Text(state.jangananItems[index].category.title),
-          //           Text(state.jangananItems[index].stock.toString()),
-          //           Text(state.jangananItems[index].price.toString()),
-          //         ],
-          //       ),
-          //     ),
-          //   );
-          //   // if (state is JangananLoad) {
-          //   //   return ListView.builder(
-          //   //     itemCount: state.jangananItems.length,
-          //   //     itemBuilder: (ctx, index) => Card(
-          //   //       child: Column(
-          //   //         children: [
-          //   //           Text(state.jangananItems[index].itemName),
-          //   //           // Text(state.jangananItems[index].category.toString()),
-          //   //         ],
-          //   //       ),
-          //   //     ),
-          //   //   );
-          // }
           if (state is LoadByCategory) {
             return ListView.builder(
               itemCount: state.filteredItems.length,

@@ -74,16 +74,16 @@ class HomeAppBarBody extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    // CategoryItem in home screen widgets directory
+                    // CategoryButton in home screen widgets directory
                     CategoryButton(
                       catImage: Image.asset(
                         'assets/images/ic-vegetables.png',
                       ),
                       catTitle: 'Vegetables',
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/vegetables-screen');
                         context.read<JangananBloc>().add(
                             LoadByCategoryEvent(selectedCat: vegetableCat));
+                        Navigator.of(context).pushNamed('/vegetables-screen');
                       },
                     ),
                     CategoryButton(
@@ -92,10 +92,10 @@ class HomeAppBarBody extends StatelessWidget {
                       ),
                       catTitle: 'Fruits',
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/fruits-screen');
                         context
                             .read<JangananBloc>()
                             .add(LoadByCategoryEvent(selectedCat: fruitCat));
+                        Navigator.of(context).pushNamed('/fruits-screen');
                       },
                     ),
                     CategoryButton(
@@ -104,10 +104,10 @@ class HomeAppBarBody extends StatelessWidget {
                       ),
                       catTitle: 'Spices',
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/spices-screen');
                         context
                             .read<JangananBloc>()
                             .add(LoadByCategoryEvent(selectedCat: spicesCat));
+                        Navigator.of(context).pushNamed('/spices-screen');
                       },
                     ),
                   ],

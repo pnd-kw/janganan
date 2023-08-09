@@ -7,7 +7,7 @@ sealed class JangananEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class JangananLoaded extends JangananEvent {}
+// class JangananLoaded extends JangananEvent {}
 
 class LoadByCategoryEvent extends JangananEvent {
   final Category selectedCat;
