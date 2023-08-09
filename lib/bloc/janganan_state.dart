@@ -9,15 +9,6 @@ sealed class JangananState extends Equatable {
 
 final class JangananInitial extends JangananState {}
 
-// final class JangananLoad extends JangananState {
-//   final List<JangananItem> jangananItems;
-
-//   const JangananLoad({required this.jangananItems});
-
-//   @override
-//   List<Object> get props => [jangananItems];
-// }
-
 final class LoadByCategory extends JangananState {
   final List<JangananItem> filteredItems;
 

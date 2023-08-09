@@ -10,11 +10,7 @@ part 'janganan_state.dart';
 
 class JangananBloc extends Bloc<JangananEvent, JangananState> {
   JangananBloc() : super(JangananInitial()) {
-    // on<JangananLoaded>((event, emit) async {
-    //   await Future<void>.delayed(const Duration(seconds: 1));
-    //   emit(JangananLoad(jangananItems: jangananItems));
-    // });
-    on<LoadByCategoryEvent>((event, emit) {
+    on<LoadByCategoryEvent>((event, emit) async {
       // await Future<void>.delayed(const Duration(seconds: 1));
       emit(LoadByCategory(
           filteredItems: jangananItems
