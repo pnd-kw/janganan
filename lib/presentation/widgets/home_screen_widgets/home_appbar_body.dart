@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:janganan/bloc/janganan_bloc.dart';
+import 'package:janganan/bloc/janganan/janganan_bloc.dart';
 import 'package:janganan/data/models/categories.dart';
 import 'package:janganan/data/models/category_model.dart';
 import 'package:janganan/presentation/widgets/home_screen_widgets/campaign_banner.dart';

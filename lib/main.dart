@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:janganan/bloc/janganan_bloc.dart';
+import 'package:janganan/bloc/card/bloc/card_bloc.dart';
+import 'package:janganan/bloc/janganan/janganan_bloc.dart';
 import 'package:janganan/config/theme.dart';
 import 'package:janganan/presentation/screens/add_vegetable_screen.dart';
 import 'package:janganan/presentation/screens/fruits_screen.dart';
@@ -23,6 +24,9 @@ class Janganan extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => JangananBloc(), //..add(JangananLoaded()),
+        ),
+        BlocProvider(
+          create: (context) => CardBloc(),
         ),
       ],
       child: MaterialApp(

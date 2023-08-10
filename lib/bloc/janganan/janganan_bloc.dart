@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:janganan/data/models/category_model.dart';
 import 'package:janganan/data/models/janganan_items.dart';
 
-import '../data/models/janganan_item_model.dart';
+import '../../data/models/janganan_item_model.dart';
 
 part 'janganan_event.dart';
 part 'janganan_state.dart';
