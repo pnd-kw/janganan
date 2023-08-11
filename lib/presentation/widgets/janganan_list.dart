@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:janganan/bloc/card/bloc/card_bloc.dart';
+import 'package:janganan/bloc/expanded_container/expanded_container_bloc.dart';
 import 'package:janganan/bloc/janganan/janganan_bloc.dart';
 import 'package:janganan/presentation/widgets/janganan_list_items.dart';
 
@@ -19,12 +19,13 @@ class JangananList extends StatelessWidget {
           return ListView.builder(
             itemCount: jangananState.filteredItems.length,
             itemBuilder: (ctx, index) {
-              return BlocBuilder<CardBloc, CardState>(
-                builder: (context, cardState) {
+              return BlocBuilder<ExpandedContainerBloc, ExpandedContainerState>(
+                builder: (context, expandedContainerState) {
                   return JangananListItems(
                     index: index,
-                    isExpanded: cardState is CardInitial &&
-                        cardState.expandedIndex == index,
+                    isExpanded:
+                        expandedContainerState is ExpandedContainerInitial &&
+                            expandedContainerState.expandedIndex == index,
                     filteredItems: jangananState.filteredItems,
                   );
                 },

@@ -1,17 +1,17 @@
-part of 'card_bloc.dart';
+part of 'expanded_container_bloc.dart';
 
-sealed class CardEvent extends Equatable {
-  const CardEvent();
+sealed class ExpandedContainerEvent extends Equatable {
+  const ExpandedContainerEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class ToggleCard extends CardEvent {
-  final int cardIndex;
+class ToggleExpandedContainer extends ExpandedContainerEvent {
+  final int expandedContainerIndex;
 
-  const ToggleCard({required this.cardIndex});
+  const ToggleExpandedContainer({required this.expandedContainerIndex});
 
   @override
-  List<Object> get props => [cardIndex];
+  List<Object> get props => [expandedContainerIndex];
 }

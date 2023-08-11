@@ -1,16 +1,16 @@
-part of 'card_bloc.dart';
+part of 'expanded_container_bloc.dart';
 
-sealed class CardState extends Equatable {
-  const CardState();
+sealed class ExpandedContainerState extends Equatable {
+  const ExpandedContainerState();
 
   @override
   List<Object> get props => [];
 }
 
-final class CardInitial extends CardState {
+final class ExpandedContainerInitial extends ExpandedContainerState {
   final int expandedIndex;
 
-  const CardInitial({required this.expandedIndex});
+  const ExpandedContainerInitial({required this.expandedIndex});
 
   @override
   List<Object> get props => [expandedIndex];

@@ -1,25 +1,27 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-part 'card_event.dart';
-part 'card_state.dart';
+part 'expanded_container_event.dart';
+part 'expanded_container_state.dart';
 
-class CardBloc extends Bloc<CardEvent, CardState> {
-  CardBloc() : super(const CardInitial(expandedIndex: -1)) {
-    on<ToggleCard>((event, emit) {
-      if (state is CardInitial) {
-        final currentState = state as CardInitial;
-        if (currentState.expandedIndex == event.cardIndex) {
-          emit(const CardInitial(expandedIndex: -1));
-        } else {
-          emit(CardInitial(expandedIndex: event.cardIndex));
+class ExpandedContainerBloc
+    extends Bloc<ExpandedContainerEvent, ExpandedContainerState> {
+  ExpandedContainerBloc()
+      : super(const ExpandedContainerInitial(expandedIndex: -1)) {
+    on<ToggleExpandedContainer>(
+      (event, emit) {
+        if (state is ExpandedContainerInitial) {
+          final currentState = state as ExpandedContainerInitial;
+          if (currentState.expandedIndex == event.expandedContainerIndex) {
+            emit(const ExpandedContainerInitial(
+                expandedIndex: -1)); // Tutup semua Container
+          } else {
+            emit(ExpandedContainerInitial(
+                expandedIndex:
+                    event.expandedContainerIndex)); // Buka expanded Container
+          }
         }
-      }
-      // if (event.cardIndex == state.expandedIndex) {
-      //   emit(const CardInitial(expandedIndex: -1));
-      // } else {
-      //   emit(CardInitial(expandedIndex: event.cardIndex));
-      // }
-    });
+      },
+    );
   }
 }

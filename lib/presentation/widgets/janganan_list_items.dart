@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:janganan/bloc/card/bloc/card_bloc.dart';
+import 'package:janganan/bloc/expanded_container/expanded_container_bloc.dart';
 import 'package:janganan/data/models/janganan_item_model.dart';
 import 'package:janganan/utils/constants/colors.dart';
 
@@ -19,11 +19,13 @@ class JangananListItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final jangananState = context.watch<JangananBloc>().state;
+    // final double quantityValue = 0;
 
     return GestureDetector(
       onTap: () {
-        context.read<CardBloc>().add(ToggleCard(cardIndex: index));
+        context
+            .read<ExpandedContainerBloc>()
+            .add(ToggleExpandedContainer(expandedContainerIndex: index));
       },
       child: AnimatedSize(
         duration: const Duration(milliseconds: 300),
@@ -40,63 +42,67 @@ class JangananListItems extends StatelessWidget {
                 ),
               ],
             ),
-            height: isExpanded ? 200 : 100,
+            height: isExpanded ? 250 : 125,
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SizedBox(
-                      height: 100,
-                      child: Image.asset(
-                        filteredItems[index].itemImg,
-                        fit: BoxFit.cover,
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(
+                        height: 100,
+                        child: Image.asset(
+                          filteredItems[index].itemImg,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          filteredItems[index].itemName,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              filteredItems[index].category.title,
-                              style: GoogleFonts.mPlus1p(
-                                fontSize: 12,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                              child: filteredItems[index].category.catIcon,
-                            )
-                          ],
-                        ),
-                        Text(
-                          'stok: ${filteredItems[index].stock.toString()}',
-                          style: GoogleFonts.mPlus1p(
-                            fontSize: 12,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            filteredItems[index].itemName,
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onBackground),
                           ),
-                        ),
-                        Text(
-                          'harga: ${filteredItems[index].price.toString()}',
-                          style: GoogleFonts.mPlus1p(fontSize: 12),
-                        ),
-                      ],
-                    ),
-                  ],
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                filteredItems[index].category.title,
+                                style: GoogleFonts.mPlus1p(
+                                  fontSize: 12,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                                child: filteredItems[index].category.catIcon,
+                              )
+                            ],
+                          ),
+                          Text(
+                            'stok: ${filteredItems[index].stock.toString()}',
+                            style: GoogleFonts.mPlus1p(
+                              fontSize: 12,
+                            ),
+                          ),
+                          Text(
+                            'harga: ${filteredItems[index].price.toString()}',
+                            style: GoogleFonts.mPlus1p(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 if (isExpanded)
                   Padding(
@@ -104,7 +110,7 @@ class JangananListItems extends StatelessWidget {
                     child: Column(
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
                               'Total: ',
@@ -116,6 +122,50 @@ class JangananListItems extends StatelessWidget {
                                         .colorScheme
                                         .onBackground,
                                   ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                SizedBox(
+                                  height: 30,
+                                  child: IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(Icons.remove),
+                                    iconSize: 10,
+                                  ),
+                                ),
+                                const Text('0'),
+                                // SizedBox(
+                                //   height: 30,
+                                //   width: 50,
+                                //   child: TextFormField(
+                                //     controller: centerCursorController,
+                                //     keyboardType: TextInputType.number,
+                                //     decoration: InputDecoration(
+                                //       border: OutlineInputBorder(
+                                //         borderSide: const BorderSide(width: 1),
+                                //         borderRadius: BorderRadius.circular(5),
+                                //       ),
+                                //       focusedBorder: OutlineInputBorder(
+                                //         borderSide: const BorderSide(width: 1),
+                                //         borderRadius: BorderRadius.circular(5),
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
+                                SizedBox(
+                                  height: 30,
+                                  child: IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(Icons.add),
+                                    iconSize: 10,
+                                  ),
+                                ),
+                              ],
                             ),
                             TextButton(
                               onPressed: () {},
@@ -138,15 +188,18 @@ class JangananListItems extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Text(
-                          '*harga dapat berubah sewaktu-waktu, jika ada perbedaan harga, maka harga di tempat adalah harga yang berlaku',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(
-                                color:
-                                    Theme.of(context).colorScheme.onBackground,
-                              ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          child: Text(
+                            '*harga dapat berubah sewaktu-waktu, jika ada perbedaan harga, maka harga di tempat adalah harga yang berlaku',
+                            style:
+                                Theme.of(context).textTheme.bodySmall!.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground,
+                                    ),
+                          ),
                         ),
                       ],
                     ),
