@@ -9,6 +9,7 @@ final jangananItems = [
     category: categories[Categories.vegetable]!,
     stock: 20.0,
     price: 3000.0,
+    itemImg: 'assets/images/kangkung-img.png',
   ),
   JangananItem(
     id: '1',
@@ -16,6 +17,7 @@ final jangananItems = [
     category: categories[Categories.fruit]!,
     stock: 2.5,
     price: 25000.0,
+    itemImg: 'assets/images/jeruk-img.png',
   ),
   JangananItem(
     id: '2',
@@ -23,6 +25,7 @@ final jangananItems = [
     category: categories[Categories.spices]!,
     stock: 10.0,
     price: 40000.0,
+    itemImg: 'assets/images/bwg-mrh-img.png',
   ),
   JangananItem(
     id: '3',
@@ -30,5 +33,6 @@ final jangananItems = [
     category: categories[Categories.vegetable]!,
     stock: 15.0,
     price: 3500.0,
+    itemImg: 'assets/images/bayam-img.png',
   ),
 ];

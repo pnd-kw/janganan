@@ -7,15 +7,16 @@ class JangananItem extends Equatable {
   final Category category;
   final double stock;
   final double price;
+  final String itemImg;
 
-  const JangananItem({
-    required this.id,
-    required this.itemName,
-    required this.category,
-    required this.stock,
-    required this.price,
-  });
+  const JangananItem(
+      {required this.id,
+      required this.itemName,
+      required this.category,
+      required this.stock,
+      required this.price,
+      required this.itemImg});
 
   @override
-  List<Object> get props => [id, itemName, category, stock, price];
+  List<Object> get props => [id, itemName, category, stock, price, itemImg];
 }
