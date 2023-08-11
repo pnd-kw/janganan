@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:janganan/bloc/expanded_container/expanded_container_bloc.dart';
 import 'package:janganan/bloc/janganan/janganan_bloc.dart';
+import 'package:janganan/bloc/quantity_counter/quantity_counter_bloc.dart';
 import 'package:janganan/config/theme.dart';
 import 'package:janganan/presentation/screens/add_vegetable_screen.dart';
 import 'package:janganan/presentation/screens/fruits_screen.dart';
@@ -27,6 +28,9 @@ class Janganan extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => ExpandedContainerBloc(),
+        ),
+        BlocProvider(
+          create: (context) => QuantityCounterBloc(),
         ),
       ],
       child: MaterialApp(

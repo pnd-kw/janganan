@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:janganan/bloc/expanded_container/expanded_container_bloc.dart';
+import 'package:janganan/bloc/quantity_counter/quantity_counter_bloc.dart';
 import 'package:janganan/data/models/janganan_item_model.dart';
 import 'package:janganan/utils/constants/colors.dart';
 
@@ -96,7 +97,7 @@ class JangananListItems extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'harga: ${filteredItems[index].price.toString()}',
+                            'harga: Rp ${filteredItems[index].price.toString()}',
                             style: GoogleFonts.mPlus1p(fontSize: 12),
                           ),
                         ],
@@ -128,44 +129,59 @@ class JangananListItems extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Row(
-                              children: [
-                                SizedBox(
-                                  height: 30,
-                                  child: IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(Icons.remove),
-                                    iconSize: 10,
-                                  ),
-                                ),
-                                const Text('0'),
-                                // SizedBox(
-                                //   height: 30,
-                                //   width: 50,
-                                //   child: TextFormField(
-                                //     controller: centerCursorController,
-                                //     keyboardType: TextInputType.number,
-                                //     decoration: InputDecoration(
-                                //       border: OutlineInputBorder(
-                                //         borderSide: const BorderSide(width: 1),
-                                //         borderRadius: BorderRadius.circular(5),
-                                //       ),
-                                //       focusedBorder: OutlineInputBorder(
-                                //         borderSide: const BorderSide(width: 1),
-                                //         borderRadius: BorderRadius.circular(5),
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
-                                SizedBox(
-                                  height: 30,
-                                  child: IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(Icons.add),
-                                    iconSize: 10,
-                                  ),
-                                ),
-                              ],
+                            BlocBuilder<QuantityCounterBloc, int>(
+                              builder: (context, count) {
+                                return Row(
+                                  children: [
+                                    SizedBox(
+                                      height: 30,
+                                      child: IconButton(
+                                        onPressed: () {
+                                          context
+                                              .read<QuantityCounterBloc>()
+                                              .add(QuantityCounterDecrement());
+                                        },
+                                        icon: const Icon(Icons.remove),
+                                        iconSize: 10,
+                                      ),
+                                    ),
+                                    Text('$count'),
+                                    SizedBox(
+                                      height: 30,
+                                      child: IconButton(
+                                        onPressed: () {
+                                          context
+                                              .read<QuantityCounterBloc>()
+                                              .add(QuantityCounterIncrement());
+                                        },
+                                        icon: const Icon(Icons.add),
+                                        iconSize: 10,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                              // child: Row(
+                              //   children: [
+                              //     SizedBox(
+                              //       height: 30,
+                              //       child: IconButton(
+                              //         onPressed: () {},
+                              //         icon: const Icon(Icons.remove),
+                              //         iconSize: 10,
+                              //       ),
+                              //     ),
+                              //     const Text('$count'),
+                              //     SizedBox(
+                              //       height: 30,
+                              //       child: IconButton(
+                              //         onPressed: () {},
+                              //         icon: const Icon(Icons.add),
+                              //         iconSize: 10,
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
                             ),
                             TextButton(
                               onPressed: () {},

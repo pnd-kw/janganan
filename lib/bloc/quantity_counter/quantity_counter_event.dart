@@ -8,19 +8,19 @@ sealed class QuantityCounterEvent extends Equatable {
 }
 
 class QuantityCounterIncrement extends QuantityCounterEvent {
-  final double quantityIncrement;
+  // final double quantityIncrement;
 
-  const QuantityCounterIncrement({required this.quantityIncrement});
+  // const QuantityCounterIncrement({required this.quantityIncrement});
 
-  @override
-  List<Object> get props => [quantityIncrement];
+  // @override
+  // List<Object> get props => [quantityIncrement];
 }
 
 class QuantityCounterDecrement extends QuantityCounterEvent {
-  final double quantityDecrement;
+  // final double quantityDecrement;
 
-  const QuantityCounterDecrement({required this.quantityDecrement});
+  // const QuantityCounterDecrement({required this.quantityDecrement});
 
-  @override
-  List<Object> get props => [quantityDecrement];
+  // @override
+  // List<Object> get props => [quantityDecrement];
 }
