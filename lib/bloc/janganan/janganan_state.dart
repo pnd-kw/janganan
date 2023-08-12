@@ -1,6 +1,6 @@
 part of 'janganan_bloc.dart';
 
-sealed class JangananState extends Equatable {
+abstract class JangananState extends Equatable {
   const JangananState();
 
   @override

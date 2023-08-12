@@ -1,6 +1,6 @@
 part of 'janganan_bloc.dart';
 
-sealed class JangananEvent extends Equatable {
+abstract class JangananEvent extends Equatable {
   const JangananEvent();
 
   @override

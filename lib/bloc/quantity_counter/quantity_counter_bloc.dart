@@ -4,24 +4,43 @@ import 'package:equatable/equatable.dart';
 part 'quantity_counter_event.dart';
 part 'quantity_counter_state.dart';
 
-// class CounterBloc extends Bloc<QuantityCounterEvent, QuantityCounterState> {
-//   CounterBloc() : super(const QuantityCounterInitial(quantity: 0)) {
-//     on<QuantityCounterIncrement>((event, emit) {
-//       emit(QuantityCounterInitial(quantity: event.quantityIncrement + 1));
-//     });
-//     on<QuantityCounterDecrement>((event, emit) {
-//       emit(QuantityCounterInitial(quantity: event.quantityDecrement - 1));
-//     });
-//   }
-// }
-
-class QuantityCounterBloc extends Bloc<QuantityCounterEvent, int> {
-  QuantityCounterBloc() : super(0) {
-    on<QuantityCounterIncrement>((event, emit) {
-      emit(state + 1);
+class QuantityCounterBloc
+    extends Bloc<QuantityCounterEvent, QuantityCounterState> {
+  final bool isIntType;
+  QuantityCounterBloc({required this.isIntType})
+      : super(isIntType
+            ? const IntQuantityCounter(quantity: 1)
+            : const DoubleQuantityCounter(quantity: 0.25)) {
+    on<QuantityCounterEvent>((event, emit) {
+      if (event is IncrementEvent) {
+        if (isIntType) {
+          emit(IntQuantityCounter(quantity: state.quantity.toInt() + 1));
+        } else {
+          emit(DoubleQuantityCounter(quantity: state.quantity + 0.25));
+        }
+      } else if (event is DecrementEvent) {
+        if (isIntType) {
+          emit(IntQuantityCounter(quantity: state.quantity.toInt() - 1));
+        } else {
+          emit(DoubleQuantityCounter(quantity: state.quantity - 0.25));
+        }
+      }
     });
-    on<QuantityCounterDecrement>((event, emit) {
-      emit(state - 1);
-    });
+    // on<IntQuantityCounterIncrement>((event, emit) {
+    //   emit(IntQuantityCounter(
+    //       quantity: (state as IntQuantityCounter).quantity + 1));
+    // });
+    // on<IntQuantityCounterDecrement>((event, emit) {
+    //   emit(IntQuantityCounter(
+    //       quantity: (state as IntQuantityCounter).quantity - 1));
+    // });
+    // on<DoubleQuantityCounterIncrement>((event, emit) {
+    //   emit(DoubleQuantityCounter(
+    //       quantity: (state as DoubleQuantityCounter).quantity + 0.25));
+    // });
+    // on<DoubleQuantityCounterDecrement>((event, emit) {
+    //   emit(DoubleQuantityCounter(
+    //       quantity: (state as DoubleQuantityCounter).quantity - 0.25));
+    // });
   }
 }

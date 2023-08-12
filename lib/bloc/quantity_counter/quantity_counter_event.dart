@@ -1,26 +1,48 @@
 part of 'quantity_counter_bloc.dart';
 
-sealed class QuantityCounterEvent extends Equatable {
+abstract class QuantityCounterEvent extends Equatable {
   const QuantityCounterEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class QuantityCounterIncrement extends QuantityCounterEvent {
-  // final double quantityIncrement;
+class IncrementEvent extends QuantityCounterEvent {}
 
-  // const QuantityCounterIncrement({required this.quantityIncrement});
+class DecrementEvent extends QuantityCounterEvent {}
 
-  // @override
-  // List<Object> get props => [quantityIncrement];
-}
+// class IntQuantityCounterIncrement extends QuantityCounterEvent {
+//   final int quantity;
 
-class QuantityCounterDecrement extends QuantityCounterEvent {
-  // final double quantityDecrement;
+//   const IntQuantityCounterIncrement({required this.quantity});
 
-  // const QuantityCounterDecrement({required this.quantityDecrement});
+//   @override
+//   List<Object> get props => [quantity];
+// }
 
-  // @override
-  // List<Object> get props => [quantityDecrement];
-}
+// class IntQuantityCounterDecrement extends QuantityCounterEvent {
+//   final int quantity;
+
+//   const IntQuantityCounterDecrement({required this.quantity});
+
+//   @override
+//   List<Object> get props => [quantity];
+// }
+
+// class DoubleQuantityCounterIncrement extends QuantityCounterEvent {
+//   final double quantity;
+
+//   const DoubleQuantityCounterIncrement({required this.quantity});
+
+//   @override
+//   List<Object> get props => [quantity];
+// }
+
+// class DoubleQuantityCounterDecrement extends QuantityCounterEvent {
+//   final double quantity;
+
+//   const DoubleQuantityCounterDecrement({required this.quantity});
+
+//   @override
+//   List<Object> get props => [quantity];
+// }

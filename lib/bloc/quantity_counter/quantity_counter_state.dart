@@ -1,17 +1,19 @@
 part of 'quantity_counter_bloc.dart';
 
-// sealed class QuantityCounterState extends Equatable {
-//   const QuantityCounterState();
+abstract class QuantityCounterState extends Equatable {
+  final num quantity;
 
-//   @override
-//   List<Object> get props => [];
-// }
+  const QuantityCounterState({required this.quantity});
 
-// final class QuantityCounterState {} //extends QuantityCounterState {
-  // final double quantity;
+  @override
+  List<Object> get props => [quantity];
+}
 
-  // const QuantityCounterInitial({required this.quantity});
+class IntQuantityCounter extends QuantityCounterState {
+  const IntQuantityCounter({required int quantity}) : super(quantity: quantity);
+}
 
-  // @override
-  // List<Object> get props => [quantity];
-//}
+class DoubleQuantityCounter extends QuantityCounterState {
+  const DoubleQuantityCounter({required double quantity})
+      : super(quantity: quantity);
+}
