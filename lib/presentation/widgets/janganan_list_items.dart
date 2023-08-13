@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:janganan/bloc/expanded_container/expanded_container_bloc.dart';
 import 'package:janganan/bloc/quantity_counter/quantity_counter_bloc.dart';
+import 'package:janganan/bloc/total_price/bloc/total_price_bloc.dart';
 import 'package:janganan/data/models/janganan_item_model.dart';
 import 'package:janganan/utils/constants/colors.dart';
 
@@ -20,10 +21,16 @@ class JangananListItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => QuantityCounterBloc(
-        isIntType: filteredItems[index].category.title == 'Vegetable',
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => QuantityCounterBloc(
+              isIntType: filteredItems[index].category.title == 'Vegetable'),
+        ),
+        BlocProvider(
+          create: (context) => TotalPriceBloc(),
+        ),
+      ],
       child: GestureDetector(
         onTap: () {
           context
@@ -73,17 +80,45 @@ class JangananListItems extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text(
-                                'Total: ',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground,
-                                    ),
+                              BlocListener<QuantityCounterBloc,
+                                  QuantityCounterState>(
+                                listenWhen: (prev, curr) =>
+                                    prev.quantity != curr.quantity,
+                                listener: (context, state) {
+                                  context.read<TotalPriceBloc>().add(
+                                      TotalPriceCounterEvent(
+                                          price: filteredItems[index].price,
+                                          quantity: state.quantity.toDouble()));
+                                },
+                                child: BlocBuilder<TotalPriceBloc,
+                                    TotalPriceCounterState>(
+                                  builder: (context, totalPriceState) => Text(
+                                    'Total: ${totalPriceState.totalPrice}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onBackground,
+                                        ),
+                                  ),
+                                ),
                               ),
+                              // BlocBuilder<TotalPriceBloc,
+                              //     TotalPriceCounterState>(
+                              //   builder: (context, totalPriceState) => Text(
+                              //     'Total: ${totalPriceState.totalPrice}',
+                              //     style: Theme.of(context)
+                              //         .textTheme
+                              //         .titleMedium!
+                              //         .copyWith(
+                              //           color: Theme.of(context)
+                              //               .colorScheme
+                              //               .onBackground,
+                              //         ),
+                              //   ),
+                              // ),
                             ],
                           ),
                           Row(
@@ -173,21 +208,36 @@ class JangananListItems extends StatelessWidget {
                 child: IconButton(
                   onPressed: () {
                     context.read<QuantityCounterBloc>().add(DecrementEvent());
+                    // context.read<TotalPriceBloc>().add(TotalPriceCounterEvent(
+                    //     price: filteredItems[index].price,
+                    //     quantity: countState.quantity.toDouble()));
                   },
                   icon: const Icon(Icons.remove),
                   iconSize: 10,
                 ),
               ),
-              Text('${countState.quantity} kg'),
+              Text(
+                '${countState.quantity}',
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    color: Theme.of(context).colorScheme.onBackground),
+              ),
               SizedBox(
                 height: 30,
                 child: IconButton(
                   onPressed: () {
                     context.read<QuantityCounterBloc>().add(IncrementEvent());
+                    // context.read<TotalPriceBloc>().add(TotalPriceCounterEvent(
+                    //     price: filteredItems[index].price,
+                    //     quantity: countState.quantity.toDouble()));
                   },
                   icon: const Icon(Icons.add),
                   iconSize: 10,
                 ),
+              ),
+              Text(
+                '/kg/buah/ikat',
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    color: Theme.of(context).colorScheme.onBackground),
               ),
             ],
           );

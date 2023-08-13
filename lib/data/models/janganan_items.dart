@@ -16,7 +16,7 @@ final jangananItems = [
     itemName: 'Jeruk',
     category: categories[Categories.fruit]!,
     stock: 2.5,
-    price: 25000.0,
+    price: 5000.0,
     itemImg: 'assets/images/jeruk-img.png',
   ),
   JangananItem(
@@ -24,7 +24,7 @@ final jangananItems = [
     itemName: 'Bawang Merah',
     category: categories[Categories.spices]!,
     stock: 10.0,
-    price: 40000.0,
+    price: 10000.0,
     itemImg: 'assets/images/bwg-mrh-img.png',
   ),
   JangananItem(

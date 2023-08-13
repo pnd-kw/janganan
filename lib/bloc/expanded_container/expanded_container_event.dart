@@ -1,6 +1,6 @@
 part of 'expanded_container_bloc.dart';
 
-sealed class ExpandedContainerEvent extends Equatable {
+abstract class ExpandedContainerEvent extends Equatable {
   const ExpandedContainerEvent();
 
   @override
