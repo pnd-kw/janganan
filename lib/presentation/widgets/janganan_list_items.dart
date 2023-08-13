@@ -21,7 +21,9 @@ class JangananListItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => QuantityCounterBloc(isIntType: false),
+      create: (context) => QuantityCounterBloc(
+        isIntType: filteredItems[index].category.title == 'Vegetable',
+      ),
       child: GestureDetector(
         onTap: () {
           context
@@ -59,49 +61,7 @@ class JangananListItems extends StatelessWidget {
                             fit: BoxFit.cover,
                           ),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              filteredItems[index].itemName,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  filteredItems[index].category.title,
-                                  style: GoogleFonts.mPlus1p(
-                                    fontSize: 12,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                  child: filteredItems[index].category.catIcon,
-                                )
-                              ],
-                            ),
-                            Text(
-                              'stok: ${filteredItems[index].stock.toString()}',
-                              style: GoogleFonts.mPlus1p(
-                                fontSize: 12,
-                              ),
-                            ),
-                            Text(
-                              'harga: Rp ${filteredItems[index].price.toString()}',
-                              style: GoogleFonts.mPlus1p(fontSize: 12),
-                            ),
-                          ],
-                        ),
+                        _buildItemDetailInfo(context),
                       ],
                     ),
                   ),
@@ -129,59 +89,8 @@ class JangananListItems extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              BlocBuilder<QuantityCounterBloc,
-                                  QuantityCounterState>(
-                                builder: (context, countState) {
-                                  return Row(
-                                    children: [
-                                      SizedBox(
-                                        height: 30,
-                                        child: IconButton(
-                                          onPressed: () {
-                                            context
-                                                .read<QuantityCounterBloc>()
-                                                .add(DecrementEvent());
-                                          },
-                                          icon: const Icon(Icons.remove),
-                                          iconSize: 10,
-                                        ),
-                                      ),
-                                      Text('${countState.quantity}'),
-                                      SizedBox(
-                                        height: 30,
-                                        child: IconButton(
-                                          onPressed: () {
-                                            context
-                                                .read<QuantityCounterBloc>()
-                                                .add(IncrementEvent());
-                                          },
-                                          icon: const Icon(Icons.add),
-                                          iconSize: 10,
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                              TextButton(
-                                onPressed: () {},
-                                style: TextButton.styleFrom(
-                                    backgroundColor: AppColor.secondaryColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    )),
-                                child: Text(
-                                  'Add to Cart',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall!
-                                      .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .background,
-                                      ),
-                                ),
-                              ),
+                              _buildQuantityCounter(),
+                              _buildAddToCartButton(context),
                             ],
                           ),
                           Padding(
@@ -210,4 +119,94 @@ class JangananListItems extends StatelessWidget {
       ),
     );
   }
+
+  // Item detail info widget
+  Widget _buildItemDetailInfo(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            filteredItems[index].itemName,
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(color: Theme.of(context).colorScheme.onBackground),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                filteredItems[index].category.title,
+                style: GoogleFonts.mPlus1p(
+                  fontSize: 12,
+                ),
+              ),
+              SizedBox(
+                height: 20,
+                child: filteredItems[index].category.catIcon,
+              )
+            ],
+          ),
+          Text(
+            'stok: ${filteredItems[index].stock.toString()}',
+            style: GoogleFonts.mPlus1p(
+              fontSize: 12,
+            ),
+          ),
+          Text(
+            'harga: Rp ${filteredItems[index].price.toString()}',
+            style: GoogleFonts.mPlus1p(fontSize: 12),
+          ),
+        ],
+      );
+
+  // Quantity counter widget
+  Widget _buildQuantityCounter() =>
+      BlocBuilder<QuantityCounterBloc, QuantityCounterState>(
+        builder: (context, countState) {
+          return Row(
+            children: [
+              SizedBox(
+                height: 30,
+                child: IconButton(
+                  onPressed: () {
+                    context.read<QuantityCounterBloc>().add(DecrementEvent());
+                  },
+                  icon: const Icon(Icons.remove),
+                  iconSize: 10,
+                ),
+              ),
+              Text('${countState.quantity} kg'),
+              SizedBox(
+                height: 30,
+                child: IconButton(
+                  onPressed: () {
+                    context.read<QuantityCounterBloc>().add(IncrementEvent());
+                  },
+                  icon: const Icon(Icons.add),
+                  iconSize: 10,
+                ),
+              ),
+            ],
+          );
+        },
+      );
+
+  // Add to cart button widget
+  Widget _buildAddToCartButton(BuildContext context) => TextButton(
+        onPressed: () {},
+        style: TextButton.styleFrom(
+            backgroundColor: AppColor.secondaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            )),
+        child: Text(
+          'Add to Cart',
+          style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                color: Theme.of(context).colorScheme.background,
+              ),
+        ),
+      );
 }
