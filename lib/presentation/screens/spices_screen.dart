@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:janganan/bloc/janganan_bloc.dart';
 import 'package:janganan/presentation/widgets/bottom_navigation.dart';
-import 'package:janganan/presentation/widgets/janganan_list.dart';
+import 'package:janganan/presentation/widgets/janganan_list_widgets/janganan_list.dart';
 
 class SpicesScreen extends StatelessWidget {
   const SpicesScreen({super.key});
