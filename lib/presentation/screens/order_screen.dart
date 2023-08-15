@@ -7,7 +7,7 @@ class OrderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('Under Construction!'),
+        child: Text('Order Screen Under Construction!'),
       ),
     );
   }

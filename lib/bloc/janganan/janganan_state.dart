@@ -9,7 +9,7 @@ abstract class JangananState extends Equatable {
 
 final class JangananInitial extends JangananState {}
 
-final class LoadByCategory extends JangananState {
+class LoadByCategory extends JangananState {
   final List<JangananItem> filteredItems;
 
   const LoadByCategory({required this.filteredItems});

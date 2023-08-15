@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:janganan/bloc/bottom_navigation/bottom_navigation_bloc.dart';
 import 'package:janganan/bloc/expanded_container/expanded_container_bloc.dart';
 import 'package:janganan/bloc/janganan/janganan_bloc.dart';
 import 'package:janganan/config/theme.dart';
@@ -26,6 +27,9 @@ class Janganan extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          create: (context) => BottomNavigationBloc(),
+        ),
+        BlocProvider(
           create: (context) => JangananBloc(),
         ),
         BlocProvider(
@@ -38,14 +42,14 @@ class Janganan extends StatelessWidget {
         // home: const HomeScreen(),
         initialRoute: '/',
         routes: {
-          '/': (ctx) => const BottomNavigation(),
-          '/home-screen': (ctx) => const HomeScreen(),
-          '/order-screen': (ctx) => const OrderScreen(),
-          '/user-screen': (ctx) => const UserScreen(),
-          '/vegetables-screen': (ctx) => const VegetablesScreen(),
-          '/fruits-screen': (ctx) => const FruitsScreen(),
-          '/spices-screen': (ctx) => const SpicesScreen(),
-          '/add-vegetable-screen': (ctx) => const AddVegetableScreen(),
+          '/': (context) => const BottomNavigation(),
+          '/home-screen': (context) => const HomeScreen(),
+          '/order-screen': (context) => const OrderScreen(),
+          '/user-screen': (context) => const UserScreen(),
+          '/vegetables-screen': (context) => const VegetablesScreen(),
+          '/fruits-screen': (context) => const FruitsScreen(),
+          '/spices-screen': (context) => const SpicesScreen(),
+          '/add-vegetable-screen': (context) => const AddVegetableScreen(),
         },
       ),
     );

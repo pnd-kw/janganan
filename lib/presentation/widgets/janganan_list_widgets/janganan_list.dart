@@ -18,7 +18,7 @@ class JangananList extends StatelessWidget {
         } else if (jangananState is LoadByCategory) {
           return ListView.builder(
             itemCount: jangananState.filteredItems.length,
-            itemBuilder: (ctx, index) {
+            itemBuilder: (context, index) {
               return BlocBuilder<ExpandedContainerBloc, ExpandedContainerState>(
                 builder: (context, expandedContainerState) {
                   return JangananListItems(

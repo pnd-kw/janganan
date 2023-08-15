@@ -8,3 +8,12 @@ abstract class BottomNavigationState extends Equatable {
 }
 
 final class BottomNavigationInitial extends BottomNavigationState {}
+
+class BottomNavigationChanged extends BottomNavigationState {
+  final int navIndex;
+
+  const BottomNavigationChanged({required this.navIndex});
+
+  @override
+  List<Object> get props => [navIndex];
+}

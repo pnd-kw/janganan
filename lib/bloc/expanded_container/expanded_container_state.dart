@@ -7,7 +7,7 @@ abstract class ExpandedContainerState extends Equatable {
   List<Object> get props => [];
 }
 
-final class ExpandedContainerInitial extends ExpandedContainerState {
+class ExpandedContainerInitial extends ExpandedContainerState {
   final int expandedIndex;
 
   const ExpandedContainerInitial({required this.expandedIndex});
