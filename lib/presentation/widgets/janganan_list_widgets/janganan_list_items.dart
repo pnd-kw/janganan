@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:janganan/bloc/expanded_container/expanded_container_bloc.dart';
 import 'package:janganan/bloc/quantity_counter/quantity_counter_bloc.dart';
-import 'package:janganan/bloc/total_price/bloc/total_price_bloc.dart';
+import 'package:janganan/bloc/total_price/total_price_bloc.dart';
 import 'package:janganan/data/models/janganan_item_model.dart';
 import 'package:janganan/presentation/widgets/janganan_list_widgets/janganan_add_to_cart.dart';
 import 'package:janganan/presentation/widgets/janganan_list_widgets/janganan_detail.dart';
@@ -150,46 +150,6 @@ class JangananListItems extends StatelessWidget {
         itemStock: 'stok: ${filteredItems[index].stock.toString()}',
         itemPrice: 'harga: Rp ${filteredItems[index].price.toString()}',
       );
-  // Widget _buildItemDetailInfo(BuildContext context) => Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         Text(
-  //           filteredItems[index].itemName,
-  //           style: Theme.of(context)
-  //               .textTheme
-  //               .titleMedium!
-  //               .copyWith(color: Theme.of(context).colorScheme.onBackground),
-  //         ),
-  //         const SizedBox(
-  //           height: 10,
-  //         ),
-  //         Row(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             Text(
-  //               filteredItems[index].category.title,
-  //               style: GoogleFonts.mPlus1p(
-  //                 fontSize: 12,
-  //               ),
-  //             ),
-  //             SizedBox(
-  //               height: 20,
-  //               child: filteredItems[index].category.catIcon,
-  //             )
-  //           ],
-  //         ),
-  //         Text(
-  //           'stok: ${filteredItems[index].stock.toString()}',
-  //           style: GoogleFonts.mPlus1p(
-  //             fontSize: 12,
-  //           ),
-  //         ),
-  //         Text(
-  //           'harga: Rp ${filteredItems[index].price.toString()}',
-  //           style: GoogleFonts.mPlus1p(fontSize: 12),
-  //         ),
-  //       ],
-  //     );
 
   // Quantity counter widget
   Widget _buildQuantityCounter() =>
@@ -204,58 +164,10 @@ class JangananListItems extends StatelessWidget {
               context.read<QuantityCounterBloc>().add(IncrementEvent());
             },
           );
-          // return Row(
-          //   children: [
-          //     SizedBox(
-          //       height: 30,
-          //       child: IconButton(
-          //         onPressed: () {
-          //           context.read<QuantityCounterBloc>().add(DecrementEvent());
-          //         },
-          //         icon: const Icon(Icons.remove),
-          //         iconSize: 10,
-          //       ),
-          //     ),
-          //     Text(
-          //       '${countState.quantity}',
-          //       style: Theme.of(context).textTheme.titleSmall!.copyWith(
-          //           color: Theme.of(context).colorScheme.onBackground),
-          //     ),
-          //     SizedBox(
-          //       height: 30,
-          //       child: IconButton(
-          //         onPressed: () {
-          //           context.read<QuantityCounterBloc>().add(IncrementEvent());
-          //         },
-          //         icon: const Icon(Icons.add),
-          //         iconSize: 10,
-          //       ),
-          //     ),
-          //     Text(
-          //       '/kg/buah/ikat',
-          //       style: Theme.of(context).textTheme.titleSmall!.copyWith(
-          //           color: Theme.of(context).colorScheme.onBackground),
-          //     ),
-          //   ],
-          // );
         },
       );
 
   // Add to cart button widget
   Widget _buildAddToCartButton(BuildContext context) =>
       JangananAddToCart(addToCart: () {}, buttonText: 'Add to Cart');
-  // TextButton(
-  //       onPressed: () {},
-  //       style: TextButton.styleFrom(
-  //           backgroundColor: AppColor.secondaryColor,
-  //           shape: RoundedRectangleBorder(
-  //             borderRadius: BorderRadius.circular(10),
-  //           )),
-  //       child: Text(
-  //         'Add to Cart',
-  //         style: Theme.of(context).textTheme.titleSmall!.copyWith(
-  //               color: Theme.of(context).colorScheme.background,
-  //             ),
-  //       ),
-  //     );
 }
