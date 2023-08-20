@@ -124,7 +124,10 @@ class LoginScreen extends StatelessWidget {
                                           .onBackground),
                             ),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context)
+                                    .pushNamed('/register-screen');
+                              },
                               child: Text(
                                 'Daftar',
                                 style: Theme.of(context)

@@ -11,6 +11,7 @@ import 'package:janganan/presentation/screens/home_screen.dart';
 import 'package:janganan/presentation/screens/login_screen.dart';
 import 'package:janganan/presentation/screens/onboarding_screen.dart';
 import 'package:janganan/presentation/screens/order_screen.dart';
+import 'package:janganan/presentation/screens/register_screen.dart';
 import 'package:janganan/presentation/screens/spices_screen.dart';
 import 'package:janganan/presentation/screens/user_screen.dart';
 import 'package:janganan/presentation/screens/vegetables_screen.dart';
@@ -46,6 +47,7 @@ class Janganan extends StatelessWidget {
         routes: {
           '/': (context) => const OnBoardingScreen(),
           '/login-screen': (context) => const LoginScreen(),
+          '/register-screen': (context) => const RegisterScreen(),
           '/bottom-navigation': (context) => const BottomNavigation(),
           '/home-screen': (context) => const HomeScreen(),
           '/order-screen': (context) => const OrderScreen(),
