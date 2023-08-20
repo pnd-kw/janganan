@@ -102,7 +102,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   ElevatedButton(
                       onPressed: () {
                         Navigator.of(context)
-                            .pushReplacementNamed('/bottom-navigation');
+                            .pushReplacementNamed('/login-screen');
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColor.secondaryColor,
