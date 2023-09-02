@@ -7,6 +7,7 @@ final colorScheme = ColorScheme.fromSeed(seedColor: AppColor.primaryColor);
 final theme = ThemeData().copyWith(
   useMaterial3: true,
   colorScheme: colorScheme,
+  primaryColor: AppColor.primaryColor,
   textTheme: GoogleFonts.mPlus1pTextTheme().copyWith(
     titleLarge: GoogleFonts.mPlus1p(
       fontWeight: FontWeight.bold,

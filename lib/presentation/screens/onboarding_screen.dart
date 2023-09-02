@@ -18,105 +18,188 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       body: PageView(
         controller: pageController,
         children: [
-          // Center(
-          SizedBox(
-            height: 500,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-                  child: Text(
-                    'Selamat Datang di Janganan',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.onBackground),
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-                SizedBox(
-                  height: 300,
-                  width: double.infinity,
-                  child: Image.asset(
-                    'assets/images/onboarding-img1.png',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-                  child: Text(
-                    'Jaga kesehatanmu dengan memenuhi kebutuhan nutrisi harian mu dari sayur-sayuran, buah-buahan yang berkualitas.',
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                        color: Theme.of(context).colorScheme.onBackground),
-                    textAlign: TextAlign.end,
-                    maxLines: 4,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // ),
-          Center(
-            child: SizedBox(
-              height: 500,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 300,
-                    width: double.infinity,
-                    child: Image.asset(
-                      'assets/images/onboarding-img2.png',
-                      fit: BoxFit.cover,
+          // OnBoarding First Page
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              // SizedBox(
+              //   height: 100,
+              //   child: Padding(
+              //     padding:
+              //         const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              //     child: TextButton(
+              //       onPressed: () {
+              //         Navigator.of(context)
+              //             .pushReplacementNamed('/login-screen');
+              //       },
+              //       child: Text(
+              //         'Lewati',
+              //         style: Theme.of(context).textTheme.titleMedium!.copyWith(
+              //             color: Theme.of(context).colorScheme.primary),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              buildTopRightButton(),
+              SizedBox(
+                height: 600,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 30, horizontal: 20),
+                      child: buildTitleLarge(
+                          'Selamat Datang di Janganan', TextAlign.start),
+                      //   child: Text(
+                      //     'Selamat Datang di Janganan',
+                      //     style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      //         color: Theme.of(context).colorScheme.onBackground),
+                      //     textAlign: TextAlign.start,
+                      //   ),
                     ),
-                  ),
-                  Text(
-                    'Kami menyediakan sayur, buah, bumbu setiap hari.',
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                        color: Theme.of(context).colorScheme.onBackground),
-                  )
-                ],
+                    // SizedBox(
+                    //   height: 300,
+                    //   width: double.infinity,
+                    //   child: Image.asset(
+                    //     'assets/images/onboarding-img1.png',
+                    //     fit: BoxFit.fitHeight,
+                    //   ),
+                    // ),
+                    buildImage('assets/images/onboarding-img1.png'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: buildTitleSmall(
+                          'Jaga kesehatanmu dengan memenuhi kebutuhan nutrisi harian mu dari sayur-sayuran, buah-buahan yang berkualitas.',
+                          TextAlign.end,
+                          4),
+                      // child: Text(
+                      //   'Jaga kesehatanmu dengan memenuhi kebutuhan nutrisi harian mu dari sayur-sayuran, buah-buahan yang berkualitas.',
+                      //   style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                      //       color: Theme.of(context).colorScheme.onBackground),
+                      //   textAlign: TextAlign.end,
+                      //   maxLines: 4,
+                      // ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ],
           ),
+          // OnBoarding Second Page
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              // SizedBox(
+              //   height: 100,
+              //   child: Padding(
+              //     padding:
+              //         const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+              //     child: TextButton(
+              //       onPressed: () {
+              //         Navigator.of(context)
+              //             .pushReplacementNamed('/login-screen');
+              //       },
+              //       child: Text(
+              //         'Lewati',
+              //         style: Theme.of(context).textTheme.titleMedium!.copyWith(
+              //             color: Theme.of(context).colorScheme.primary),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              buildTopRightButton(),
+              SizedBox(
+                height: 600,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // SizedBox(
+                    //   height: 300,
+                    //   width: double.infinity,
+                    //   child: Image.asset(
+                    //     'assets/images/onboarding-img2.png',
+                    //     fit: BoxFit.fitHeight,
+                    //   ),
+                    // ),
+                    buildImage('assets/images/onboarding-img2.png'),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 20),
+                      child: Column(
+                        children: [
+                          buildTitleLarge(
+                              'Harga Update Setiap Hari', TextAlign.center),
+                          // Text(
+                          //   'Harga Update Setiap Hari',
+                          //   style: Theme.of(context)
+                          //       .textTheme
+                          //       .titleLarge!
+                          //       .copyWith(
+                          //           color: Theme.of(context)
+                          //               .colorScheme
+                          //               .onBackground),
+                          //   textAlign: TextAlign.center,
+                          // ),
+                          buildTitleSmall(
+                              'Ketahui harga terbaru dari kebutuhan mu setiap hari dari smartphone mu.',
+                              TextAlign.center,
+                              2)
+                          // Text(
+                          //   'Ketahui harga terbaru dari kebutuhan mu setiap hari dari smartphone mu.',
+                          //   style: Theme.of(context)
+                          //       .textTheme
+                          //       .titleSmall!
+                          //       .copyWith(
+                          //           color: Theme.of(context)
+                          //               .colorScheme
+                          //               .onBackground),
+                          //   textAlign: TextAlign.center,
+                          // ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+          // OnBoarding Third Page
           Center(
             child: SizedBox(
-              height: 500,
+              height: 600,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Selamat Berbelanja',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: Theme.of(context).colorScheme.onBackground),
-                  ),
-                  SizedBox(
-                    height: 300,
-                    width: double.infinity,
-                    child: Image.asset(
-                      'assets/images/onboarding-img3.png',
+                  // SizedBox(
+                  //   height: 300,
+                  //   width: double.infinity,
+                  //   child: Image.asset(
+                  //     'assets/images/onboarding-img3.png',
+                  //     fit: BoxFit.fitHeight,
+                  //   ),
+                  // ),
+                  buildImage('assets/images/onboarding-img3.png'),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .pushReplacementNamed('/login-screen');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColor.secondaryColor,
+                    ),
+                    child: Text(
+                      'MULAI',
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushReplacementNamed('/login-screen');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColor.secondaryColor,
-                      ),
-                      child: Text(
-                        'MULAI',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      )),
                 ],
               ),
             ),
           ),
         ],
       ),
+      // Bottom Slide
       bottomSheet: Container(
         color: Colors.white,
         height: 50,
@@ -135,4 +218,52 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       ),
     );
   }
+
+  Widget buildTopRightButton() => SizedBox(
+        height: 100,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+          child: TextButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed('/login-screen');
+            },
+            child: Text(
+              'Lewati',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(color: Theme.of(context).colorScheme.primary),
+            ),
+          ),
+        ),
+      );
+
+  Widget buildImage(String imgPath) => SizedBox(
+        height: 300,
+        width: double.infinity,
+        child: Image.asset(
+          // 'assets/images/onboarding-img1.png',
+          imgPath,
+          fit: BoxFit.fitHeight,
+        ),
+      );
+
+  Widget buildTitleLarge(String text, TextAlign align) => Text(
+        text,
+        style: Theme.of(context)
+            .textTheme
+            .titleLarge!
+            .copyWith(color: Theme.of(context).colorScheme.onBackground),
+        textAlign: align,
+      );
+
+  Widget buildTitleSmall(String text, TextAlign align, int lines) => Text(
+        text,
+        style: Theme.of(context)
+            .textTheme
+            .titleSmall!
+            .copyWith(color: Theme.of(context).colorScheme.onBackground),
+        textAlign: align,
+        maxLines: lines,
+      );
 }

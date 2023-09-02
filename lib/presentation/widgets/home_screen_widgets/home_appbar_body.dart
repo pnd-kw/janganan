@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:janganan/bloc/janganan/janganan_bloc.dart';
+// import 'package:janganan/config/theme.dart';
 import 'package:janganan/data/models/categories.dart';
 import 'package:janganan/data/models/category_model.dart';
 import 'package:janganan/presentation/widgets/home_screen_widgets/campaign_banner.dart';
@@ -20,7 +21,8 @@ class HomeAppBarBody extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         SliverAppBar(
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          // backgroundColor: Theme.of(context).colorScheme.primary,
+          backgroundColor: Theme.of(context).primaryColor,
           pinned: true,
           title: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
