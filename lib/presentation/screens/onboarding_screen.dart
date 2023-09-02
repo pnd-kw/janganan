@@ -22,24 +22,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              // SizedBox(
-              //   height: 100,
-              //   child: Padding(
-              //     padding:
-              //         const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              //     child: TextButton(
-              //       onPressed: () {
-              //         Navigator.of(context)
-              //             .pushReplacementNamed('/login-screen');
-              //       },
-              //       child: Text(
-              //         'Lewati',
-              //         style: Theme.of(context).textTheme.titleMedium!.copyWith(
-              //             color: Theme.of(context).colorScheme.primary),
-              //       ),
-              //     ),
-              //   ),
-              // ),
               buildTopRightButton(),
               SizedBox(
                 height: 600,
@@ -51,21 +33,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           vertical: 30, horizontal: 20),
                       child: buildTitleLarge(
                           'Selamat Datang di Janganan', TextAlign.start),
-                      //   child: Text(
-                      //     'Selamat Datang di Janganan',
-                      //     style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      //         color: Theme.of(context).colorScheme.onBackground),
-                      //     textAlign: TextAlign.start,
-                      //   ),
                     ),
-                    // SizedBox(
-                    //   height: 300,
-                    //   width: double.infinity,
-                    //   child: Image.asset(
-                    //     'assets/images/onboarding-img1.png',
-                    //     fit: BoxFit.fitHeight,
-                    //   ),
-                    // ),
                     buildImage('assets/images/onboarding-img1.png'),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -73,13 +41,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           'Jaga kesehatanmu dengan memenuhi kebutuhan nutrisi harian mu dari sayur-sayuran, buah-buahan yang berkualitas.',
                           TextAlign.end,
                           4),
-                      // child: Text(
-                      //   'Jaga kesehatanmu dengan memenuhi kebutuhan nutrisi harian mu dari sayur-sayuran, buah-buahan yang berkualitas.',
-                      //   style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                      //       color: Theme.of(context).colorScheme.onBackground),
-                      //   textAlign: TextAlign.end,
-                      //   maxLines: 4,
-                      // ),
                     ),
                   ],
                 ),
@@ -90,38 +51,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              // SizedBox(
-              //   height: 100,
-              //   child: Padding(
-              //     padding:
-              //         const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-              //     child: TextButton(
-              //       onPressed: () {
-              //         Navigator.of(context)
-              //             .pushReplacementNamed('/login-screen');
-              //       },
-              //       child: Text(
-              //         'Lewati',
-              //         style: Theme.of(context).textTheme.titleMedium!.copyWith(
-              //             color: Theme.of(context).colorScheme.primary),
-              //       ),
-              //     ),
-              //   ),
-              // ),
               buildTopRightButton(),
               SizedBox(
                 height: 600,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // SizedBox(
-                    //   height: 300,
-                    //   width: double.infinity,
-                    //   child: Image.asset(
-                    //     'assets/images/onboarding-img2.png',
-                    //     fit: BoxFit.fitHeight,
-                    //   ),
-                    // ),
                     buildImage('assets/images/onboarding-img2.png'),
                     Padding(
                       padding: const EdgeInsets.symmetric(
@@ -130,32 +65,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         children: [
                           buildTitleLarge(
                               'Harga Update Setiap Hari', TextAlign.center),
-                          // Text(
-                          //   'Harga Update Setiap Hari',
-                          //   style: Theme.of(context)
-                          //       .textTheme
-                          //       .titleLarge!
-                          //       .copyWith(
-                          //           color: Theme.of(context)
-                          //               .colorScheme
-                          //               .onBackground),
-                          //   textAlign: TextAlign.center,
-                          // ),
                           buildTitleSmall(
                               'Ketahui harga terbaru dari kebutuhan mu setiap hari dari smartphone mu.',
                               TextAlign.center,
                               2)
-                          // Text(
-                          //   'Ketahui harga terbaru dari kebutuhan mu setiap hari dari smartphone mu.',
-                          //   style: Theme.of(context)
-                          //       .textTheme
-                          //       .titleSmall!
-                          //       .copyWith(
-                          //           color: Theme.of(context)
-                          //               .colorScheme
-                          //               .onBackground),
-                          //   textAlign: TextAlign.center,
-                          // ),
                         ],
                       ),
                     )
@@ -171,14 +84,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // SizedBox(
-                  //   height: 300,
-                  //   width: double.infinity,
-                  //   child: Image.asset(
-                  //     'assets/images/onboarding-img3.png',
-                  //     fit: BoxFit.fitHeight,
-                  //   ),
-                  // ),
                   buildImage('assets/images/onboarding-img3.png'),
                   ElevatedButton(
                     onPressed: () {
@@ -242,7 +147,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         height: 300,
         width: double.infinity,
         child: Image.asset(
-          // 'assets/images/onboarding-img1.png',
           imgPath,
           fit: BoxFit.fitHeight,
         ),

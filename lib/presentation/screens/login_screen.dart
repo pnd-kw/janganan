@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:janganan/utils/constants/colors.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _loginFormKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,46 +31,68 @@ class LoginScreen extends StatelessWidget {
                         color: Theme.of(context).colorScheme.onBackground),
                   ),
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      hintText: 'johndoe@gmail.com',
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(width: 1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Theme.of(context).colorScheme.primary,
+                Form(
+                  key: _loginFormKey,
+                  autovalidateMode: AutovalidateMode.always,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 10),
+                        child: TextFormField(
+                          controller: _emailController,
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return 'Bidang ini tidak boleh kosong.';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                            hintText: 'johndoe@gmail.com',
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(width: 1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 1,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
                         ),
-                        borderRadius: BorderRadius.circular(10),
                       ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      hintText: 'Password',
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(width: 1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Theme.of(context).colorScheme.primary,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 10),
+                        child: TextFormField(
+                          controller: _passwordController,
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return 'Bidang ini tidak boleh kosong.';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            hintText: 'Password',
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(width: 1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 1,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
                         ),
-                        borderRadius: BorderRadius.circular(10),
                       ),
-                    ),
+                    ],
                   ),
                 ),
                 Padding(
