@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:janganan/presentation/widgets/reusable_form_field.dart';
 import 'package:janganan/utils/constants/colors.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -36,62 +37,84 @@ class _LoginScreenState extends State<LoginScreen> {
                   autovalidateMode: AutovalidateMode.always,
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 10),
-                        child: TextFormField(
-                          controller: _emailController,
-                          validator: (text) {
-                            if (text == null || text.isEmpty) {
-                              return 'Bidang ini tidak boleh kosong.';
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            labelText: 'Email',
-                            hintText: 'johndoe@gmail.com',
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(width: 1),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
+                      ReusableFormField(
+                        controller: _emailController,
+                        validator: (text) {
+                          if (text == null || text.isEmpty) {
+                            return 'Bidang ini tidak boleh kosong.';
+                          }
+                          return null;
+                        },
+                        label: 'Email',
+                        hint: 'johndoe@gmail.com',
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 10),
-                        child: TextFormField(
-                          controller: _passwordController,
-                          validator: (text) {
-                            if (text == null || text.isEmpty) {
-                              return 'Bidang ini tidak boleh kosong.';
-                            }
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            hintText: 'Password',
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(width: 1),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(
+                      //       vertical: 10, horizontal: 10),
+                      //   child: TextFormField(
+                      //     controller: _emailController,
+                      //     validator: (text) {
+                      //       if (text == null || text.isEmpty) {
+                      //         return 'Bidang ini tidak boleh kosong.';
+                      //       }
+                      //       return null;
+                      //     },
+                      //     decoration: InputDecoration(
+                      //       labelText: 'Email',
+                      //       hintText: 'johndoe@gmail.com',
+                      //       border: OutlineInputBorder(
+                      //         borderSide: const BorderSide(width: 1),
+                      //         borderRadius: BorderRadius.circular(10),
+                      //       ),
+                      //       focusedBorder: OutlineInputBorder(
+                      //         borderSide: BorderSide(
+                      //           width: 1,
+                      //           color: Theme.of(context).colorScheme.primary,
+                      //         ),
+                      //         borderRadius: BorderRadius.circular(10),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      ReusableFormField(
+                        controller: _passwordController,
+                        validator: (text) {
+                          if (text == null || text.isEmpty) {
+                            return 'Bidang ini tidak boleh kosong.';
+                          }
+                          return null;
+                        },
+                        label: 'Password',
+                        hint: 'Xa8ji4opq9',
                       ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(
+                      //       vertical: 10, horizontal: 10),
+                      //   child: TextFormField(
+                      //     controller: _passwordController,
+                      //     validator: (text) {
+                      //       if (text == null || text.isEmpty) {
+                      //         return 'Bidang ini tidak boleh kosong.';
+                      //       }
+                      //       return null;
+                      //     },
+                      //     decoration: InputDecoration(
+                      //       labelText: 'Password',
+                      //       hintText: 'Password',
+                      //       border: OutlineInputBorder(
+                      //         borderSide: const BorderSide(width: 1),
+                      //         borderRadius: BorderRadius.circular(10),
+                      //       ),
+                      //       focusedBorder: OutlineInputBorder(
+                      //         borderSide: BorderSide(
+                      //           width: 1,
+                      //           color: Theme.of(context).colorScheme.primary,
+                      //         ),
+                      //         borderRadius: BorderRadius.circular(10),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

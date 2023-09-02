@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:janganan/utils/constants/colors.dart';
 
+import '../widgets/reusable_form_field.dart';
+
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -42,148 +44,63 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     autovalidateMode: AutovalidateMode.always,
                     child: Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          child: TextFormField(
-                            controller: _usernameController,
-                            validator: (text) {
-                              if (text == null || text.isEmpty) {
-                                return 'Bidang ini tidak boleh kosong.';
-                              }
-                              if (text.length < 3) {
-                                return 'Minimal 3 karakter.';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Nama',
-                              hintText: 'Nama',
-                              border: OutlineInputBorder(
-                                borderSide: const BorderSide(width: 1),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 1,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
+                        ReusableFormField(
+                          controller: _usernameController,
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return 'Bidang ini tidak boleh kosong.';
+                            }
+                            if (text.length < 3) {
+                              return 'Minimal 3 karakter.';
+                            }
+                            return null;
+                          },
+                          label: 'Nama',
+                          hint: 'John Doe',
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          child: TextFormField(
-                            controller: _emailController,
-                            validator: (text) {
-                              if (text == null || text.isEmpty) {
-                                return 'Bidang ini tidak boleh kosong.';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Email',
-                              hintText: 'Email',
-                              border: OutlineInputBorder(
-                                borderSide: const BorderSide(width: 1),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 1,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
+                        ReusableFormField(
+                          controller: _emailController,
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return 'Bidang ini tidak boleh kosong.';
+                            }
+                            return null;
+                          },
+                          label: 'Email',
+                          hint: 'johndoe@gmail.com',
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          child: TextFormField(
-                            controller: _phoneController,
-                            validator: (text) {
-                              if (text == null || text.isEmpty) {
-                                return 'Bidang ini tidak boleh kosong.';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Telepon',
-                              hintText: 'Telepon',
-                              border: OutlineInputBorder(
-                                borderSide: const BorderSide(width: 1),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 1,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
+                        ReusableFormField(
+                          controller: _phoneController,
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return 'Bidang ini tidak boleh kosong.';
+                            }
+                            return null;
+                          },
+                          label: 'Telepon',
+                          hint: '080808080808',
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          child: TextFormField(
-                            controller: _passwordController,
-                            validator: (text) {
-                              if (text == null || text.isEmpty) {
-                                return 'Bidang ini tidak boleh kosong.';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Password',
-                              hintText: 'Password',
-                              border: OutlineInputBorder(
-                                borderSide: const BorderSide(width: 1),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 1,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
+                        ReusableFormField(
+                          controller: _passwordController,
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return 'Bidang ini tidak boleh kosong.';
+                            }
+                            return null;
+                          },
+                          label: 'Password',
+                          hint: 'Xa8ji4opq9',
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          child: TextFormField(
-                            controller: _passwordMatchController,
-                            validator: (text) {
-                              if (text == null || text.isEmpty) {
-                                return 'Bidang ini tidak boleh kosong.';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Ulangi Password',
-                              hintText: 'Ulangi Password',
-                              border: OutlineInputBorder(
-                                borderSide: const BorderSide(width: 1),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 1,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
+                        ReusableFormField(
+                          controller: _passwordMatchController,
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return 'Bidang ini tidak boleh kosong.';
+                            }
+                            return null;
+                          },
+                          label: 'Ulangi Password',
+                          hint: 'Xa8ji4opq9',
                         ),
                       ],
                     ),
