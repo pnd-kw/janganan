@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:janganan/firebase_options.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:janganan/bloc/bottom_navigation/bottom_navigation_bloc.dart';
 import 'package:janganan/bloc/expanded_container/expanded_container_bloc.dart';
 import 'package:janganan/bloc/janganan/janganan_bloc.dart';
+
 import 'package:janganan/config/theme.dart';
+
 import 'package:janganan/presentation/screens/add_vegetable_screen.dart';
 import 'package:janganan/presentation/screens/fruits_screen.dart';
 import 'package:janganan/presentation/screens/home_screen.dart';
@@ -17,8 +23,12 @@ import 'package:janganan/presentation/screens/user_screen.dart';
 import 'package:janganan/presentation/screens/vegetables_screen.dart';
 import 'package:janganan/presentation/widgets/bottom_navigation.dart';
 
-void main() {
+void main() async {
   debugRepaintRainbowEnabled = false;
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const Janganan());
 }
 
