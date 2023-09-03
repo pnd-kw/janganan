@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:janganan/utils/constants/colors.dart';
+import 'package:janganan/utils/regex_validator.dart';
 
 import '../widgets/reusable_form_field.dart';
 
@@ -48,10 +49,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           controller: _usernameController,
                           validator: (text) {
                             if (text == null || text.isEmpty) {
-                              return 'Bidang ini tidak boleh kosong.';
+                              return msgEmptyField;
                             }
                             if (text.length < 3) {
-                              return 'Minimal 3 karakter.';
+                              return msgMinInput;
+                            }
+                            if (!validCharacters.hasMatch(text)) {
+                              return msgInvalidCharacters;
                             }
                             return null;
                           },
@@ -64,6 +68,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             if (text == null || text.isEmpty) {
                               return 'Bidang ini tidak boleh kosong.';
                             }
+                            if (!validEmail.hasMatch(text)) {
+                              return msgInvalidEmail;
+                            }
                             return null;
                           },
                           label: 'Email',
@@ -74,6 +81,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           validator: (text) {
                             if (text == null || text.isEmpty) {
                               return 'Bidang ini tidak boleh kosong.';
+                            }
+                            if (!validPhone.hasMatch(text)) {
+                              return msgInvalidPhone;
                             }
                             return null;
                           },
@@ -86,10 +96,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             if (text == null || text.isEmpty) {
                               return 'Bidang ini tidak boleh kosong.';
                             }
+                            if (!validPassword.hasMatch(text)) {
+                              return msgInvalidPassword;
+                            }
                             return null;
                           },
                           label: 'Password',
-                          hint: 'Xa8ji4opq9',
+                          hint: 'Contoh Xa8ji4opq9',
                         ),
                         ReusableFormField(
                           controller: _passwordMatchController,
@@ -97,10 +110,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             if (text == null || text.isEmpty) {
                               return 'Bidang ini tidak boleh kosong.';
                             }
+                            if (!validPassword.hasMatch(text)) {
+                              return msgInvalidPassword;
+                            }
                             return null;
                           },
                           label: 'Ulangi Password',
-                          hint: 'Xa8ji4opq9',
+                          hint: 'Contoh Xa8ji4opq9',
                         ),
                       ],
                     ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:janganan/presentation/widgets/reusable_form_field.dart';
 import 'package:janganan/utils/constants/colors.dart';
+import 'package:janganan/utils/regex_validator.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,9 +14,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _loginFormKey = GlobalKey<FormState>();
+  bool _isPasswordVisible = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Center(
         child: SizedBox(
           height: 600,
@@ -43,41 +47,27 @@ class _LoginScreenState extends State<LoginScreen> {
                           if (text == null || text.isEmpty) {
                             return 'Bidang ini tidak boleh kosong.';
                           }
+                          if (!validEmail.hasMatch(text)) {
+                            return msgInvalidEmail;
+                          }
                           return null;
                         },
                         label: 'Email',
                         hint: 'johndoe@gmail.com',
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(
-                      //       vertical: 10, horizontal: 10),
-                      //   child: TextFormField(
-                      //     controller: _emailController,
-                      //     validator: (text) {
-                      //       if (text == null || text.isEmpty) {
-                      //         return 'Bidang ini tidak boleh kosong.';
-                      //       }
-                      //       return null;
-                      //     },
-                      //     decoration: InputDecoration(
-                      //       labelText: 'Email',
-                      //       hintText: 'johndoe@gmail.com',
-                      //       border: OutlineInputBorder(
-                      //         borderSide: const BorderSide(width: 1),
-                      //         borderRadius: BorderRadius.circular(10),
-                      //       ),
-                      //       focusedBorder: OutlineInputBorder(
-                      //         borderSide: BorderSide(
-                      //           width: 1,
-                      //           color: Theme.of(context).colorScheme.primary,
-                      //         ),
-                      //         borderRadius: BorderRadius.circular(10),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                       ReusableFormField(
                         controller: _passwordController,
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                          icon: Icon(_isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                        ),
+                        obscureText: !_isPasswordVisible,
                         validator: (text) {
                           if (text == null || text.isEmpty) {
                             return 'Bidang ini tidak boleh kosong.';
@@ -87,34 +77,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         label: 'Password',
                         hint: 'Xa8ji4opq9',
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(
-                      //       vertical: 10, horizontal: 10),
-                      //   child: TextFormField(
-                      //     controller: _passwordController,
-                      //     validator: (text) {
-                      //       if (text == null || text.isEmpty) {
-                      //         return 'Bidang ini tidak boleh kosong.';
-                      //       }
-                      //       return null;
-                      //     },
-                      //     decoration: InputDecoration(
-                      //       labelText: 'Password',
-                      //       hintText: 'Password',
-                      //       border: OutlineInputBorder(
-                      //         borderSide: const BorderSide(width: 1),
-                      //         borderRadius: BorderRadius.circular(10),
-                      //       ),
-                      //       focusedBorder: OutlineInputBorder(
-                      //         borderSide: BorderSide(
-                      //           width: 1,
-                      //           color: Theme.of(context).colorScheme.primary,
-                      //         ),
-                      //         borderRadius: BorderRadius.circular(10),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),
