@@ -10,12 +10,14 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:janganan/main.dart';
 import 'package:janganan/repository/auth_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(
-        Janganan(authenticationRepository: AuthenticationRepository()));
+    final prefs = await SharedPreferences.getInstance();
+    await tester.pumpWidget(Janganan(
+        authenticationRepository: AuthenticationRepository(prefs: prefs)));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
