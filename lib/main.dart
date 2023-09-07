@@ -6,10 +6,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:janganan/bloc/app_bloc/app_bloc.dart';
 import 'package:janganan/bloc/bottom_navigation/bottom_navigation_bloc.dart';
+import 'package:janganan/bloc/cubit/cubit/sign_up_cubit.dart';
 import 'package:janganan/bloc/expanded_container/expanded_container_bloc.dart';
 import 'package:janganan/bloc/janganan/janganan_bloc.dart';
 
 import 'package:janganan/config/theme.dart';
+import 'package:janganan/firebase_options.dart';
 
 import 'package:janganan/presentation/screens/add_vegetable_screen.dart';
 import 'package:janganan/presentation/screens/fruits_screen.dart';
@@ -29,7 +31,9 @@ void main() async {
   debugRepaintRainbowEnabled = false;
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   final prefs = await SharedPreferences.getInstance();
 
@@ -55,6 +59,9 @@ class Janganan extends StatelessWidget {
           BlocProvider(
             create: (context) =>
                 AppBloc(authenticationRepository: _authenticationRepository),
+          ),
+          BlocProvider(
+            create: (context) => SignUpCubit(_authenticationRepository),
           ),
           BlocProvider(
             create: (context) => BottomNavigationBloc(),

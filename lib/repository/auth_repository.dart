@@ -1,5 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -117,38 +118,24 @@ class LogInWithGoogleFailure implements Exception {
 class LogOutFailure implements Exception {}
 
 class AuthenticationRepository {
-  final FirebaseFirestore _firebaseFirestore;
+  // final FirebaseFirestore _firebaseFirestore;
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
   final SharedPreferences _prefs;
 
+  bool isWeb = kIsWeb;
+
   AuthenticationRepository(
-      {FirebaseFirestore? firebaseFirestore,
-      firebase_auth.FirebaseAuth? firebaseAuth,
+      // {FirebaseFirestore? firebaseFirestore,
+      {firebase_auth.FirebaseAuth? firebaseAuth,
       GoogleSignIn? googleSignIn,
       required SharedPreferences prefs})
-      : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
-        _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
+      // : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
+      : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
         _googleSignIn = googleSignIn ?? GoogleSignIn.standard(),
         _prefs = prefs;
 
   Stream<User> get user {
-    // return _firebaseAuth.authStateChanges().asyncMap((firebaseUser) async {
-    //   final user = firebaseUser == null ? User.empty : firebaseUser.toUser;
-    //   final userRef = _firebaseFirestore.collection('user').doc(user.id);
-
-    //   if (firebaseUser != null) {
-    //     await userRef.set({'isLoggedIn': true}, SetOptions(merge: true));
-    //   } else {
-    //     await userRef.set({'isLoggedIn': false}, SetOptions(merge: true));
-    //   }
-    //   return user;
-    // });
-    // return _firebaseAuth.authStateChanges().map((firebaseUser) {
-    //   final user = firebaseUser == null ? User.empty : firebaseUser.toUser;
-    //   _cache.write();
-    //   return user;
-    // })
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
       final user = firebaseUser == null ? User.empty : firebaseUser.toUser;
       _prefs.setBool('isLoggedIn', firebaseUser != null);
@@ -159,7 +146,12 @@ class AuthenticationRepository {
   User get currentUser {
     final user = _firebaseAuth.currentUser?.toUser ?? User.empty;
     final isLoggedIn = _prefs.getBool('isLoggedIn') ?? false;
-    return user;
+
+    if (isLoggedIn) {
+      return user;
+    } else {
+      return User.empty;
+    }
   }
 
   Future<void> signUp({required String email, required String password}) async {
@@ -170,6 +162,32 @@ class AuthenticationRepository {
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
       throw const SignUpWithEmailAndPasswordFailure();
+    }
+  }
+
+  Future<void> logInWithGoogle() async {
+    try {
+      late final firebase_auth.AuthCredential credential;
+      if (isWeb) {
+        final googleProvider = firebase_auth.GithubAuthProvider();
+        final userCredential = await _firebaseAuth.signInWithPopup(
+          googleProvider,
+        );
+        credential = userCredential.credential!;
+      } else {
+        final googleUser = await _googleSignIn.signIn();
+        final googleAuth = await googleUser!.authentication;
+        credential = firebase_auth.GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+      }
+
+      await _firebaseAuth.signInWithCredential(credential);
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      throw LogInWithGoogleFailure.fromCode(e.code);
+    } catch (_) {
+      throw const LogInWithGoogleFailure();
     }
   }
 

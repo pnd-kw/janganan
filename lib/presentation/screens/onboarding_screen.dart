@@ -88,7 +88,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   ElevatedButton(
                     onPressed: () {
                       Navigator.of(context)
-                          .pushReplacementNamed('/login-screen');
+                          .pushReplacementNamed('/sign-in-screen');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColor.secondaryColor,
@@ -130,7 +130,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
           child: TextButton(
             onPressed: () {
-              Navigator.of(context).pushReplacementNamed('/login-screen');
+              Navigator.of(context).pushReplacementNamed('/sign-in-screen');
             },
             child: Text(
               'Lewati',

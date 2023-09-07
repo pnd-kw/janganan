@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:janganan/bloc/cubit/cubit/sign_up_cubit.dart';
 import 'package:janganan/utils/constants/colors.dart';
 import 'package:janganan/utils/regex_validator.dart';
 
-import '../widgets/reusable_form_field.dart';
+import '../../widgets/reusable_form_field.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
-  bool _isChecked = false;
+class _SignUpScreenState extends State<SignUpScreen> {
+  bool _isTermsAccepted = false;
+  bool _isPasswordVisible = false;
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
@@ -22,6 +25,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final signUpCubit = BlocProvider.of<SignUpCubit>(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Center(
@@ -47,6 +52,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       children: [
                         ReusableFormField(
                           controller: _usernameController,
+                          obscureText: false,
                           validator: (text) {
                             if (text == null || text.isEmpty) {
                               return msgEmptyField;
@@ -64,6 +70,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         ReusableFormField(
                           controller: _emailController,
+                          obscureText: false,
                           validator: (text) {
                             if (text == null || text.isEmpty) {
                               return 'Bidang ini tidak boleh kosong.';
@@ -78,6 +85,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         ReusableFormField(
                           controller: _phoneController,
+                          obscureText: false,
                           validator: (text) {
                             if (text == null || text.isEmpty) {
                               return 'Bidang ini tidak boleh kosong.';
@@ -88,10 +96,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             return null;
                           },
                           label: 'Telepon',
-                          hint: '080808080808',
+                          hint: '6280808080808',
                         ),
                         ReusableFormField(
                           controller: _passwordController,
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
+                            icon: Icon(
+                              _isPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                          ),
+                          obscureText: !_isPasswordVisible,
                           validator: (text) {
                             if (text == null || text.isEmpty) {
                               return 'Bidang ini tidak boleh kosong.';
@@ -106,6 +127,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         ReusableFormField(
                           controller: _passwordMatchController,
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            },
+                            icon: Icon(
+                              _isPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                          ),
+                          obscureText: !_isPasswordVisible,
                           validator: (text) {
                             if (text == null || text.isEmpty) {
                               return 'Bidang ini tidak boleh kosong.';
@@ -138,10 +170,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       .onBackground),
                         ),
                         Checkbox(
-                            value: _isChecked,
+                            value: _isTermsAccepted,
                             onChanged: (bool? newValue) {
                               setState(() {
-                                _isChecked = newValue!;
+                                _isTermsAccepted = newValue!;
                               });
                             }),
                       ],
@@ -153,7 +185,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          if (_registerFormKey.currentState!.validate()) {
+                            signUpCubit.signUpFormSubmitted(
+                              _emailController.text,
+                              _passwordController.text,
+                              _passwordMatchController.text,
+                            );
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColor.secondaryColor,
                           shape: RoundedRectangleBorder(
