@@ -79,7 +79,17 @@ class Janganan extends StatelessWidget {
           // home: const HomeScreen(),
           initialRoute: '/',
           routes: {
-            '/': (context) => const OnBoardingScreen(),
+            // '/': (context) => const OnBoardingScreen(),
+            '/': (context) {
+              final isAuthenticated = context.read<AppBloc>().state.status ==
+                  AppStatus.authenticated;
+
+              if (isAuthenticated) {
+                return const HomeScreen();
+              } else {
+                return const OnBoardingScreen();
+              }
+            },
             '/sign-in-screen': (context) => const SignInScreen(),
             '/sign-up-screen': (context) => const SignUpScreen(),
             '/bottom-navigation': (context) => const BottomNavigation(),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:janganan/bloc/cubit/cubit/sign_in_cubit.dart';
 import 'package:janganan/presentation/widgets/reusable_form_field.dart';
 import 'package:janganan/utils/constants/colors.dart';
 import 'package:janganan/utils/regex_validator.dart';
@@ -18,6 +20,8 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final signInCubit = BlocProvider.of<SignInCubit>(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Center(
@@ -86,7 +90,14 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (_loginFormKey.currentState!.validate()) {
+                          signInCubit.logInWithCredentials(
+                            _emailController.text,
+                            _passwordController.text,
+                          );
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColor.secondaryColor,
                         shape: RoundedRectangleBorder(
@@ -160,6 +171,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
                 ),
+                if (signInCubit.state.isLoading)
+                  const CircularProgressIndicator(),
               ],
             ),
           ),
