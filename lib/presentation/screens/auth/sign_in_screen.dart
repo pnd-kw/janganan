@@ -47,6 +47,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     children: [
                       ReusableFormField(
                         controller: _emailController,
+                        obscureText: false,
                         validator: (text) {
                           if (text == null || text.isEmpty) {
                             return 'Bidang ini tidak boleh kosong.';
@@ -90,12 +91,22 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (_loginFormKey.currentState!.validate()) {
-                          signInCubit.logInWithCredentials(
+                          await signInCubit.logInWithCredentials(
                             _emailController.text,
                             _passwordController.text,
                           );
+
+                          final signInState = signInCubit.state;
+
+                          if (signInState.status == SignInStatus.success) {
+                            print('Login Berhasil');
+                            Navigator.of(context)
+                                .pushReplacementNamed('/bottom-navigation');
+                          } else {
+                            print('Login Gagal: ${signInState.errorMessage}');
+                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -171,8 +182,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
                 ),
-                if (signInCubit.state.isLoading)
-                  const CircularProgressIndicator(),
+                // if (signInCubit.state.isLoading)
+                //   const CircularProgressIndicator(),
               ],
             ),
           ),

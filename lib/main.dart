@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:janganan/bloc/app_bloc/app_bloc.dart';
 import 'package:janganan/bloc/bottom_navigation/bottom_navigation_bloc.dart';
+import 'package:janganan/bloc/cubit/cubit/sign_in_cubit.dart';
 import 'package:janganan/bloc/cubit/cubit/sign_up_cubit.dart';
 import 'package:janganan/bloc/expanded_container/expanded_container_bloc.dart';
 import 'package:janganan/bloc/janganan/janganan_bloc.dart';
@@ -18,6 +19,7 @@ import 'package:janganan/presentation/screens/fruits_screen.dart';
 import 'package:janganan/presentation/screens/home_screen.dart';
 import 'package:janganan/presentation/screens/auth/sign_in_screen.dart';
 import 'package:janganan/presentation/screens/onboarding_screen.dart';
+// import 'package:janganan/presentation/screens/onboarding_screen.dart';
 import 'package:janganan/presentation/screens/order_screen.dart';
 import 'package:janganan/presentation/screens/auth/sign_up_screen.dart';
 import 'package:janganan/presentation/screens/spices_screen.dart';
@@ -61,6 +63,9 @@ class Janganan extends StatelessWidget {
                 AppBloc(authenticationRepository: _authenticationRepository),
           ),
           BlocProvider(
+            create: (context) => SignInCubit(_authenticationRepository),
+          ),
+          BlocProvider(
             create: (context) => SignUpCubit(_authenticationRepository),
           ),
           BlocProvider(
@@ -85,7 +90,7 @@ class Janganan extends StatelessWidget {
                   AppStatus.authenticated;
 
               if (isAuthenticated) {
-                return const HomeScreen();
+                return const BottomNavigation();
               } else {
                 return const OnBoardingScreen();
               }
