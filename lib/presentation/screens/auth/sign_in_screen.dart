@@ -90,40 +90,55 @@ class _SignInScreenState extends State<SignInScreen> {
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   child: SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (_loginFormKey.currentState!.validate()) {
-                          await signInCubit.logInWithCredentials(
-                            _emailController.text,
-                            _passwordController.text,
+                    child: BlocListener<SignInCubit, SignInState>(
+                      listener: (context, signInState) {
+                        if (signInState.status == SignInStatus.success) {
+                          Navigator.of(context)
+                              .pushReplacementNamed('/bottom-navigation');
+                        } else if (signInState.status == SignInStatus.failure) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Terdapat Kesalahan'),
+                              content: const Text(
+                                  'Otentikasi gagal, periksa kembali alamat email, password, dan koneksi anda.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Tutup'),
+                                ),
+                              ],
+                            ),
                           );
-
-                          final signInState = signInCubit.state;
-
-                          if (signInState.status == SignInStatus.success) {
-                            print('Login Berhasil');
-                            Navigator.of(context)
-                                .pushReplacementNamed('/bottom-navigation');
-                          } else {
-                            print('Login Gagal: ${signInState.errorMessage}');
-                          }
                         }
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColor.secondaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_loginFormKey.currentState!.validate()) {
+                            signInCubit.logInWithCredentials(
+                              _emailController.text,
+                              _passwordController.text,
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColor.secondaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 2,
                         ),
-                        elevation: 2,
-                      ),
-                      child: Text(
-                        'LOGIN',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(
-                                color:
-                                    Theme.of(context).colorScheme.background),
+                        child: Text(
+                          'LOGIN',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.background),
+                        ),
                       ),
                     ),
                   ),

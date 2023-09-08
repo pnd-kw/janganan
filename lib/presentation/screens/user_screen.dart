@@ -11,7 +11,30 @@ class UserScreen extends StatelessWidget {
       body: Center(
         child: TextButton(
           onPressed: () {
-            context.read<AppBloc>().add(const AppLogOutRequested());
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text('Logout'),
+                content: const Text(
+                    'Apakah anda yakin ingin keluar dari akun anda?'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      context.read<AppBloc>().add(const AppLogOutRequested());
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/sign-in-screen', (route) => false);
+                    },
+                    child: const Text('Keluar'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Batal'),
+                  ),
+                ],
+              ),
+            );
           },
           style: TextButton.styleFrom(
             backgroundColor: Colors.red,
