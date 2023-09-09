@@ -184,31 +184,60 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         vertical: 10, horizontal: 10),
                     child: SizedBox(
                       width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (_registerFormKey.currentState!.validate()) {
-                            signUpCubit.signUpFormSubmitted(
-                              _emailController.text,
-                              _passwordController.text,
-                              _passwordMatchController.text,
+                      child: BlocListener<SignUpCubit, SignUpState>(
+                        listener: (context, signUpState) {
+                          print('Status: ${signUpState.status}');
+                          print('ErrorMessage: ${signUpState.errorMessage}');
+                          if (signUpState.status == SignUpStatus.success) {
+                            Navigator.of(context)
+                                .pushReplacementNamed('/sign-in-screen');
+                          } else if (signUpState.status ==
+                              SignUpStatus.failure) {
+                            print('show dialog');
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('Terdapat Kesalahan'),
+                                content: Text(signUpState.errorMessage!),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Tutup'),
+                                  ),
+                                ],
+                              ),
                             );
                           }
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColor.secondaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (_registerFormKey.currentState!.validate()) {
+                              signUpCubit.signUpFormSubmitted(
+                                _emailController.text,
+                                _passwordController.text,
+                                _passwordMatchController.text,
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.secondaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            elevation: 2,
                           ),
-                          elevation: 2,
-                        ),
-                        child: Text(
-                          'REGISTER',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.background),
+                          child: Text(
+                            'REGISTER',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .background),
+                          ),
                         ),
                       ),
                     ),

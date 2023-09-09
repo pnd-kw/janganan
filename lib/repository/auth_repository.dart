@@ -23,7 +23,7 @@ class SignUpWithEmailAndPasswordFailure implements Exception {
         return const SignUpWithEmailAndPasswordFailure(
           'This user has been disabled. Please contact support for help.',
         );
-      case 'email-alreaady-in-use':
+      case 'email-already-in-use':
         return const SignUpWithEmailAndPasswordFailure(
           'An account already exists for that email.',
         );
