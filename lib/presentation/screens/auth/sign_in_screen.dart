@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:janganan/bloc/cubit/cubit/sign_in_cubit.dart';
+// import 'package:janganan/bloc/cubit/cubit/sign_up_cubit.dart';
 import 'package:janganan/presentation/widgets/reusable_form_field.dart';
 import 'package:janganan/utils/constants/colors.dart';
 import 'package:janganan/utils/regex_validator.dart';
@@ -21,6 +22,7 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     final signInCubit = BlocProvider.of<SignInCubit>(context);
+    // final signUpCubit = BlocProvider.of<SignUpCubit>(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -90,11 +92,16 @@ class _SignInScreenState extends State<SignInScreen> {
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   child: SizedBox(
                     width: double.infinity,
+                    // child: BlocListener<SignInCubit, SignInState>(
                     child: BlocListener<SignInCubit, SignInState>(
+                      // listener: (context, signInState) {
                       listener: (context, signInState) {
+                        // if (signInState.status == SignInStatus.success) {
                         if (signInState.status == SignInStatus.success) {
+                          // print('Sign Up status: ${signInState.status}');
                           Navigator.of(context)
-                              .pushReplacementNamed('/bottom-navigation');
+                              .pushReplacementNamed('/sign-up-screen');
+                          // } else if (signInState.status == SignInStatus.failure) {
                         } else if (signInState.status == SignInStatus.failure) {
                           showDialog(
                             context: context,
@@ -117,6 +124,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (_loginFormKey.currentState!.validate()) {
+                            // signInCubit.logInWithCredentials(
                             signInCubit.logInWithCredentials(
                               _emailController.text,
                               _passwordController.text,

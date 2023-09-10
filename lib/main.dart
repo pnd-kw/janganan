@@ -63,10 +63,10 @@ class Janganan extends StatelessWidget {
                 AppBloc(authenticationRepository: _authenticationRepository),
           ),
           BlocProvider(
-            create: (context) => SignInCubit(_authenticationRepository),
+            create: (context) => SignUpCubit(_authenticationRepository),
           ),
           BlocProvider(
-            create: (context) => SignUpCubit(_authenticationRepository),
+            create: (context) => SignInCubit(_authenticationRepository),
           ),
           BlocProvider(
             create: (context) => BottomNavigationBloc(),
@@ -84,17 +84,7 @@ class Janganan extends StatelessWidget {
           // home: const HomeScreen(),
           initialRoute: '/',
           routes: {
-            // '/': (context) => const OnBoardingScreen(),
-            '/': (context) {
-              final isAuthenticated = context.read<AppBloc>().state.status ==
-                  AppStatus.authenticated;
-
-              if (isAuthenticated) {
-                return const BottomNavigation();
-              } else {
-                return const OnBoardingScreen();
-              }
-            },
+            '/': (context) => const OnBoardingScreen(),
             '/sign-in-screen': (context) => const SignInScreen(),
             '/sign-up-screen': (context) => const SignUpScreen(),
             '/bottom-navigation': (context) => const BottomNavigation(),

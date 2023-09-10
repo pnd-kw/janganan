@@ -9,3 +9,4 @@ const msgInvalidCharacters = 'Tanpa spasi dan karakter khusus!';
 const msgInvalidEmail = 'Format email tidak sesuai!';
 const msgInvalidPhone = 'Format telepon tidak sesuai!';
 const msgInvalidPassword = '8 karakter dan berikan angka!';
+const msgPasswordDidNotMatch = 'Password tidak sama!';
