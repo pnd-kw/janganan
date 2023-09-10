@@ -5,8 +5,8 @@ import 'package:janganan/presentation/screens/home_screen.dart';
 import 'package:janganan/presentation/screens/order_screen.dart';
 import 'package:janganan/presentation/screens/user_screen.dart';
 
-class BottomNavigation extends StatelessWidget {
-  const BottomNavigation({super.key});
+class ScreenNavigation extends StatelessWidget {
+  const ScreenNavigation({super.key});
 
   @override
   Widget build(BuildContext context) {

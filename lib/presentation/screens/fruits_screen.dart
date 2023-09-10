@@ -34,7 +34,6 @@ class FruitsScreen extends StatelessWidget {
         ),
       ),
       body: const JangananList(),
-      // bottomNavigationBar: const BottomNavigation(),
     );
   }
 }

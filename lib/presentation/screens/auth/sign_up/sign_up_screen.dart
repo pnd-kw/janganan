@@ -191,6 +191,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         if (signUpState.status == SignUpStatus.success) {
                           Navigator.of(context)
                               .pushReplacementNamed('/sign-in-screen');
+                          showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                    title: const Text('Pendaftaran Berhasil'),
+                                    content: const Text(
+                                        'Selama pendaftaran telah berhasil, silahkan melakukan login.'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Tutup'),
+                                      ),
+                                    ],
+                                  ));
                         } else if (signUpState.status == SignUpStatus.failure) {
                           showDialog(
                             context: context,
@@ -240,7 +255,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 child: CircularProgressIndicator(
                                   valueColor: AlwaysStoppedAnimation(
                                       Theme.of(context).colorScheme.background),
-                                  // strokeWidth: 2,
                                 ),
                               )
                             : Text(

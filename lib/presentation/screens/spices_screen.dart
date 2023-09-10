@@ -33,7 +33,6 @@ class SpicesScreen extends StatelessWidget {
         ),
       ),
       body: const JangananList(),
-      // bottomNavigationBar: const BottomNavigation(),
     );
   }
 }

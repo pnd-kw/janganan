@@ -17,15 +17,14 @@ import 'package:janganan/firebase_options.dart';
 import 'package:janganan/presentation/screens/add_vegetable_screen.dart';
 import 'package:janganan/presentation/screens/fruits_screen.dart';
 import 'package:janganan/presentation/screens/home_screen.dart';
-import 'package:janganan/presentation/screens/auth/sign_in_screen.dart';
+import 'package:janganan/presentation/screens/auth/sign_in/sign_in_screen.dart';
 import 'package:janganan/presentation/screens/onboarding_screen.dart';
-// import 'package:janganan/presentation/screens/onboarding_screen.dart';
 import 'package:janganan/presentation/screens/order_screen.dart';
-import 'package:janganan/presentation/screens/auth/sign_up_screen.dart';
+import 'package:janganan/presentation/screens/auth/sign_up/sign_up_screen.dart';
 import 'package:janganan/presentation/screens/spices_screen.dart';
 import 'package:janganan/presentation/screens/user_screen.dart';
 import 'package:janganan/presentation/screens/vegetables_screen.dart';
-import 'package:janganan/presentation/widgets/bottom_navigation.dart';
+import 'package:janganan/presentation/widgets/screen_navigation.dart';
 import 'package:janganan/repository/auth_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,13 +41,16 @@ void main() async {
   final authenticationRepository = AuthenticationRepository(prefs: prefs);
   await authenticationRepository.user.first;
 
-  runApp(Janganan(authenticationRepository: authenticationRepository));
+  runApp(Janganan(
+    authenticationRepository: authenticationRepository,
+  ));
 }
 
 class Janganan extends StatelessWidget {
-  const Janganan(
-      {super.key, required AuthenticationRepository authenticationRepository})
-      : _authenticationRepository = authenticationRepository;
+  const Janganan({
+    super.key,
+    required AuthenticationRepository authenticationRepository,
+  }) : _authenticationRepository = authenticationRepository;
 
   final AuthenticationRepository _authenticationRepository;
 
@@ -81,13 +83,21 @@ class Janganan extends StatelessWidget {
         child: MaterialApp(
           title: 'Janganan',
           theme: theme,
-          // home: const HomeScreen(),
           initialRoute: '/',
           routes: {
-            '/': (context) => const OnBoardingScreen(),
+            '/': (context) {
+              final isAuthenticated = context.read<AppBloc>().state.status ==
+                  AppStatus.authenticated;
+
+              if (isAuthenticated) {
+                return const ScreenNavigation();
+              } else {
+                return const OnBoardingScreen();
+              }
+            },
             '/sign-in-screen': (context) => const SignInScreen(),
             '/sign-up-screen': (context) => const SignUpScreen(),
-            '/bottom-navigation': (context) => const BottomNavigation(),
+            '/screen-navigation': (context) => const ScreenNavigation(),
             '/home-screen': (context) => const HomeScreen(),
             '/order-screen': (context) => const OrderScreen(),
             '/user-screen': (context) => const UserScreen(),
