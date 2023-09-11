@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+// import 'package:janganan/data/models/user.dart';
 import 'package:janganan/repository/auth_repository.dart';
 
 part 'sign_up_state.dart';
@@ -19,13 +20,16 @@ class SignUpCubit extends Cubit<SignUpState> {
     emit(state.copyWith(password: password));
   }
 
-  Future<void> signUpFormSubmitted(String email, String password) async {
+  Future<void> signUpFormSubmitted(String username, String email,
+      String password, String phoneNumber) async {
     try {
       emit(state.copyWith(status: SignUpStatus.initial));
 
       await _authenticationRepository.signUp(
+        username: username,
         email: email,
         password: password,
+        phoneNumber: phoneNumber,
       );
 
       emit(state.copyWith(status: SignUpStatus.success));

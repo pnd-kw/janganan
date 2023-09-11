@@ -95,7 +95,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       listener: (context, signInState) {
                         if (signInState.status == SignInStatus.success) {
                           Navigator.of(context)
-                              .pushReplacementNamed('/screen-navigation');
+                              .pushReplacementNamed('/verification-screen');
                         } else if (signInState.status == SignInStatus.failure) {
                           showDialog(
                             context: context,

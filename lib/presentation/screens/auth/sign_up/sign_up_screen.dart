@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:janganan/bloc/cubit/cubit/sign_up_cubit.dart';
+import 'package:janganan/presentation/widgets/custom_elevated_button.dart';
 import 'package:janganan/presentation/widgets/reusable_form_field.dart';
-import 'package:janganan/utils/constants/colors.dart';
 import 'package:janganan/utils/regex_validator.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -32,7 +32,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: SizedBox(
-          // height: 800,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 10),
             child: Column(
@@ -227,7 +226,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           );
                         }
                       },
-                      child: ElevatedButton(
+                      child: CustomElevatedButton(
+                        isAuthenticating: _isAuthenticating,
                         onPressed: _isTermsAccepted
                             ? () {
                                 setState(() {
@@ -235,38 +235,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 });
                                 if (_registerFormKey.currentState!.validate()) {
                                   signUpCubit.signUpFormSubmitted(
+                                    _usernameController.text,
                                     _emailController.text,
                                     _passwordController.text,
+                                    _phoneController.text,
                                   );
                                 }
                               }
                             : null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColor.secondaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          elevation: 2,
-                        ),
-                        child: _isAuthenticating
-                            ? SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation(
-                                      Theme.of(context).colorScheme.background),
-                                ),
-                              )
-                            : Text(
-                                'REGISTER',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .background),
-                              ),
+                        text: 'REGISTER',
                       ),
                     ),
                   ),

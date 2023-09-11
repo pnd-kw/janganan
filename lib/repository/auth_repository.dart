@@ -1,4 +1,4 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
@@ -118,7 +118,7 @@ class LogInWithGoogleFailure implements Exception {
 class LogOutFailure implements Exception {}
 
 class AuthenticationRepository {
-  // final FirebaseFirestore _firebaseFirestore;
+  final FirebaseFirestore _firebaseFirestore;
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
   final SharedPreferences _prefs;
@@ -126,12 +126,12 @@ class AuthenticationRepository {
   bool isWeb = kIsWeb;
 
   AuthenticationRepository(
-      // {FirebaseFirestore? firebaseFirestore,
-      {firebase_auth.FirebaseAuth? firebaseAuth,
+      {FirebaseFirestore? firebaseFirestore,
+      firebase_auth.FirebaseAuth? firebaseAuth,
       GoogleSignIn? googleSignIn,
       required SharedPreferences prefs})
-      // : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
-      : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
+      : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
+        _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
         _googleSignIn = googleSignIn ?? GoogleSignIn.standard(),
         _prefs = prefs;
 
@@ -154,10 +154,23 @@ class AuthenticationRepository {
     }
   }
 
-  Future<void> signUp({required String email, required String password}) async {
+  Future<void> signUp({
+    required String username,
+    required String email,
+    required String password,
+    required String phoneNumber,
+  }) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
+
+      await _firebaseFirestore
+          .collection('users')
+          .doc(_firebaseAuth.currentUser?.uid)
+          .set({
+        'username': username,
+        'phoneNumber': phoneNumber,
+      });
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
@@ -217,6 +230,6 @@ class AuthenticationRepository {
 extension on firebase_auth.User {
   User get toUser {
     return User(
-        id: uid, username: displayName, email: email, phone: phoneNumber);
+        id: uid, username: displayName, email: email, phoneNumber: phoneNumber);
   }
 }

@@ -24,6 +24,7 @@ import 'package:janganan/presentation/screens/auth/sign_up/sign_up_screen.dart';
 import 'package:janganan/presentation/screens/spices_screen.dart';
 import 'package:janganan/presentation/screens/user_screen.dart';
 import 'package:janganan/presentation/screens/vegetables_screen.dart';
+import 'package:janganan/presentation/screens/verification_screen.dart';
 import 'package:janganan/presentation/widgets/screen_navigation.dart';
 import 'package:janganan/repository/auth_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -97,6 +98,7 @@ class Janganan extends StatelessWidget {
             },
             '/sign-in-screen': (context) => const SignInScreen(),
             '/sign-up-screen': (context) => const SignUpScreen(),
+            '/verification-screen': (context) => const VerificationScreen(),
             '/screen-navigation': (context) => const ScreenNavigation(),
             '/home-screen': (context) => const HomeScreen(),
             '/order-screen': (context) => const OrderScreen(),
