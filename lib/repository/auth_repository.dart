@@ -72,6 +72,36 @@ class LogInWithEmailAndPasswordFailure implements Exception {
   }
 }
 
+class LogInWithPhoneNumberFailure implements Exception {
+  final String message;
+
+  const LogInWithPhoneNumberFailure(
+      [this.message = 'An unknown exception occured.']);
+
+  factory LogInWithPhoneNumberFailure.fromCode(String code) {
+    switch (code) {
+      case 'invalid-credential':
+        return const LogInWithPhoneNumberFailure(
+          'The credential is malformed or has expired.',
+        );
+      case 'user-disabled':
+        return const LogInWithPhoneNumberFailure(
+          'This user has been disabled. Please contact support for help.',
+        );
+      case 'invalid-verification-code':
+        return const LogInWithPhoneNumberFailure(
+          'The verification code of the credential is not valid.',
+        );
+      case 'invalid-verification-id':
+        return const LogInWithPhoneNumberFailure(
+          'The verification ID of the credential is not valid.id.',
+        );
+      default:
+        return const LogInWithPhoneNumberFailure();
+    }
+  }
+}
+
 class LogInWithGoogleFailure implements Exception {
   final String message;
 
@@ -213,6 +243,24 @@ class AuthenticationRepository {
       throw LogInWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
       throw const LogInWithEmailAndPasswordFailure();
+    }
+  }
+
+  Future<void> sendOtp(String phoneNumber) async {
+    try {
+      await _firebaseAuth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: (firebase_auth.PhoneAuthCredential credential) {
+          _firebaseAuth.signInWithCredential(credential);
+        },
+        verificationFailed: (firebase_auth.FirebaseAuthException e) {
+          throw LogInWithPhoneNumberFailure.fromCode(e.code);
+        },
+        codeSent: (String verificationId, int? resendToken) {},
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      );
+    } catch (e) {
+      throw const LogInWithPhoneNumberFailure();
     }
   }
 

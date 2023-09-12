@@ -88,7 +88,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   ElevatedButton(
                     onPressed: () {
                       Navigator.of(context)
-                          .pushReplacementNamed('/sign-in-screen');
+                          .pushReplacementNamed('/verification-screen');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColor.secondaryColor,

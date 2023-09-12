@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-// import 'package:janganan/data/models/user.dart';
 import 'package:janganan/repository/auth_repository.dart';
 
 part 'sign_up_state.dart';
