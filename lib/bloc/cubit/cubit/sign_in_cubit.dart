@@ -22,7 +22,9 @@ class SignInCubit extends Cubit<SignInState> {
   Future<void> logInWithCredentials(String email, String password) async {
     try {
       emit(state.copyWith(
-          status: SignInStatus.initial, errorMessage: '', isLoading: true));
+        status: SignInStatus.initial,
+        errorMessage: '',
+      ));
 
       await _authenticationRepository.logInWithEmailAndPassword(
           email: email, password: password);
@@ -33,8 +35,8 @@ class SignInCubit extends Cubit<SignInState> {
         status: SignInStatus.failure,
         errorMessage: e.toString(),
       ));
-    } finally {
-      emit(state.copyWith(isLoading: false));
+      // } finally {
+      //   emit(state.copyWith(isLoading: false));
     }
   }
 }

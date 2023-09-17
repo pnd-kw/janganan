@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
+import 'package:janganan/bloc/cubit/cubit/verification_cubit.dart';
 import 'package:janganan/utils/constants/colors.dart';
 
 class VerificationScreen extends StatefulWidget {
+  // final VerificationCubit verificationCubit;
+  // const VerificationScreen({super.key, required this.verificationCubit});
   const VerificationScreen({super.key});
 
   @override
@@ -15,6 +19,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final verificationCubit = BlocProvider.of<VerificationCubit>(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Padding(
@@ -75,14 +81,67 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 ),
               ),
             ),
-            TextButton(
-              onPressed: () {},
-              child: Text(
-                'Resend Code',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall!
-                    .copyWith(color: Theme.of(context).colorScheme.primary),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: SizedBox(
+                child: BlocConsumer<VerificationCubit, VerificationState>(
+                  listener: (context, verificationState) {
+                    if (verificationState.step == VerificationStep.codeSent) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Sedang mengirimkan kode OTP.')));
+                    } else if (verificationState.step ==
+                        VerificationStep.verificationCompleted) {
+                      Navigator.of(context)
+                          .pushReplacementNamed('/screen-navigation');
+                    } else if (verificationState.step ==
+                        VerificationStep.verificationFailed) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Verification Failed'),
+                          content: const Text(
+                              'Verifikasi gagal, periksa kembali kode otp atau koneksi internet.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Tutup'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                  builder: (context, verificationState) {
+                    return ElevatedButton(
+                      onPressed: () {
+                        if (verificationState.step ==
+                            VerificationStep.initial) {
+                          verificationCubit.requestOtp();
+                        } else if (verificationState.step ==
+                            VerificationStep.codeSent) {
+                          verificationCubit.verifyOtp(_code!);
+                        } else if (verificationState.step ==
+                            VerificationStep.countdown) {}
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColor.secondaryColor,
+                      ),
+                      child: Text(
+                        verificationState.step == VerificationStep.initial
+                            ? 'REQUEST CODE'
+                            : 'VERIFY',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(
+                                color:
+                                    Theme.of(context).colorScheme.background),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ],

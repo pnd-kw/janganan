@@ -12,14 +12,14 @@ class SignInState extends Equatable {
     this.password = '',
     this.errorMessage,
     this.status = SignInStatus.initial,
-    this.isLoading = true,
+    // this.isLoading = true,
   });
 
   final String email;
   final String password;
   final String? errorMessage;
   final SignInStatus status;
-  final bool isLoading;
+  // final bool isLoading;
 
   bool get isValid => email.isNotEmpty && password.isNotEmpty;
 
@@ -28,14 +28,14 @@ class SignInState extends Equatable {
     String? password,
     String? errorMessage,
     SignInStatus? status,
-    bool? isLoading,
+    // bool? isLoading,
   }) {
     return SignInState(
       email: email ?? this.email,
       password: password ?? this.password,
       errorMessage: errorMessage ?? this.errorMessage,
       status: status ?? this.status,
-      isLoading: isLoading ?? this.isLoading,
+      // isLoading: isLoading ?? this.isLoading,
     );
   }
 

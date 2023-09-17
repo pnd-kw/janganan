@@ -11,6 +11,7 @@ class OnBoardingScreen extends StatefulWidget {
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final pageController = PageController();
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -87,16 +88,29 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   buildImage('assets/images/onboarding-img3.png'),
                   ElevatedButton(
                     onPressed: () {
+                      setState(() {
+                        _isLoading = true;
+                      });
                       Navigator.of(context)
-                          .pushReplacementNamed('/verification-screen');
+                          .pushReplacementNamed('/sign-in-screen');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColor.secondaryColor,
                     ),
-                    child: Text(
-                      'MULAI',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
+                    child: _isLoading
+                        ? SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation(
+                                Theme.of(context).colorScheme.background,
+                              ),
+                            ),
+                          )
+                        : Text(
+                            'MULAI',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
                   ),
                 ],
               ),

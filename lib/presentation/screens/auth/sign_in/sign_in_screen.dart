@@ -102,7 +102,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             builder: (context) => AlertDialog(
                               title: const Text('Terdapat Kesalahan'),
                               content: const Text(
-                                  'Otentikasi gagal, periksa kembali alamat email, password, dan koneksi anda.'),
+                                  'Otentikasi gagal, periksa kembali alamat email, password, dan koneksi internet.'),
                               actions: [
                                 TextButton(
                                   onPressed: () {

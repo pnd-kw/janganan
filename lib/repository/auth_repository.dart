@@ -1,7 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:janganan/repository/firestore_repository.dart';
+// import 'package:janganan/utils/otp_util.dart';
+import 'package:janganan/utils/regex_validator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/models/user.dart';
@@ -102,6 +107,61 @@ class LogInWithPhoneNumberFailure implements Exception {
   }
 }
 
+class UserDocumentNotFound implements Exception {
+  final String message;
+
+  const UserDocumentNotFound([
+    this.message = 'User document not found.',
+  ]);
+}
+
+class SignInWithCredentialFailure implements Exception {
+  final String message;
+
+  const SignInWithCredentialFailure([
+    this.message = 'An unknown exception occured.',
+  ]);
+
+  factory SignInWithCredentialFailure.fromCode(String code) {
+    switch (code) {
+      case 'account-exists-with-different-credential':
+        return const SignInWithCredentialFailure(
+          'Account exists with different credentials.',
+        );
+      case 'invalid-credentials':
+        return const SignInWithCredentialFailure(
+          'The credential received is malformed or has expired.',
+        );
+      case 'operation-not-allowed:':
+        return const SignInWithCredentialFailure(
+          'Type of account corresponding to the credential is not enabled',
+        );
+      case 'user-disabled':
+        return const SignInWithCredentialFailure(
+          'This user has been disabled. Please contact support for help.',
+        );
+      case 'user-not-found':
+        return const SignInWithCredentialFailure(
+          'Email is not found, please create an account.',
+        );
+      case 'wrong-password':
+        return const SignInWithCredentialFailure(
+          'Incorrect password, please try again.',
+        );
+      case 'invalid-verification-code':
+        return const SignInWithCredentialFailure(
+          'The credential verification code received is invalid.',
+        );
+      case 'invalid-verification-id':
+        return const SignInWithCredentialFailure(
+          'The credential verification ID received is invalid.',
+        );
+      default:
+        return const SignInWithCredentialFailure();
+    }
+  }
+}
+
 class LogInWithGoogleFailure implements Exception {
   final String message;
 
@@ -148,21 +208,25 @@ class LogInWithGoogleFailure implements Exception {
 class LogOutFailure implements Exception {}
 
 class AuthenticationRepository {
-  final FirebaseFirestore _firebaseFirestore;
+  // final FirebaseFirestore _firebaseFirestore;
   final firebase_auth.FirebaseAuth _firebaseAuth;
+  final FirestoreRepository _firestoreRepository;
   final GoogleSignIn _googleSignIn;
+  // final OtpUtil _otpUtil;
   final SharedPreferences _prefs;
 
   bool isWeb = kIsWeb;
 
   AuthenticationRepository(
-      {FirebaseFirestore? firebaseFirestore,
-      firebase_auth.FirebaseAuth? firebaseAuth,
+      {firebase_auth.FirebaseAuth? firebaseAuth,
+      FirestoreRepository? firestoreRepository,
       GoogleSignIn? googleSignIn,
+      // required OtpUtil otpUtil,
       required SharedPreferences prefs})
-      : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance,
-        _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
+      : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
+        _firestoreRepository = firestoreRepository ?? FirestoreRepository(),
         _googleSignIn = googleSignIn ?? GoogleSignIn.standard(),
+        // _otpUtil = otpUtil,
         _prefs = prefs;
 
   Stream<User> get user {
@@ -191,20 +255,35 @@ class AuthenticationRepository {
     required String phoneNumber,
   }) async {
     try {
+      final formattedPhoneNumber = formatPhoneNumber(phoneNumber);
+
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
 
-      await _firebaseFirestore
-          .collection('users')
-          .doc(_firebaseAuth.currentUser?.uid)
-          .set({
-        'username': username,
-        'phoneNumber': phoneNumber,
-      });
+      final userId = _firebaseAuth.currentUser?.uid;
+
+      await _firestoreRepository.setUserData(
+        userId!,
+        username,
+        formattedPhoneNumber,
+        'Step1Completed',
+      );
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
       throw const SignUpWithEmailAndPasswordFailure();
+    }
+  }
+
+  String formatPhoneNumber(String phoneNumber) {
+    final cleanedPhoneNumber = phoneNumber.replaceAll(frmtPhoneNumber, '');
+
+    if (cleanedPhoneNumber.startsWith('0')) {
+      return '+62${phoneNumber.substring(1)}';
+    } else if (!cleanedPhoneNumber.startsWith('+')) {
+      return '+62$cleanedPhoneNumber';
+    } else {
+      return cleanedPhoneNumber;
     }
   }
 
@@ -239,6 +318,20 @@ class AuthenticationRepository {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
+
+      final userId = _firebaseAuth.currentUser?.uid;
+      final userDoc = await _firestoreRepository.getUserData(userId!);
+
+      if (userDoc != null) {
+        // final userPhoneNumber = userDoc['phoneNumber'];
+
+        await _firestoreRepository
+            .updateUserData(userId, {'authenticationStatus': 'Step1Completed'});
+
+        // await _otpUtil.sendOtp(userPhoneNumber);
+      } else {
+        throw const UserDocumentNotFound();
+      }
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw LogInWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
@@ -246,23 +339,91 @@ class AuthenticationRepository {
     }
   }
 
-  Future<void> sendOtp(String phoneNumber) async {
+  Future<void> requestOtp() async {
     try {
-      await _firebaseAuth.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
-        verificationCompleted: (firebase_auth.PhoneAuthCredential credential) {
-          _firebaseAuth.signInWithCredential(credential);
-        },
-        verificationFailed: (firebase_auth.FirebaseAuthException e) {
-          throw LogInWithPhoneNumberFailure.fromCode(e.code);
-        },
-        codeSent: (String verificationId, int? resendToken) {},
-        codeAutoRetrievalTimeout: (String verificationId) {},
-      );
+      final userId = _firebaseAuth.currentUser?.uid;
+      if (userId != null) {
+        final userDoc = await _firestoreRepository.getUserData(userId);
+        if (userDoc != null) {
+          final userPhoneNumber = userDoc['phoneNumber'];
+          await _firebaseAuth.verifyPhoneNumber(
+            phoneNumber: userPhoneNumber,
+            verificationCompleted:
+                (firebase_auth.PhoneAuthCredential credential) {},
+            verificationFailed: (firebase_auth.FirebaseAuthException e) {},
+            codeSent: (String verificationId, int? resendToken) {},
+            codeAutoRetrievalTimeout: (String verificationId) {},
+          );
+        }
+      } else {
+        throw const UserDocumentNotFound();
+      }
     } catch (e) {
       throw const LogInWithPhoneNumberFailure();
     }
   }
+
+  Future<bool> verifyOtp(String code) async {
+    try {
+      final phoneAuthCredential = firebase_auth.PhoneAuthProvider.credential(
+          verificationId: code, smsCode: code);
+
+      await _firebaseAuth.signInWithCredential(phoneAuthCredential);
+      return true;
+    } catch (e) {
+      throw const LogInWithPhoneNumberFailure();
+    }
+  }
+
+  // Future<void> verifyPhoneNumberAndSignIn(
+  //   String code,
+  //   // bool isRequestCode,
+  // ) async {
+  //   Completer<bool> completer = Completer<bool>();
+
+  //   try {
+  //     final userId = _firebaseAuth.currentUser?.uid;
+  //     final userDoc = await _firestoreRepository.getUserData(userId!);
+
+  //     if (userDoc != null) {
+  //       final userPhoneNumber = userDoc['phoneNumber'];
+
+  //       // if (isRequestCode) {
+  //         await _firebaseAuth.verifyPhoneNumber(
+  //             phoneNumber: userPhoneNumber,
+  //             verificationCompleted:
+  //                 (firebase_auth.PhoneAuthCredential credential) {},
+  //             verificationFailed: (firebase_auth.FirebaseAuthException e) {},
+  //             codeSent: (String verificationId, int? resendToken) {},
+  //             codeAutoRetrievalTimeout: (String verificationId) {});
+  //       // } else {
+  //         // await _firebaseAuth.verifyPhoneNumber(
+  //         //   phoneNumber: userPhoneNumber,
+  //         //   verificationCompleted:
+  //         //       (firebase_auth.PhoneAuthCredential credential) {
+  //         //     _firebaseAuth.signInWithCredential(credential);
+  //         //   },
+  //         //   verificationFailed: (firebase_auth.FirebaseAuthException e) {
+  //         //     throw const SignInWithCredentialFailure();
+  //         //   },
+  //         //   codeSent: (String verificationId, int? resendToken) {},
+  //         //   codeAutoRetrievalTimeout: (String verificationId) {},
+  //         // );
+  //         final phoneAuthCredential =
+  //             firebase_auth.PhoneAuthProvider.credential(
+  //           verificationId: code,
+  //           smsCode: code,
+  //         );
+
+  //         await _firebaseAuth.signInWithCredential(phoneAuthCredential);
+  //       // }
+  //     } else {
+  //       throw const UserDocumentNotFound();
+  //     }
+  //   } catch (e) {
+  //     completer.complete(false);
+  //   }
+  // }
 
   Future<void> logOut() async {
     try {

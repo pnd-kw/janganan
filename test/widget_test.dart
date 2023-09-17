@@ -7,9 +7,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+// import 'package:janganan/bloc/cubit/cubit/verification_cubit.dart';
 
 import 'package:janganan/main.dart';
 import 'package:janganan/repository/auth_repository.dart';
+// import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+// import 'package:janganan/repository/firestore_repository.dart';
+// import 'package:janganan/utils/otp_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -17,7 +21,16 @@ void main() {
     // Build our app and trigger a frame.
     final prefs = await SharedPreferences.getInstance();
     await tester.pumpWidget(Janganan(
-        authenticationRepository: AuthenticationRepository(prefs: prefs)));
+        authenticationRepository: AuthenticationRepository(
+      prefs: prefs,
+      // otpUtil: OtpUtil(
+      //     firebaseAuth: firebase_auth.FirebaseAuth.instance,
+      //     firestoreRepository: FirestoreRepository())),
+      // verificationCubit: VerificationCubit(
+      //     otpUtil: OtpUtil(
+      //         firebaseAuth: firebase_auth.FirebaseAuth.instance,
+      //         firestoreRepository: FirestoreRepository())),
+    )));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
