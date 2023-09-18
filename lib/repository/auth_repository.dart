@@ -216,6 +216,7 @@ class AuthenticationRepository {
   final SharedPreferences _prefs;
 
   bool isWeb = kIsWeb;
+  String? _verificationId;
 
   AuthenticationRepository(
       {firebase_auth.FirebaseAuth? firebaseAuth,
@@ -351,7 +352,9 @@ class AuthenticationRepository {
             verificationCompleted:
                 (firebase_auth.PhoneAuthCredential credential) {},
             verificationFailed: (firebase_auth.FirebaseAuthException e) {},
-            codeSent: (String verificationId, int? resendToken) {},
+            codeSent: (String verificationId, int? resendToken) {
+              _verificationId = verificationId;
+            },
             codeAutoRetrievalTimeout: (String verificationId) {},
           );
         }
@@ -365,11 +368,17 @@ class AuthenticationRepository {
 
   Future<bool> verifyOtp(String code) async {
     try {
-      final phoneAuthCredential = firebase_auth.PhoneAuthProvider.credential(
-          verificationId: code, smsCode: code);
+      if (_verificationId != null) {
+        final phoneAuthCredential = firebase_auth.PhoneAuthProvider.credential(
+            verificationId: _verificationId!, smsCode: code);
 
-      await _firebaseAuth.signInWithCredential(phoneAuthCredential);
-      return true;
+        print(code);
+
+        await _firebaseAuth.signInWithCredential(phoneAuthCredential);
+        return true;
+      } else {
+        throw const LogInWithPhoneNumberFailure();
+      }
     } catch (e) {
       throw const LogInWithPhoneNumberFailure();
     }

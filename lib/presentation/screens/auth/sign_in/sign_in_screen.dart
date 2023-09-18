@@ -133,7 +133,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColor.secondaryColor,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(20),
                           ),
                           elevation: 2,
                         ),
@@ -157,6 +157,69 @@ class _SignInScreenState extends State<SignInScreen> {
                                             .colorScheme
                                             .background),
                               ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(
+                        width: 100,
+                        child: Divider(
+                          color: Theme.of(context).colorScheme.onBackground,
+                          thickness: 1.0,
+                        ),
+                      ),
+                      SizedBox(
+                        child: Text(
+                          'atau',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 100,
+                        child: Divider(
+                          color: Theme.of(context).colorScheme.onBackground,
+                          thickness: 1.0,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: TextButton.icon(
+                      onPressed: () {},
+                      icon: Image.asset(
+                        'assets/images/google-logo.png',
+                        fit: BoxFit.cover,
+                      ),
+                      label: Text(
+                        'SIGN IN WITH GOOGLE',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(
+                                color:
+                                    Theme.of(context).colorScheme.onBackground),
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStatePropertyAll(Colors.grey.shade200),
                       ),
                     ),
                   ),

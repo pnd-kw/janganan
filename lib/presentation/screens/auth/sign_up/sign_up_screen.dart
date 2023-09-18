@@ -96,7 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return null;
                         },
                         label: 'Telepon',
-                        hint: '6280808080808',
+                        hint: '080808080808',
                       ),
                       ReusableFormField(
                         controller: _passwordController,
@@ -123,7 +123,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return null;
                         },
                         label: 'Password',
-                        hint: 'Contoh Xa8ji4opq9',
+                        hint: '8 karakter, angka, huruf kapital',
                       ),
                       ReusableFormField(
                         controller: _passwordMatchController,
@@ -154,7 +154,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return null;
                         },
                         label: 'Ulangi Password',
-                        hint: 'Contoh Xa8ji4opq9',
+                        hint: '8 karakter, angka, huruf kapital',
                       ),
                     ],
                   ),
