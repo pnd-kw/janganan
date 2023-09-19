@@ -5,8 +5,6 @@ import 'package:janganan/bloc/cubit/cubit/verification_cubit.dart';
 import 'package:janganan/utils/constants/colors.dart';
 
 class VerificationScreen extends StatefulWidget {
-  // final VerificationCubit verificationCubit;
-  // const VerificationScreen({super.key, required this.verificationCubit});
   const VerificationScreen({super.key});
 
   @override
@@ -93,7 +91,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
                           content: Text('Sedang mengirimkan kode OTP.')));
                     } else if (verificationState.step ==
                         VerificationStep.verificationCompleted) {
-                      print(verificationState);
                       Navigator.of(context)
                           .pushReplacementNamed('/screen-navigation');
                     } else if (verificationState.step ==
@@ -144,7 +141,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: ElevatedButton(
                             onPressed: () {
-                              print(_code!);
                               verificationCubit.verifyOtp(_code!);
                             },
                             style: ElevatedButton.styleFrom(
@@ -164,32 +160,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         ),
                       ],
                     );
-                    // return ElevatedButton(
-                    //   onPressed: () {
-                    //     if (verificationState.step ==
-                    //         VerificationStep.initial) {
-                    //       verificationCubit.requestOtp();
-                    //     } else if (verificationState.step ==
-                    //         VerificationStep.codeSent) {
-                    //       verificationCubit.verifyOtp(_code!);
-                    //     } else if (verificationState.step ==
-                    //         VerificationStep.countdown) {}
-                    //   },
-                    //   style: ElevatedButton.styleFrom(
-                    //     backgroundColor: AppColor.secondaryColor,
-                    //   ),
-                    //   child: Text(
-                    //     verificationState.step == VerificationStep.initial
-                    //         ? 'REQUEST CODE'
-                    //         : 'VERIFY',
-                    //     style: Theme.of(context)
-                    //         .textTheme
-                    //         .titleMedium!
-                    //         .copyWith(
-                    //             color:
-                    //                 Theme.of(context).colorScheme.background),
-                    //   ),
-                    // );
                   },
                 ),
               ),

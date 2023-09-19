@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "306446799427-6soo0lefcku0o15v08mov82ol6vbbetg.apps.googleusercontent.com",
+          "client_id": "306446799427-bc98at4tliq7ondvraqsvgrq5ve964ak.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.janganan",
+            "certificate_hash": "03c24be73694961e77268fa522c09da849fc609c"
+          }
+        },
+        {
+          "client_id": "306446799427-ms52knj4cdkgs1rerd43bn1eretkas9f.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

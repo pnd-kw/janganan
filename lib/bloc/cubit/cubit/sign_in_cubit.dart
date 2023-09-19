@@ -39,4 +39,26 @@ class SignInCubit extends Cubit<SignInState> {
       //   emit(state.copyWith(isLoading: false));
     }
   }
+
+  Future<void> logInWithGoogle() async {
+    try {
+      emit(state.copyWith(
+        status: SignInStatus.initial,
+        errorMessage: '',
+      ));
+
+      await _authenticationRepository.logInWithGoogle();
+
+      emit(state.copyWith(status: SignInStatus.success));
+    } catch (e) {
+      if (e is LogInWithGoogleFailure) {
+        emit(state.copyWith(
+            status: SignInStatus.failure, errorMessage: e.message));
+      } else {
+        emit(state.copyWith(
+            status: SignInStatus.failure,
+            errorMessage: 'An unknown error occured.'));
+      }
+    }
+  }
 }

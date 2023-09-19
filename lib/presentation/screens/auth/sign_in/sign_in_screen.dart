@@ -62,27 +62,26 @@ class _SignInScreenState extends State<SignInScreen> {
                         hint: 'johndoe@gmail.com',
                       ),
                       ReusableFormField(
-                        controller: _passwordController,
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
-                            });
+                          controller: _passwordController,
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
+                            icon: Icon(_isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off),
+                          ),
+                          obscureText: !_isPasswordVisible,
+                          validator: (text) {
+                            if (text == null || text.isEmpty) {
+                              return 'Bidang ini tidak boleh kosong.';
+                            }
+                            return null;
                           },
-                          icon: Icon(_isPasswordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off),
-                        ),
-                        obscureText: !_isPasswordVisible,
-                        validator: (text) {
-                          if (text == null || text.isEmpty) {
-                            return 'Bidang ini tidak boleh kosong.';
-                          }
-                          return null;
-                        },
-                        label: 'Password',
-                        hint: 'Xa8ji4opq9',
-                      ),
+                          label: 'Password',
+                          hint: '8 karakter, angka, huruf kapital'),
                     ],
                   ),
                 ),
@@ -202,24 +201,53 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: SizedBox(
                     height: 50,
                     width: double.infinity,
-                    child: TextButton.icon(
-                      onPressed: () {},
-                      icon: Image.asset(
-                        'assets/images/google-logo.png',
-                        fit: BoxFit.cover,
-                      ),
-                      label: Text(
-                        'SIGN IN WITH GOOGLE',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(
-                                color:
-                                    Theme.of(context).colorScheme.onBackground),
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll(Colors.grey.shade200),
+                    child: BlocListener<SignInCubit, SignInState>(
+                      listener: (context, googleSignInState) {
+                        if (googleSignInState.status == SignInStatus.success) {
+                          Navigator.of(context)
+                              .pushReplacementNamed('/screen-navigation');
+                        } else if (googleSignInState.status ==
+                            SignInStatus.failure) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Terdapat Kesalahan'),
+                              content: const Text(
+                                  'Masalah kredensial atau sambungan internet.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Tutup'),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      },
+                      child: TextButton.icon(
+                        onPressed: () {
+                          signInCubit.logInWithGoogle();
+                        },
+                        icon: Image.asset(
+                          'assets/images/google-logo.png',
+                          fit: BoxFit.cover,
+                        ),
+                        label: Text(
+                          'SIGN IN WITH GOOGLE',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground),
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll(Colors.grey.shade200),
+                        ),
                       ),
                     ),
                   ),

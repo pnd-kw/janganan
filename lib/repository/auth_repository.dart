@@ -1,11 +1,10 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:janganan/repository/firestore_repository.dart';
-// import 'package:janganan/utils/otp_util.dart';
+
 import 'package:janganan/utils/regex_validator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -208,11 +207,10 @@ class LogInWithGoogleFailure implements Exception {
 class LogOutFailure implements Exception {}
 
 class AuthenticationRepository {
-  // final FirebaseFirestore _firebaseFirestore;
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final FirestoreRepository _firestoreRepository;
   final GoogleSignIn _googleSignIn;
-  // final OtpUtil _otpUtil;
+
   final SharedPreferences _prefs;
 
   bool isWeb = kIsWeb;
@@ -222,12 +220,10 @@ class AuthenticationRepository {
       {firebase_auth.FirebaseAuth? firebaseAuth,
       FirestoreRepository? firestoreRepository,
       GoogleSignIn? googleSignIn,
-      // required OtpUtil otpUtil,
       required SharedPreferences prefs})
       : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
         _firestoreRepository = firestoreRepository ?? FirestoreRepository(),
         _googleSignIn = googleSignIn ?? GoogleSignIn.standard(),
-        // _otpUtil = otpUtil,
         _prefs = prefs;
 
   Stream<User> get user {
@@ -292,7 +288,7 @@ class AuthenticationRepository {
     try {
       late final firebase_auth.AuthCredential credential;
       if (isWeb) {
-        final googleProvider = firebase_auth.GithubAuthProvider();
+        final googleProvider = firebase_auth.GoogleAuthProvider();
         final userCredential = await _firebaseAuth.signInWithPopup(
           googleProvider,
         );
@@ -324,12 +320,8 @@ class AuthenticationRepository {
       final userDoc = await _firestoreRepository.getUserData(userId!);
 
       if (userDoc != null) {
-        // final userPhoneNumber = userDoc['phoneNumber'];
-
         await _firestoreRepository
             .updateUserData(userId, {'authenticationStatus': 'Step1Completed'});
-
-        // await _otpUtil.sendOtp(userPhoneNumber);
       } else {
         throw const UserDocumentNotFound();
       }
@@ -372,8 +364,6 @@ class AuthenticationRepository {
         final phoneAuthCredential = firebase_auth.PhoneAuthProvider.credential(
             verificationId: _verificationId!, smsCode: code);
 
-        print(code);
-
         await _firebaseAuth.signInWithCredential(phoneAuthCredential);
         return true;
       } else {
@@ -383,56 +373,6 @@ class AuthenticationRepository {
       throw const LogInWithPhoneNumberFailure();
     }
   }
-
-  // Future<void> verifyPhoneNumberAndSignIn(
-  //   String code,
-  //   // bool isRequestCode,
-  // ) async {
-  //   Completer<bool> completer = Completer<bool>();
-
-  //   try {
-  //     final userId = _firebaseAuth.currentUser?.uid;
-  //     final userDoc = await _firestoreRepository.getUserData(userId!);
-
-  //     if (userDoc != null) {
-  //       final userPhoneNumber = userDoc['phoneNumber'];
-
-  //       // if (isRequestCode) {
-  //         await _firebaseAuth.verifyPhoneNumber(
-  //             phoneNumber: userPhoneNumber,
-  //             verificationCompleted:
-  //                 (firebase_auth.PhoneAuthCredential credential) {},
-  //             verificationFailed: (firebase_auth.FirebaseAuthException e) {},
-  //             codeSent: (String verificationId, int? resendToken) {},
-  //             codeAutoRetrievalTimeout: (String verificationId) {});
-  //       // } else {
-  //         // await _firebaseAuth.verifyPhoneNumber(
-  //         //   phoneNumber: userPhoneNumber,
-  //         //   verificationCompleted:
-  //         //       (firebase_auth.PhoneAuthCredential credential) {
-  //         //     _firebaseAuth.signInWithCredential(credential);
-  //         //   },
-  //         //   verificationFailed: (firebase_auth.FirebaseAuthException e) {
-  //         //     throw const SignInWithCredentialFailure();
-  //         //   },
-  //         //   codeSent: (String verificationId, int? resendToken) {},
-  //         //   codeAutoRetrievalTimeout: (String verificationId) {},
-  //         // );
-  //         final phoneAuthCredential =
-  //             firebase_auth.PhoneAuthProvider.credential(
-  //           verificationId: code,
-  //           smsCode: code,
-  //         );
-
-  //         await _firebaseAuth.signInWithCredential(phoneAuthCredential);
-  //       // }
-  //     } else {
-  //       throw const UserDocumentNotFound();
-  //     }
-  //   } catch (e) {
-  //     completer.complete(false);
-  //   }
-  // }
 
   Future<void> logOut() async {
     try {
