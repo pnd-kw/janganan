@@ -262,6 +262,7 @@ class AuthenticationRepository {
       await _firestoreRepository.setUserData(
         userId!,
         username,
+        email,
         formattedPhoneNumber,
         'Step1Completed',
       );
@@ -365,6 +366,16 @@ class AuthenticationRepository {
             verificationId: _verificationId!, smsCode: code);
 
         await _firebaseAuth.signInWithCredential(phoneAuthCredential);
+
+        final userId = _firebaseAuth.currentUser?.uid;
+        final userDoc = await _firestoreRepository.getUserData(userId!);
+
+        if (userDoc != null) {
+          await _firestoreRepository.updateUserData(
+              userId, {'authenticationStatus': 'Step2Completed'});
+        } else {
+          throw const UserDocumentNotFound();
+        }
         return true;
       } else {
         throw const LogInWithPhoneNumberFailure();

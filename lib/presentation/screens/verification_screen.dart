@@ -86,15 +86,36 @@ class _VerificationScreenState extends State<VerificationScreen> {
               child: SizedBox(
                 child: BlocConsumer<VerificationCubit, VerificationState>(
                   listener: (context, verificationState) {
-                    if (verificationState.step == VerificationStep.codeSent) {
+                    if (verificationState.status ==
+                        VerificationStatus.requestingCode) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Sedang mengirimkan kode OTP.')));
-                    } else if (verificationState.step ==
-                        VerificationStep.verificationCompleted) {
+                    } else if (verificationState.status ==
+                        VerificationStatus.verifying) {
+                      showDialog(
+                        context: context,
+                        builder: (context) => Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: SizedBox(
+                              height: 50,
+                              width: 50,
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation(
+                                    Theme.of(context).colorScheme.background),
+                                strokeWidth: 5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    } else if (verificationState.status ==
+                        VerificationStatus.verificationCompleted) {
                       Navigator.of(context)
                           .pushReplacementNamed('/screen-navigation');
-                    } else if (verificationState.step ==
-                        VerificationStep.verificationFailed) {
+                    } else if (verificationState.status ==
+                        VerificationStatus.verificationFailed) {
+                      Navigator.pop(context);
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
@@ -117,44 +138,71 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     return Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              verificationCubit.requestOtp();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColor.secondaryColor,
-                            ),
-                            child: Text(
-                              'REQUEST CODE',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .background),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          child: SizedBox(
+                            width: 300,
+                            child: ElevatedButton(
+                              onPressed: verificationState.status ==
+                                      VerificationStatus.codeSent
+                                  ? null
+                                  : () {
+                                      verificationCubit.requestOtp();
+                                      verificationCubit.startCountdown();
+                                    },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColor.secondaryColor,
+                              ),
+                              child: verificationState.status ==
+                                      VerificationStatus.codeSent
+                                  ? Text(
+                                      // verificationCubit.state.countdownText,
+                                      'REQUEST CODE AGAIN IN : ${verificationCubit.state.remainingTime}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .background),
+                                    )
+                                  : Text(
+                                      'REQUEST CODE',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .background),
+                                    ),
                             ),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              verificationCubit.verifyOtp(_code!);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColor.secondaryColor,
-                            ),
-                            child: Text(
-                              'VERIFY',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .background),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          child: SizedBox(
+                            width: 300,
+                            child: ElevatedButton(
+                              onPressed: _code != null
+                                  ? () {
+                                      verificationCubit.verifyOtp(_code!);
+                                    }
+                                  : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColor.secondaryColor,
+                              ),
+                              child: Text(
+                                'VERIFY',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .background),
+                              ),
                             ),
                           ),
                         ),

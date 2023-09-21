@@ -14,7 +14,6 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   bool _isPasswordVisible = false;
-  bool _isAuthenticating = false;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _loginFormKey = GlobalKey<FormState>();
@@ -92,9 +91,32 @@ class _SignInScreenState extends State<SignInScreen> {
                     width: double.infinity,
                     child: BlocListener<SignInCubit, SignInState>(
                       listener: (context, signInState) {
-                        if (signInState.status == SignInStatus.success) {
-                          Navigator.of(context)
-                              .pushReplacementNamed('/verification-screen');
+                        if (signInState.status == SignInStatus.sendingRequest) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: SizedBox(
+                                  height: 50,
+                                  width: 50,
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation(
+                                        Theme.of(context)
+                                            .colorScheme
+                                            .background),
+                                    strokeWidth: 5,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        } else if (signInState.status == SignInStatus.success) {
+                          if (signInState.method ==
+                              SignInMethod.emailAndPassword) {
+                            Navigator.of(context)
+                                .pushReplacementNamed('/verification-screen');
+                          }
                         } else if (signInState.status == SignInStatus.failure) {
                           showDialog(
                             context: context,
@@ -106,9 +128,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                 TextButton(
                                   onPressed: () {
                                     Navigator.of(context).pop();
-                                    setState(() {
-                                      _isAuthenticating = false;
-                                    });
                                   },
                                   child: const Text('Tutup'),
                                 ),
@@ -119,9 +138,6 @@ class _SignInScreenState extends State<SignInScreen> {
                       },
                       child: ElevatedButton(
                         onPressed: () {
-                          setState(() {
-                            _isAuthenticating = true;
-                          });
                           if (_loginFormKey.currentState!.validate()) {
                             signInCubit.logInWithCredentials(
                               _emailController.text,
@@ -136,26 +152,15 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           elevation: 2,
                         ),
-                        child: _isAuthenticating
-                            ? SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation(
-                                    Theme.of(context).colorScheme.background,
-                                  ),
-                                ),
-                              )
-                            : Text(
-                                'LOGIN',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .background),
-                              ),
+                        child: Text(
+                          'LOGIN',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.background),
+                        ),
                       ),
                     ),
                   ),
@@ -204,8 +209,11 @@ class _SignInScreenState extends State<SignInScreen> {
                     child: BlocListener<SignInCubit, SignInState>(
                       listener: (context, googleSignInState) {
                         if (googleSignInState.status == SignInStatus.success) {
-                          Navigator.of(context)
-                              .pushReplacementNamed('/screen-navigation');
+                          if (googleSignInState.method ==
+                              SignInMethod.googleSignIn) {
+                            Navigator.of(context)
+                                .pushReplacementNamed('/screen-navigation');
+                          }
                         } else if (googleSignInState.status ==
                             SignInStatus.failure) {
                           showDialog(

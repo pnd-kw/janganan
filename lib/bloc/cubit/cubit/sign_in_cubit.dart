@@ -21,35 +21,29 @@ class SignInCubit extends Cubit<SignInState> {
 
   Future<void> logInWithCredentials(String email, String password) async {
     try {
-      emit(state.copyWith(
-        status: SignInStatus.initial,
-        errorMessage: '',
-      ));
+      emit(state.copyWith(status: SignInStatus.sendingRequest));
 
       await _authenticationRepository.logInWithEmailAndPassword(
           email: email, password: password);
 
       emit(state.copyWith(status: SignInStatus.success));
+      emit(state.copyWith(method: SignInMethod.emailAndPassword));
     } catch (e) {
       emit(state.copyWith(
         status: SignInStatus.failure,
         errorMessage: e.toString(),
       ));
-      // } finally {
-      //   emit(state.copyWith(isLoading: false));
     }
   }
 
   Future<void> logInWithGoogle() async {
     try {
-      emit(state.copyWith(
-        status: SignInStatus.initial,
-        errorMessage: '',
-      ));
+      emit(state.copyWith(status: SignInStatus.sendingRequest));
 
       await _authenticationRepository.logInWithGoogle();
 
       emit(state.copyWith(status: SignInStatus.success));
+      emit(state.copyWith(method: SignInMethod.googleSignIn));
     } catch (e) {
       if (e is LogInWithGoogleFailure) {
         emit(state.copyWith(

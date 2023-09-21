@@ -6,10 +6,11 @@ class FirestoreRepository {
   FirestoreRepository({FirebaseFirestore? firebaseFirestore})
       : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
-  Future<void> setUserData(String userId, String username, String phoneNumber,
-      String authenticationStatus) async {
+  Future<void> setUserData(String userId, String username, String email,
+      String phoneNumber, String authenticationStatus) async {
     final userData = {
       'username': username,
+      'email': email,
       'phoneNumber': phoneNumber,
       'authenticationStatus': authenticationStatus,
     };

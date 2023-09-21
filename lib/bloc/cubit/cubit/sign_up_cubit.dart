@@ -9,6 +9,11 @@ class SignUpCubit extends Cubit<SignUpState> {
 
   SignUpCubit(this._authenticationRepository) : super(const SignUpState());
 
+  void usernameChanged(String value) {
+    final username = value;
+    emit(state.copyWith(username: username));
+  }
+
   void emailChanged(String value) {
     final email = value;
     emit(state.copyWith(email: email));
@@ -19,10 +24,15 @@ class SignUpCubit extends Cubit<SignUpState> {
     emit(state.copyWith(password: password));
   }
 
+  void phoneNumberChanged(String value) {
+    final phoneNumber = value;
+    emit(state.copyWith(phoneNumber: phoneNumber));
+  }
+
   Future<void> signUpFormSubmitted(String username, String email,
       String password, String phoneNumber) async {
     try {
-      emit(state.copyWith(status: SignUpStatus.initial));
+      emit(state.copyWith(status: SignUpStatus.sendingRequest));
 
       await _authenticationRepository.signUp(
         username: username,

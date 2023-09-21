@@ -16,7 +16,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _isTermsAccepted = false;
   bool _isPasswordVisible = false;
   bool _isPasswordMatchVisible = false;
-  bool _isAuthenticating = false;
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
@@ -187,7 +186,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     width: double.infinity,
                     child: BlocListener<SignUpCubit, SignUpState>(
                       listener: (context, signUpState) {
-                        if (signUpState.status == SignUpStatus.success) {
+                        if (signUpState.status == SignUpStatus.sendingRequest) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: SizedBox(
+                                  height: 50,
+                                  width: 50,
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation(
+                                        Theme.of(context)
+                                            .colorScheme
+                                            .background),
+                                    strokeWidth: 5,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        } else if (signUpState.status == SignUpStatus.success) {
+                          Navigator.pop(context);
                           Navigator.of(context)
                               .pushReplacementNamed('/sign-in-screen');
                           showDialog(
@@ -205,7 +225,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       ),
                                     ],
                                   ));
-                        } else if (signUpState.status == SignUpStatus.failure) {
+                        } else {
+                          Navigator.pop(context);
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -215,9 +236,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 TextButton(
                                   onPressed: () {
                                     Navigator.of(context).pop();
-                                    setState(() {
-                                      _isAuthenticating = false;
-                                    });
                                   },
                                   child: const Text('Tutup'),
                                 ),
@@ -227,12 +245,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         }
                       },
                       child: CustomElevatedButton(
-                        isAuthenticating: _isAuthenticating,
                         onPressed: _isTermsAccepted
                             ? () {
-                                setState(() {
-                                  _isAuthenticating = true;
-                                });
                                 if (_registerFormKey.currentState!.validate()) {
                                   signUpCubit.signUpFormSubmitted(
                                     _usernameController.text,

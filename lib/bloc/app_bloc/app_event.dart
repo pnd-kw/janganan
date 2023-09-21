@@ -1,13 +1,14 @@
 part of 'app_bloc.dart';
 
-sealed class AppEvent {
+abstract class AppEvent {
   const AppEvent();
 }
 
 final class _AppUserChanged extends AppEvent {
   final User user;
+  final String authenticationStatus;
 
-  const _AppUserChanged(this.user);
+  const _AppUserChanged(this.user, this.authenticationStatus);
 }
 
 final class AppLogOutRequested extends AppEvent {

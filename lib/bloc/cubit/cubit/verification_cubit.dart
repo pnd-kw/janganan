@@ -16,12 +16,13 @@ class VerificationCubit extends Cubit<VerificationState> {
 
   Future<void> requestOtp() async {
     try {
+      emit(state.copyWith(status: VerificationStatus.requestingCode));
+
       await _authenticationRepository.requestOtp();
 
-      emit(state.copyWith(
-          status: VerificationStatus.initial, step: VerificationStep.codeSent));
+      emit(state.copyWith(status: VerificationStatus.codeSent));
 
-      startCountdown();
+      // startCountdown();
     } catch (e) {
       if (e is LogInWithPhoneNumberFailure) {
         emit(state.copyWith(
@@ -38,10 +39,13 @@ class VerificationCubit extends Cubit<VerificationState> {
 
   Future<void> verifyOtp(String code) async {
     try {
+      emit(state.copyWith(status: VerificationStatus.verifying));
+
       await _authenticationRepository.verifyOtp(code);
+
       emit(state.copyWith(
         status: VerificationStatus.verificationCompleted,
-        step: VerificationStep.verificationCompleted,
+        // step: VerificationStep.verificationCompleted,
       ));
     } catch (e) {
       if (e is LogInWithPhoneNumberFailure) {
@@ -59,23 +63,26 @@ class VerificationCubit extends Cubit<VerificationState> {
 
   void startCountdown() {
     _countdownTimer?.cancel();
+    emit(state.copyWith(
+      status: VerificationStatus.countdown,
+    ));
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      // phoneVerification(state.code);
       if (state.remainingTime > 0) {
         emit(state.copyWith(
+          status: VerificationStatus.codeSent,
           remainingTime: state.remainingTime - 1,
+          // countdownText: '${state.remainingTime}',
         ));
       } else {
         emit(state.copyWith(
-          step: VerificationStep.initial,
+          status: VerificationStatus.requestingCode,
+          remainingTime: 0,
+          // countdownText: 'REQUEST CODE',
         ));
 
         stopCountdown();
       }
     });
-    emit(state.copyWith(
-      step: VerificationStep.countdown,
-    ));
   }
 
   void stopCountdown() {
