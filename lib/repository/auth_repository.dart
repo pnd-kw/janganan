@@ -9,200 +9,7 @@ import 'package:janganan/utils/regex_validator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/models/user.dart';
-
-class SignUpWithEmailAndPasswordFailure implements Exception {
-  final String message;
-
-  const SignUpWithEmailAndPasswordFailure([
-    this.message = 'An unknown exception occured.',
-  ]);
-
-  factory SignUpWithEmailAndPasswordFailure.fromCode(String code) {
-    switch (code) {
-      case 'invalid-email':
-        return const SignUpWithEmailAndPasswordFailure(
-          'Email is not valid or badly formatted.',
-        );
-      case 'user-disabled':
-        return const SignUpWithEmailAndPasswordFailure(
-          'This user has been disabled. Please contact support for help.',
-        );
-      case 'email-already-in-use':
-        return const SignUpWithEmailAndPasswordFailure(
-          'An account already exists for that email.',
-        );
-      case 'operation-not-allowed':
-        return const SignUpWithEmailAndPasswordFailure(
-          'Operation is not allowed. Please contact support.',
-        );
-      case 'weak-password':
-        return const SignUpWithEmailAndPasswordFailure(
-          'Please enter a stronger password.',
-        );
-      default:
-        return const SignUpWithEmailAndPasswordFailure();
-    }
-  }
-}
-
-class LogInWithEmailAndPasswordFailure implements Exception {
-  final String message;
-
-  const LogInWithEmailAndPasswordFailure([
-    this.message = 'An unknown exception occured.',
-  ]);
-
-  factory LogInWithEmailAndPasswordFailure.fromCode(String code) {
-    switch (code) {
-      case 'invalid-email':
-        return const LogInWithEmailAndPasswordFailure(
-          'Email is not valid or badly formatted.',
-        );
-      case 'user-disabled':
-        return const LogInWithEmailAndPasswordFailure(
-          'This user has been disabled. Please contact support for help.',
-        );
-      case 'user-not-found':
-        return const LogInWithEmailAndPasswordFailure(
-          'Email is not found, please create an account.',
-        );
-      case 'wrong-password':
-        return const LogInWithEmailAndPasswordFailure(
-          'Incorrect password, please try again.',
-        );
-      default:
-        return const LogInWithEmailAndPasswordFailure();
-    }
-  }
-}
-
-class LogInWithPhoneNumberFailure implements Exception {
-  final String message;
-
-  const LogInWithPhoneNumberFailure(
-      [this.message = 'An unknown exception occured.']);
-
-  factory LogInWithPhoneNumberFailure.fromCode(String code) {
-    switch (code) {
-      case 'invalid-credential':
-        return const LogInWithPhoneNumberFailure(
-          'The credential is malformed or has expired.',
-        );
-      case 'user-disabled':
-        return const LogInWithPhoneNumberFailure(
-          'This user has been disabled. Please contact support for help.',
-        );
-      case 'invalid-verification-code':
-        return const LogInWithPhoneNumberFailure(
-          'The verification code of the credential is not valid.',
-        );
-      case 'invalid-verification-id':
-        return const LogInWithPhoneNumberFailure(
-          'The verification ID of the credential is not valid.id.',
-        );
-      default:
-        return const LogInWithPhoneNumberFailure();
-    }
-  }
-}
-
-class UserDocumentNotFound implements Exception {
-  final String message;
-
-  const UserDocumentNotFound([
-    this.message = 'User document not found.',
-  ]);
-}
-
-class SignInWithCredentialFailure implements Exception {
-  final String message;
-
-  const SignInWithCredentialFailure([
-    this.message = 'An unknown exception occured.',
-  ]);
-
-  factory SignInWithCredentialFailure.fromCode(String code) {
-    switch (code) {
-      case 'account-exists-with-different-credential':
-        return const SignInWithCredentialFailure(
-          'Account exists with different credentials.',
-        );
-      case 'invalid-credentials':
-        return const SignInWithCredentialFailure(
-          'The credential received is malformed or has expired.',
-        );
-      case 'operation-not-allowed:':
-        return const SignInWithCredentialFailure(
-          'Type of account corresponding to the credential is not enabled',
-        );
-      case 'user-disabled':
-        return const SignInWithCredentialFailure(
-          'This user has been disabled. Please contact support for help.',
-        );
-      case 'user-not-found':
-        return const SignInWithCredentialFailure(
-          'Email is not found, please create an account.',
-        );
-      case 'wrong-password':
-        return const SignInWithCredentialFailure(
-          'Incorrect password, please try again.',
-        );
-      case 'invalid-verification-code':
-        return const SignInWithCredentialFailure(
-          'The credential verification code received is invalid.',
-        );
-      case 'invalid-verification-id':
-        return const SignInWithCredentialFailure(
-          'The credential verification ID received is invalid.',
-        );
-      default:
-        return const SignInWithCredentialFailure();
-    }
-  }
-}
-
-class LogInWithGoogleFailure implements Exception {
-  final String message;
-
-  const LogInWithGoogleFailure([
-    this.message = 'An unknown exception occured.',
-  ]);
-
-  factory LogInWithGoogleFailure.fromCode(String code) {
-    switch (code) {
-      case 'account-exists-with-different-credential':
-        return const LogInWithGoogleFailure(
-          'Account exists with different credentials.',
-        );
-      case 'invalid-credentials':
-        return const LogInWithGoogleFailure(
-          'The credential received is malformed or has expired.',
-        );
-      case 'user-disabled':
-        return const LogInWithGoogleFailure(
-          'This user has been disabled. Please contact support for help.',
-        );
-      case 'user-not-found':
-        return const LogInWithGoogleFailure(
-          'Email is not found, please create an account.',
-        );
-      case 'wrong-password':
-        return const LogInWithGoogleFailure(
-          'Incorrect password, please try again.',
-        );
-      case 'invalid-verification-code':
-        return const LogInWithGoogleFailure(
-          'The credential verification code received is invalid.',
-        );
-      case 'invalid-verification-id':
-        return const LogInWithGoogleFailure(
-          'The credential verification ID received is invalid.',
-        );
-      default:
-        return const LogInWithGoogleFailure();
-    }
-  }
-}
+import '../utils/constants/exception.dart';
 
 class LogOutFailure implements Exception {}
 
@@ -250,6 +57,7 @@ class AuthenticationRepository {
     required String email,
     required String password,
     required String phoneNumber,
+    required String userVerificationStatus,
   }) async {
     try {
       final formattedPhoneNumber = formatPhoneNumber(phoneNumber);
@@ -264,7 +72,7 @@ class AuthenticationRepository {
         username,
         email,
         formattedPhoneNumber,
-        'Step1Completed',
+        userVerificationStatus,
       );
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
@@ -287,23 +95,38 @@ class AuthenticationRepository {
 
   Future<void> logInWithGoogle() async {
     try {
-      late final firebase_auth.AuthCredential credential;
+      late final firebase_auth.AuthCredential googleCredential;
       if (isWeb) {
         final googleProvider = firebase_auth.GoogleAuthProvider();
         final userCredential = await _firebaseAuth.signInWithPopup(
           googleProvider,
         );
-        credential = userCredential.credential!;
+        googleCredential = userCredential.credential!;
       } else {
         final googleUser = await _googleSignIn.signIn();
         final googleAuth = await googleUser!.authentication;
-        credential = firebase_auth.GoogleAuthProvider.credential(
+        googleCredential = firebase_auth.GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
         );
-      }
+        final email = googleUser.email;
 
-      await _firebaseAuth.signInWithCredential(credential);
+        final emailCredential =
+            await _firebaseAuth.fetchSignInMethodsForEmail(email);
+
+        if (emailCredential.isNotEmpty) {
+          final user = _firebaseAuth.currentUser;
+
+          await user?.linkWithCredential(googleCredential);
+        } else {
+          await _firebaseAuth.signInWithCredential(googleCredential);
+
+          final userId = _firebaseAuth.currentUser?.uid;
+
+          await _firestoreRepository.setUserData(
+              userId!, googleUser.displayName!, email, '-', 'verified');
+        }
+      }
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw LogInWithGoogleFailure.fromCode(e.code);
     } catch (_) {
@@ -311,21 +134,19 @@ class AuthenticationRepository {
     }
   }
 
-  Future<void> logInWithEmailAndPassword(
+  Future<dynamic> logInWithEmailAndPassword(
       {required String email, required String password}) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
 
       final userId = _firebaseAuth.currentUser?.uid;
+
       final userDoc = await _firestoreRepository.getUserData(userId!);
 
-      if (userDoc != null) {
-        await _firestoreRepository
-            .updateUserData(userId, {'authenticationStatus': 'Step1Completed'});
-      } else {
-        throw const UserDocumentNotFound();
-      }
+      final userVerificationStatus = userDoc?['userVerificationStatus'];
+
+      return userVerificationStatus;
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw LogInWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
@@ -361,20 +182,16 @@ class AuthenticationRepository {
 
   Future<bool> verifyOtp(String code) async {
     try {
+      final user = _firebaseAuth.currentUser;
+      final userId = _firebaseAuth.currentUser?.uid;
+      final userDoc = await _firestoreRepository.getUserData(userId!);
       if (_verificationId != null) {
-        final phoneAuthCredential = firebase_auth.PhoneAuthProvider.credential(
+        final credential = firebase_auth.PhoneAuthProvider.credential(
             verificationId: _verificationId!, smsCode: code);
-
-        await _firebaseAuth.signInWithCredential(phoneAuthCredential);
-
-        final userId = _firebaseAuth.currentUser?.uid;
-        final userDoc = await _firestoreRepository.getUserData(userId!);
-
-        if (userDoc != null) {
-          await _firestoreRepository.updateUserData(
-              userId, {'authenticationStatus': 'Step2Completed'});
-        } else {
-          throw const UserDocumentNotFound();
+        if (user != null) {
+          await user.linkWithCredential(credential);
+          userDoc?['userVerificationStatus'] = 'verified';
+          await _firestoreRepository.updateUserData(userId, userDoc!);
         }
         return true;
       } else {

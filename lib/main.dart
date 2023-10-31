@@ -76,13 +76,16 @@ class Janganan extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String initialUserId = "";
+
     return RepositoryProvider.value(
       value: _authenticationRepository,
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) =>
-                AppBloc(authenticationRepository: _authenticationRepository),
+            create: (context) => AppBloc(
+                authenticationRepository: _authenticationRepository,
+                initialUserId: initialUserId),
           ),
           BlocProvider(
             create: (context) => SignUpCubit(_authenticationRepository),
@@ -108,23 +111,19 @@ class Janganan extends StatelessWidget {
           theme: theme,
           initialRoute: '/',
           routes: {
-            // '/': (context) {
-            //   final isAuthenticated = context.watch<AppBloc>().state.status ==
-            //       AppStatus.authenticated;
-            //   final authenticationStatus =
-            //       context.watch<AppBloc>().state.authenticationStatus;
+            '/': (context) {
+              final isAuthenticated = context.watch<AppBloc>().state.status ==
+                  AppStatus.authenticated;
+              // final authenticationStatus =
+              //     context.watch<AppBloc>().state.authenticationStatus;
 
-            //   if (isAuthenticated) {
-            //     if (authenticationStatus == 'Step2Completed') {
-            //       return const ScreenNavigation();
-            //     } else {
-            //       return const SignInScreen();
-            //     }
-            //   } else {
-            //     return const OnBoardingScreen();
-            //   }
-            // },
-            '/': (context) => const OnBoardingScreen(),
+              if (isAuthenticated) {
+                return const ScreenNavigation();
+              } else {
+                return const OnBoardingScreen();
+              }
+            },
+            // '/': (context) => const OnBoardingScreen(),
             '/sign-in-screen': (context) => const SignInScreen(),
             '/sign-up-screen': (context) => const SignUpScreen(),
             '/verification-screen': (context) => const VerificationScreen(),

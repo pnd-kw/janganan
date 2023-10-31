@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:janganan/repository/auth_repository.dart';
+
+import '../../../utils/constants/exception.dart';
 
 part 'verification_state.dart';
 
@@ -21,18 +24,14 @@ class VerificationCubit extends Cubit<VerificationState> {
       await _authenticationRepository.requestOtp();
 
       emit(state.copyWith(status: VerificationStatus.codeSent));
-
-      // startCountdown();
     } catch (e) {
-      if (e is LogInWithPhoneNumberFailure) {
+      if (e is FirebaseAuthException) {
         emit(state.copyWith(
-            status: VerificationStatus.verificationFailed,
-            errorMessage: e.message));
+            status: VerificationStatus.requestFailed, errorMessage: e.message));
       } else {
         emit(state.copyWith(
-          status: VerificationStatus.verificationFailed,
-          errorMessage: 'Gagal meminta kode OTP.',
-        ));
+            status: VerificationStatus.requestFailed,
+            errorMessage: 'Gagal meminta token OTP.'));
       }
     }
   }
@@ -41,12 +40,18 @@ class VerificationCubit extends Cubit<VerificationState> {
     try {
       emit(state.copyWith(status: VerificationStatus.verifying));
 
-      await _authenticationRepository.verifyOtp(code);
+      final isVerificationSuccessful =
+          await _authenticationRepository.verifyOtp(code);
 
-      emit(state.copyWith(
-        status: VerificationStatus.verificationCompleted,
-        // step: VerificationStep.verificationCompleted,
-      ));
+      if (isVerificationSuccessful) {
+        emit(state.copyWith(
+          status: VerificationStatus.verificationCompleted,
+        ));
+      } else {
+        emit(state.copyWith(
+          status: VerificationStatus.verificationFailed,
+        ));
+      }
     } catch (e) {
       if (e is LogInWithPhoneNumberFailure) {
         emit(state.copyWith(
@@ -71,18 +76,19 @@ class VerificationCubit extends Cubit<VerificationState> {
         emit(state.copyWith(
           status: VerificationStatus.codeSent,
           remainingTime: state.remainingTime - 1,
-          // countdownText: '${state.remainingTime}',
         ));
       } else {
         emit(state.copyWith(
-          status: VerificationStatus.requestingCode,
-          remainingTime: 0,
-          // countdownText: 'REQUEST CODE',
+          status: VerificationStatus.initial,
+          remainingTime: 60,
         ));
 
         stopCountdown();
       }
     });
+    emit(state.copyWith(
+      status: VerificationStatus.countdown,
+    ));
   }
 
   void stopCountdown() {

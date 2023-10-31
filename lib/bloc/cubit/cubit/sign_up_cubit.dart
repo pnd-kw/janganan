@@ -2,6 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:janganan/repository/auth_repository.dart';
 
+import '../../../utils/constants/exception.dart';
+
 part 'sign_up_state.dart';
 
 class SignUpCubit extends Cubit<SignUpState> {
@@ -39,6 +41,7 @@ class SignUpCubit extends Cubit<SignUpState> {
         email: email,
         password: password,
         phoneNumber: phoneNumber,
+        userVerificationStatus: 'unverified',
       );
 
       emit(state.copyWith(status: SignUpStatus.success));

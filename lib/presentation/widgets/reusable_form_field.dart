@@ -30,6 +30,10 @@ class ReusableFormField extends StatelessWidget {
           suffixIcon: suffixIcon,
           labelText: label,
           hintText: hint,
+          hintStyle: Theme.of(context)
+              .textTheme
+              .bodySmall!
+              .copyWith(color: Theme.of(context).colorScheme.onBackground),
           border: OutlineInputBorder(
             borderSide: const BorderSide(width: 1),
             borderRadius: BorderRadius.circular(10),

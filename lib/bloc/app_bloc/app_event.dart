@@ -6,9 +6,8 @@ abstract class AppEvent {
 
 final class _AppUserChanged extends AppEvent {
   final User user;
-  final String authenticationStatus;
 
-  const _AppUserChanged(this.user, this.authenticationStatus);
+  const _AppUserChanged(this.user);
 }
 
 final class AppLogOutRequested extends AppEvent {

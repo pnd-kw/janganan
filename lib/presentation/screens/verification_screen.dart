@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
+import 'package:janganan/bloc/cubit/cubit/sign_in_cubit.dart';
 import 'package:janganan/bloc/cubit/cubit/verification_cubit.dart';
+import 'package:janganan/presentation/widgets/reusable_alert_dialog.dart';
+import 'package:janganan/presentation/widgets/reusable_progress_dialog.dart';
 import 'package:janganan/utils/constants/colors.dart';
 
 class VerificationScreen extends StatefulWidget {
@@ -14,6 +17,7 @@ class VerificationScreen extends StatefulWidget {
 class _VerificationScreenState extends State<VerificationScreen> {
   bool _onEditing = true;
   String? _code;
+  int requestOtpCounter = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -89,39 +93,30 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     if (verificationState.status ==
                         VerificationStatus.requestingCode) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('Sedang mengirimkan kode OTP.')));
+                          content: Text('Meminta kode OTP....')));
+                    } else if (verificationState.status ==
+                        VerificationStatus.requestFailed) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(verificationState.errorMessage!)));
                     } else if (verificationState.status ==
                         VerificationStatus.verifying) {
                       showDialog(
                         context: context,
-                        builder: (context) => Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: SizedBox(
-                              height: 50,
-                              width: 50,
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation(
-                                    Theme.of(context).colorScheme.background),
-                                strokeWidth: 5,
-                              ),
-                            ),
-                          ),
-                        ),
+                        builder: (context) => const ReusableProgressDialog(),
                       );
                     } else if (verificationState.status ==
                         VerificationStatus.verificationCompleted) {
-                      Navigator.of(context)
-                          .pushReplacementNamed('/screen-navigation');
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/screen-navigation', (route) => false);
                     } else if (verificationState.status ==
                         VerificationStatus.verificationFailed) {
                       Navigator.pop(context);
                       showDialog(
                         context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Verification Failed'),
-                          content: const Text(
-                              'Verifikasi gagal, periksa kembali kode otp atau koneksi internet.'),
+                        builder: (context) => ReusableAlertDialog(
+                          title: 'Verification Failed',
+                          content:
+                              'Verifikasi gagal kredensial tidak cocok, periksa kembali kode otp atau koneksi internet.',
                           actions: [
                             TextButton(
                               onPressed: () {
@@ -135,78 +130,103 @@ class _VerificationScreenState extends State<VerificationScreen> {
                     }
                   },
                   builder: (context, verificationState) {
-                    return Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
-                          child: SizedBox(
-                            width: 300,
-                            child: ElevatedButton(
-                              onPressed: verificationState.status ==
-                                      VerificationStatus.codeSent
-                                  ? null
-                                  : () {
-                                      verificationCubit.requestOtp();
-                                      verificationCubit.startCountdown();
-                                    },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColor.secondaryColor,
-                              ),
-                              child: verificationState.status ==
-                                      VerificationStatus.codeSent
-                                  ? Text(
-                                      // verificationCubit.state.countdownText,
-                                      'REQUEST CODE AGAIN IN : ${verificationCubit.state.remainingTime}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .background),
-                                    )
-                                  : Text(
-                                      'REQUEST CODE',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .background),
-                                    ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
-                          child: SizedBox(
-                            width: 300,
-                            child: ElevatedButton(
-                              onPressed: _code != null
-                                  ? () {
-                                      verificationCubit.verifyOtp(_code!);
-                                    }
-                                  : null,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColor.secondaryColor,
-                              ),
-                              child: Text(
-                                'VERIFY',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .background),
+                    return BlocBuilder<SignInCubit, SignInState>(
+                      builder: (context, signInState) {
+                        return Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 20),
+                              child: SizedBox(
+                                width: 300,
+                                child: ElevatedButton(
+                                  onPressed: verificationState.status ==
+                                          VerificationStatus.codeSent
+                                      ? null
+                                      : () {
+                                          if (requestOtpCounter < 2) {
+                                            verificationCubit.requestOtp();
+                                            verificationCubit.startCountdown();
+                                            requestOtpCounter++;
+                                          } else {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  ReusableAlertDialog(
+                                                title: 'Kesalahan',
+                                                content:
+                                                    'Permintaan terlalu sering, coba lagi lain waktu.',
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: const Text('Tutup'),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          }
+                                        },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColor.secondaryColor,
+                                  ),
+                                  child: verificationState.status ==
+                                          VerificationStatus.codeSent
+                                      ? Text(
+                                          'REQUEST CODE AGAIN IN : ${verificationCubit.state.remainingTime}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium!
+                                              .copyWith(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .background),
+                                        )
+                                      : Text(
+                                          'REQUEST CODE',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium!
+                                              .copyWith(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .background),
+                                        ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                      ],
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 20),
+                              child: SizedBox(
+                                width: 300,
+                                child: ElevatedButton(
+                                  onPressed: _code != null
+                                      ? () {
+                                          verificationCubit.verifyOtp(_code!);
+                                        }
+                                      : null,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColor.secondaryColor,
+                                  ),
+                                  child: Text(
+                                    'VERIFY',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .background),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     );
                   },
                 ),

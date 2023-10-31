@@ -7,6 +7,12 @@ enum SignInStatus {
   failure,
 }
 
+enum UserVerificationStatus {
+  initial,
+  verifiedUser,
+  unverifiedUser,
+}
+
 enum SignInMethod {
   initial,
   emailAndPassword,
@@ -19,6 +25,7 @@ class SignInState extends Equatable {
     this.password = '',
     this.errorMessage,
     this.status = SignInStatus.initial,
+    this.userVerificationStatus = UserVerificationStatus.initial,
     this.method = SignInMethod.initial,
   });
 
@@ -26,6 +33,7 @@ class SignInState extends Equatable {
   final String password;
   final String? errorMessage;
   final SignInStatus status;
+  final UserVerificationStatus userVerificationStatus;
   final SignInMethod method;
 
   bool get isValid => email.isNotEmpty && password.isNotEmpty;
@@ -35,6 +43,7 @@ class SignInState extends Equatable {
     String? password,
     String? errorMessage,
     SignInStatus? status,
+    UserVerificationStatus? userVerificationStatus,
     SignInMethod? method,
   }) {
     return SignInState(
@@ -42,10 +51,13 @@ class SignInState extends Equatable {
       password: password ?? this.password,
       errorMessage: errorMessage ?? this.errorMessage,
       status: status ?? this.status,
+      userVerificationStatus:
+          userVerificationStatus ?? this.userVerificationStatus,
       method: method ?? this.method,
     );
   }
 
   @override
-  List<Object?> get props => [email, password, errorMessage, status, method];
+  List<Object?> get props =>
+      [email, password, errorMessage, status, userVerificationStatus, method];
 }

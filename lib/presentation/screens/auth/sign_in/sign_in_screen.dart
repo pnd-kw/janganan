@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:janganan/bloc/cubit/cubit/sign_in_cubit.dart';
+import 'package:janganan/presentation/widgets/reusable_alert_dialog.dart';
 import 'package:janganan/presentation/widgets/reusable_form_field.dart';
+import 'package:janganan/presentation/widgets/reusable_progress_dialog.dart';
 import 'package:janganan/utils/constants/colors.dart';
 import 'package:janganan/utils/regex_validator.dart';
 
@@ -94,36 +96,49 @@ class _SignInScreenState extends State<SignInScreen> {
                         if (signInState.status == SignInStatus.sendingRequest) {
                           showDialog(
                             context: context,
-                            builder: (context) => Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: SizedBox(
-                                  height: 50,
-                                  width: 50,
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation(
-                                        Theme.of(context)
-                                            .colorScheme
-                                            .background),
-                                    strokeWidth: 5,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            builder: (context) =>
+                                const ReusableProgressDialog(),
                           );
                         } else if (signInState.status == SignInStatus.success) {
                           if (signInState.method ==
                               SignInMethod.emailAndPassword) {
-                            Navigator.of(context)
-                                .pushReplacementNamed('/verification-screen');
+                            if (signInState.userVerificationStatus ==
+                                UserVerificationStatus.unverifiedUser) {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/verification-screen', (route) => false);
+                            } else if (signInState.userVerificationStatus ==
+                                UserVerificationStatus.verifiedUser) {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/screen-navigation', (route) => false);
+                            }
                           }
+                          // print('success');
+                          // if (signInState.usersStatus ==
+                          //     UsersStatus.verifiedUser) {
+                          //   print('verified');
+                          // }
+                          // if (signInState.method ==
+                          //     SignInMethod.emailAndPassword) {
+                          //   print('email and password');
+                          // }
+                          // } else if (signInState.userStatus ==
+                          //     UsersStatus.unverifiedUser) {
+                          //   Navigator.of(context)
+                          //       .pushReplacementNamed('/verification-screen');
+                          // }
+                          // verifiedUser == false) {
+                          // if (signInState.method ==
+                          //     SignInMethod.emailAndPassword) {
+                          //   Navigator.of(context)
+                          //       .pushReplacementNamed('/verification-screen');
+                          // }
                         } else if (signInState.status == SignInStatus.failure) {
                           showDialog(
                             context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Terdapat Kesalahan'),
-                              content: const Text(
-                                  'Otentikasi gagal, periksa kembali alamat email, password, dan koneksi internet.'),
+                            builder: (context) => ReusableAlertDialog(
+                              title: 'Terdapat Kesalahan',
+                              content:
+                                  'Otentikasi gagal, periksa kembali alamat email, password, dan koneksi internet.',
                               actions: [
                                 TextButton(
                                   onPressed: () {
@@ -137,14 +152,17 @@ class _SignInScreenState extends State<SignInScreen> {
                         }
                       },
                       child: ElevatedButton(
-                        onPressed: () {
-                          if (_loginFormKey.currentState!.validate()) {
-                            signInCubit.logInWithCredentials(
-                              _emailController.text,
-                              _passwordController.text,
-                            );
-                          }
-                        },
+                        onPressed: _emailController.text.isNotEmpty &&
+                                _passwordController.text.isNotEmpty
+                            ? () {
+                                if (_loginFormKey.currentState!.validate()) {
+                                  signInCubit.logInWithCredentials(
+                                    _emailController.text,
+                                    _passwordController.text,
+                                  );
+                                }
+                              }
+                            : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColor.secondaryColor,
                           shape: RoundedRectangleBorder(
@@ -163,6 +181,69 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                       ),
                     ),
+                    // child: BlocListener<SignInCubit, SignInState>(
+                    //   listener: (context, signInState) {
+                    //     if (signInState.status == SignInStatus.sendingRequest) {
+                    //       showDialog(
+                    //         context: context,
+                    //         builder: (context) =>
+                    //             const ReusableProgressDialog(),
+                    //       );
+                    //     } else if (signInState.status == SignInStatus.success) {
+                    //       if (signInState.method ==
+                    //           SignInMethod.emailAndPassword) {
+                    //         Navigator.of(context)
+                    //             .pushReplacementNamed('/verification-screen');
+                    //       }
+                    //     } else if (signInState.status == SignInStatus.failure) {
+                    //       showDialog(
+                    //         context: context,
+                    //         builder: (context) => ReusableAlertDialog(
+                    //           title: 'Terdapat Kesalahan',
+                    //           content:
+                    //               'Otentikasi gagal, periksa kembali alamat email, password, dan koneksi internet.',
+                    //           actions: [
+                    //             TextButton(
+                    //               onPressed: () {
+                    //                 Navigator.of(context).pop();
+                    //               },
+                    //               child: const Text('Tutup'),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       );
+                    //     }
+                    //   },
+                    //   child: ElevatedButton(
+                    //     onPressed: _emailController.text.isNotEmpty &&
+                    //             _passwordController.text.isNotEmpty
+                    //         ? () {
+                    //             if (_loginFormKey.currentState!.validate()) {
+                    //               signInCubit.logInWithCredentials(
+                    //                 _emailController.text,
+                    //                 _passwordController.text,
+                    //               );
+                    //             }
+                    //           }
+                    //         : null,
+                    //     style: ElevatedButton.styleFrom(
+                    //       backgroundColor: AppColor.secondaryColor,
+                    //       shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(20),
+                    //       ),
+                    //       elevation: 2,
+                    //     ),
+                    //     child: Text(
+                    //       'LOGIN',
+                    //       style: Theme.of(context)
+                    //           .textTheme
+                    //           .titleMedium!
+                    //           .copyWith(
+                    //               color:
+                    //                   Theme.of(context).colorScheme.background),
+                    //     ),
+                    //   ),
+                    // ),
                   ),
                 ),
                 Padding(
@@ -211,17 +292,17 @@ class _SignInScreenState extends State<SignInScreen> {
                         if (googleSignInState.status == SignInStatus.success) {
                           if (googleSignInState.method ==
                               SignInMethod.googleSignIn) {
-                            Navigator.of(context)
-                                .pushReplacementNamed('/screen-navigation');
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/screen-navigation', (route) => false);
                           }
                         } else if (googleSignInState.status ==
                             SignInStatus.failure) {
                           showDialog(
                             context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Terdapat Kesalahan'),
-                              content: const Text(
-                                  'Masalah kredensial atau sambungan internet.'),
+                            builder: (context) => ReusableAlertDialog(
+                              title: 'Terdapat Kesalahan',
+                              content:
+                                  'Masalah kredensial atau sambungan internet.',
                               actions: [
                                 TextButton(
                                   onPressed: () {

@@ -1,6 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:janganan/repository/auth_repository.dart';
+
+import '../../../utils/constants/exception.dart';
 
 part 'sign_in_state.dart';
 
@@ -23,11 +26,19 @@ class SignInCubit extends Cubit<SignInState> {
     try {
       emit(state.copyWith(status: SignInStatus.sendingRequest));
 
-      await _authenticationRepository.logInWithEmailAndPassword(
-          email: email, password: password);
+      final userVerificationStatus = await _authenticationRepository
+          .logInWithEmailAndPassword(email: email, password: password);
 
       emit(state.copyWith(status: SignInStatus.success));
       emit(state.copyWith(method: SignInMethod.emailAndPassword));
+
+      if (userVerificationStatus == 'verified') {
+        emit(state.copyWith(
+            userVerificationStatus: UserVerificationStatus.verifiedUser));
+      } else if (userVerificationStatus == 'unverified') {
+        emit(state.copyWith(
+            userVerificationStatus: UserVerificationStatus.unverifiedUser));
+      }
     } catch (e) {
       emit(state.copyWith(
         status: SignInStatus.failure,

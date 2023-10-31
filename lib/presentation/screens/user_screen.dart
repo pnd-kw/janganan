@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:janganan/bloc/app_bloc/app_bloc.dart';
+import 'package:janganan/presentation/widgets/reusable_alert_dialog.dart';
 
 class UserScreen extends StatelessWidget {
   const UserScreen({super.key});
@@ -13,10 +14,9 @@ class UserScreen extends StatelessWidget {
           onPressed: () {
             showDialog(
               context: context,
-              builder: (context) => AlertDialog(
-                title: const Text('Logout'),
-                content: const Text(
-                    'Apakah anda yakin ingin keluar dari akun anda?'),
+              builder: (context) => ReusableAlertDialog(
+                title: 'Logout',
+                content: 'Apakah anda yakin ingin keluar dari akun anda?',
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -24,13 +24,26 @@ class UserScreen extends StatelessWidget {
                       Navigator.of(context).pushNamedAndRemoveUntil(
                           '/sign-in-screen', (route) => false);
                     },
-                    child: const Text('Keluar'),
+                    child: Text(
+                      'Keluar',
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium!
+                          .copyWith(color: Colors.red),
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Text('Batal'),
+                    child: Text('Batal',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onBackground)),
                   ),
                 ],
               ),

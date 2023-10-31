@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:janganan/utils/constants/colors.dart';
 
-class CustomElevatedButton extends StatelessWidget {
-  const CustomElevatedButton({
+class ReusableElevatedButton extends StatelessWidget {
+  const ReusableElevatedButton({
     super.key,
     required this.text,
     this.onPressed,

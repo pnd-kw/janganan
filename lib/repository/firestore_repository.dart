@@ -6,13 +6,19 @@ class FirestoreRepository {
   FirestoreRepository({FirebaseFirestore? firebaseFirestore})
       : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
-  Future<void> setUserData(String userId, String username, String email,
-      String phoneNumber, String authenticationStatus) async {
+  Future<void> setUserData(
+    String userId,
+    String username,
+    String email,
+    String phoneNumber,
+    String userVerificationStatus,
+  ) async {
     final userData = {
+      // 'userId': userId,
       'username': username,
       'email': email,
       'phoneNumber': phoneNumber,
-      'authenticationStatus': authenticationStatus,
+      'userVerificationStatus': userVerificationStatus,
     };
 
     try {
@@ -47,4 +53,30 @@ class FirestoreRepository {
       throw 'Failed to update user data.';
     }
   }
+
+  // Future<QuerySnapshot> checkIfEmailExists(String email) async {
+  //   try {
+  //     final querySnapshot = await _firebaseFirestore
+  //         .collection('users')
+  //         .where('email', isEqualTo: email)
+  //         .get();
+
+  //     return querySnapshot;
+  //   } catch (e) {
+  //     throw 'Failed to check if email exists.';
+  //   }
+  // }
+
+  // Future<QuerySnapshot> getUserIdByEmail(String email) async {
+  //   try {
+  //     final querySnapshot = await _firebaseFirestore
+  //         .collection('users')
+  //         .where('email', isEqualTo: email)
+  //         .get();
+
+  //     return querySnapshot;
+  //   } catch (e) {
+  //     throw 'Failed to get userId by email.';
+  //   }
+  // }
 }

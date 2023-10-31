@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:janganan/bloc/cubit/cubit/sign_up_cubit.dart';
-import 'package:janganan/presentation/widgets/custom_elevated_button.dart';
+import 'package:janganan/presentation/widgets/reusable_alert_dialog.dart';
+import 'package:janganan/presentation/widgets/reusable_elevated_button.dart';
 import 'package:janganan/presentation/widgets/reusable_form_field.dart';
+import 'package:janganan/presentation/widgets/reusable_progress_dialog.dart';
 import 'package:janganan/utils/regex_validator.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -189,49 +191,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         if (signUpState.status == SignUpStatus.sendingRequest) {
                           showDialog(
                             context: context,
-                            builder: (context) => Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: SizedBox(
-                                  height: 50,
-                                  width: 50,
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation(
-                                        Theme.of(context)
-                                            .colorScheme
-                                            .background),
-                                    strokeWidth: 5,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            builder: (context) =>
+                                const ReusableProgressDialog(),
+                            // builder: (context) => Center(
+                            //   child: Padding(
+                            //     padding: const EdgeInsets.all(10),
+                            //     child: SizedBox(
+                            //       height: 50,
+                            //       width: 50,
+                            //       child: CircularProgressIndicator(
+                            //         valueColor: AlwaysStoppedAnimation(
+                            //             Theme.of(context)
+                            //                 .colorScheme
+                            //                 .background),
+                            //         strokeWidth: 5,
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                           );
                         } else if (signUpState.status == SignUpStatus.success) {
                           Navigator.pop(context);
                           Navigator.of(context)
                               .pushReplacementNamed('/sign-in-screen');
                           showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                    title: const Text('Pendaftaran Berhasil'),
-                                    content: const Text(
-                                        'Selama pendaftaran telah berhasil, silahkan melakukan login.'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text('Tutup'),
-                                      ),
-                                    ],
-                                  ));
-                        } else {
-                          Navigator.pop(context);
-                          showDialog(
                             context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Terdapat Kesalahan'),
-                              content: Text(signUpState.errorMessage!),
+                            builder: (context) => ReusableAlertDialog(
+                              title: 'Pendaftaran Berhasil',
+                              content:
+                                  'Selamat pendaftaran telah berhasil, silahkan melakukan login.',
                               actions: [
                                 TextButton(
                                   onPressed: () {
@@ -241,10 +229,52 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                               ],
                             ),
+                            // builder: (context) => AlertDialog(
+                            //   title: const Text('Pendaftaran Berhasil'),
+                            //   content: const Text(
+                            //       'Selamat pendaftaran telah berhasil, silahkan melakukan login.'),
+                            //   actions: [
+                            //     TextButton(
+                            //       onPressed: () {
+                            //         Navigator.of(context).pop();
+                            //       },
+                            //       child: const Text('Tutup'),
+                            //     ),
+                            //   ],
+                            // ),
+                          );
+                        } else {
+                          Navigator.pop(context);
+                          showDialog(
+                            context: context,
+                            builder: (context) => ReusableAlertDialog(
+                              title: 'Terdapat Kesalahan',
+                              content: signUpState.errorMessage!,
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Tutup'),
+                                ),
+                              ],
+                            ),
+                            // builder: (context) => AlertDialog(
+                            //   title: const Text('Terdapat Kesalahan'),
+                            //   content: Text(signUpState.errorMessage!),
+                            //   actions: [
+                            //     TextButton(
+                            //       onPressed: () {
+                            //         Navigator.of(context).pop();
+                            //       },
+                            //       child: const Text('Tutup'),
+                            //     ),
+                            //   ],
+                            // ),
                           );
                         }
                       },
-                      child: CustomElevatedButton(
+                      child: ReusableElevatedButton(
                         onPressed: _isTermsAccepted
                             ? () {
                                 if (_registerFormKey.currentState!.validate()) {
