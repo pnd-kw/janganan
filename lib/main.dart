@@ -14,11 +14,10 @@ import 'package:janganan/bloc/janganan/janganan_bloc.dart';
 
 import 'package:janganan/config/theme.dart';
 import 'package:janganan/firebase_options.dart';
+import 'package:janganan/presentation/screens/link_google_screen.dart';
 
 import 'package:janganan/repository/auth_repository.dart';
-// import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-// import 'package:janganan/repository/firestore_repository.dart';
-// import 'package:janganan/utils/otp_util.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:janganan/presentation/screens/add_vegetable_screen.dart';
@@ -46,20 +45,12 @@ void main() async {
 
   final authenticationRepository = AuthenticationRepository(
     prefs: prefs,
-    // otpUtil: OtpUtil(
-    //     firebaseAuth: firebase_auth.FirebaseAuth.instance,
-    //     firestoreRepository: FirestoreRepository()));
   );
-  await authenticationRepository.user.first;
 
-  // final verificationCubit = VerificationCubit(
-  //     otpUtil: OtpUtil(
-  //         firebaseAuth: firebase_auth.FirebaseAuth.instance,
-  //         firestoreRepository: FirestoreRepository()));
+  await authenticationRepository.user.first;
 
   runApp(Janganan(
     authenticationRepository: authenticationRepository,
-    // verificationCubit: verificationCubit,
   ));
 }
 
@@ -67,26 +58,24 @@ class Janganan extends StatelessWidget {
   const Janganan({
     super.key,
     required AuthenticationRepository authenticationRepository,
-    // required VerificationCubit verificationCubit,
   }) : _authenticationRepository = authenticationRepository;
-  // _verificationCubit = verificationCubit;
 
   final AuthenticationRepository _authenticationRepository;
-  // final VerificationCubit _verificationCubit;
 
   @override
   Widget build(BuildContext context) {
-    String initialUserId = "";
+    // String initialUserId = "";
 
     return RepositoryProvider.value(
       value: _authenticationRepository,
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => AppBloc(
-                authenticationRepository: _authenticationRepository,
-                initialUserId: initialUserId),
-          ),
+              create: (context) => AppBloc(
+                    authenticationRepository: _authenticationRepository,
+                  )
+              // initialUserId: initialUserId),
+              ),
           BlocProvider(
             create: (context) => SignUpCubit(_authenticationRepository),
           ),
@@ -114,8 +103,6 @@ class Janganan extends StatelessWidget {
             '/': (context) {
               final isAuthenticated = context.watch<AppBloc>().state.status ==
                   AppStatus.authenticated;
-              // final authenticationStatus =
-              //     context.watch<AppBloc>().state.authenticationStatus;
 
               if (isAuthenticated) {
                 return const ScreenNavigation();
@@ -123,10 +110,10 @@ class Janganan extends StatelessWidget {
                 return const OnBoardingScreen();
               }
             },
-            // '/': (context) => const OnBoardingScreen(),
             '/sign-in-screen': (context) => const SignInScreen(),
             '/sign-up-screen': (context) => const SignUpScreen(),
             '/verification-screen': (context) => const VerificationScreen(),
+            '/link-google-screen': (context) => const LinkGoogleScreen(),
             '/screen-navigation': (context) => const ScreenNavigation(),
             '/home-screen': (context) => const HomeScreen(),
             '/order-screen': (context) => const OrderScreen(),

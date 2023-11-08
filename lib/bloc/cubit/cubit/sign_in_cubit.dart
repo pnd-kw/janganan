@@ -32,10 +32,10 @@ class SignInCubit extends Cubit<SignInState> {
       emit(state.copyWith(status: SignInStatus.success));
       emit(state.copyWith(method: SignInMethod.emailAndPassword));
 
-      if (userVerificationStatus == 'verified') {
+      if (userVerificationStatus == true) {
         emit(state.copyWith(
             userVerificationStatus: UserVerificationStatus.verifiedUser));
-      } else if (userVerificationStatus == 'unverified') {
+      } else if (userVerificationStatus == false) {
         emit(state.copyWith(
             userVerificationStatus: UserVerificationStatus.unverifiedUser));
       }
@@ -55,6 +55,17 @@ class SignInCubit extends Cubit<SignInState> {
 
       emit(state.copyWith(status: SignInStatus.success));
       emit(state.copyWith(method: SignInMethod.googleSignIn));
+
+      final userVerificationStatus =
+          await _authenticationRepository.getGoogleSignInStatus();
+
+      if (userVerificationStatus == true) {
+        emit(state.copyWith(
+            userVerificationStatus: UserVerificationStatus.verifiedUser));
+      } else if (userVerificationStatus == false) {
+        emit(state.copyWith(
+            userVerificationStatus: UserVerificationStatus.unverifiedUser));
+      }
     } catch (e) {
       if (e is LogInWithGoogleFailure) {
         emit(state.copyWith(
@@ -64,6 +75,20 @@ class SignInCubit extends Cubit<SignInState> {
             status: SignInStatus.failure,
             errorMessage: 'An unknown error occured.'));
       }
+    }
+  }
+
+  Future<void> linkCredential(String password) async {
+    try {
+      emit(state.copyWith(linkStatus: LinkStatus.linking));
+
+      await _authenticationRepository.googleSignIn(password);
+
+      emit(state.copyWith(linkStatus: LinkStatus.linked));
+    } catch (e) {
+      emit(state.copyWith(
+          linkStatus: LinkStatus.failed,
+          errorMessage: 'Unknown error occured.'));
     }
   }
 }

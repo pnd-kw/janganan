@@ -124,7 +124,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return null;
                         },
                         label: 'Password',
-                        hint: '8 karakter, angka, huruf kapital',
+                        hint: 'Min 8 karakter, angka, huruf kapital',
                       ),
                       ReusableFormField(
                         controller: _passwordMatchController,
@@ -155,7 +155,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return null;
                         },
                         label: 'Ulangi Password',
-                        hint: '8 karakter, angka, huruf kapital',
+                        hint: 'Min 8 karakter, angka, huruf kapital',
                       ),
                     ],
                   ),
@@ -193,22 +193,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             context: context,
                             builder: (context) =>
                                 const ReusableProgressDialog(),
-                            // builder: (context) => Center(
-                            //   child: Padding(
-                            //     padding: const EdgeInsets.all(10),
-                            //     child: SizedBox(
-                            //       height: 50,
-                            //       width: 50,
-                            //       child: CircularProgressIndicator(
-                            //         valueColor: AlwaysStoppedAnimation(
-                            //             Theme.of(context)
-                            //                 .colorScheme
-                            //                 .background),
-                            //         strokeWidth: 5,
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
                           );
                         } else if (signUpState.status == SignUpStatus.success) {
                           Navigator.pop(context);
@@ -225,23 +209,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Tutup'),
+                                  child: Text(
+                                    'Tutup',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground),
+                                  ),
                                 ),
                               ],
                             ),
-                            // builder: (context) => AlertDialog(
-                            //   title: const Text('Pendaftaran Berhasil'),
-                            //   content: const Text(
-                            //       'Selamat pendaftaran telah berhasil, silahkan melakukan login.'),
-                            //   actions: [
-                            //     TextButton(
-                            //       onPressed: () {
-                            //         Navigator.of(context).pop();
-                            //       },
-                            //       child: const Text('Tutup'),
-                            //     ),
-                            //   ],
-                            // ),
                           );
                         } else {
                           Navigator.pop(context);
@@ -255,22 +235,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Tutup'),
+                                  child: Text(
+                                    'Tutup',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground),
+                                  ),
                                 ),
                               ],
                             ),
-                            // builder: (context) => AlertDialog(
-                            //   title: const Text('Terdapat Kesalahan'),
-                            //   content: Text(signUpState.errorMessage!),
-                            //   actions: [
-                            //     TextButton(
-                            //       onPressed: () {
-                            //         Navigator.of(context).pop();
-                            //       },
-                            //       child: const Text('Tutup'),
-                            //     ),
-                            //   ],
-                            // ),
                           );
                         }
                       },

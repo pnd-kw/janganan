@@ -41,7 +41,9 @@ class SignUpCubit extends Cubit<SignUpState> {
         email: email,
         password: password,
         phoneNumber: phoneNumber,
-        userVerificationStatus: 'unverified',
+        // userVerificationStatus: 'unverified',
+        authMethodType: 'email',
+        isVerified: false,
       );
 
       emit(state.copyWith(status: SignUpStatus.success));

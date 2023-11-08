@@ -15,7 +15,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   AppBloc({
     required AuthenticationRepository authenticationRepository,
-    required String initialUserId,
+    // required String initialUserId,
   })  : _authenticationRepository = authenticationRepository,
         super(
           authenticationRepository.currentUser.isNotEmpty
@@ -31,12 +31,19 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     );
   }
 
-  void _onUserChanged(_AppUserChanged event, Emitter<AppState> emit) {
-    emit(
-      event.user.isNotEmpty
-          ? AppState.authenticated(event.user)
-          : const AppState.unauthenticated(),
-    );
+  void _onUserChanged(_AppUserChanged event, Emitter<AppState> emit) async {
+    if (event.user.isNotEmpty) {
+      final userVerificationStatus =
+          await _authenticationRepository.getUserVerificationStatus();
+
+      if (userVerificationStatus == true) {
+        emit(AppState.authenticated(event.user));
+      } else {
+        emit(const AppState.unauthenticated());
+      }
+    } else {
+      emit(const AppState.unauthenticated());
+    }
   }
 
   void _onLogoutRequested(AppLogOutRequested event, Emitter<AppState> emit) {

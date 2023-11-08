@@ -21,16 +21,17 @@ void main() {
     // Build our app and trigger a frame.
     final prefs = await SharedPreferences.getInstance();
     await tester.pumpWidget(Janganan(
-        authenticationRepository: AuthenticationRepository(
-      prefs: prefs,
-      // otpUtil: OtpUtil(
-      //     firebaseAuth: firebase_auth.FirebaseAuth.instance,
-      //     firestoreRepository: FirestoreRepository())),
-      // verificationCubit: VerificationCubit(
-      //     otpUtil: OtpUtil(
-      //         firebaseAuth: firebase_auth.FirebaseAuth.instance,
-      //         firestoreRepository: FirestoreRepository())),
-    )));
+      authenticationRepository: AuthenticationRepository(
+        prefs: prefs,
+        // otpUtil: OtpUtil(
+        //     firebaseAuth: firebase_auth.FirebaseAuth.instance,
+        //     firestoreRepository: FirestoreRepository())),
+        // verificationCubit: VerificationCubit(
+        //     otpUtil: OtpUtil(
+        //         firebaseAuth: firebase_auth.FirebaseAuth.instance,
+        //         firestoreRepository: FirestoreRepository())),
+      ),
+    ));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
+
 import 'package:janganan/repository/firestore_repository.dart';
 
 import 'package:janganan/utils/regex_validator.dart';
@@ -22,6 +23,7 @@ class AuthenticationRepository {
 
   bool isWeb = kIsWeb;
   String? _verificationId;
+  String _existingEmail = '';
 
   AuthenticationRepository(
       {firebase_auth.FirebaseAuth? firebaseAuth,
@@ -57,7 +59,8 @@ class AuthenticationRepository {
     required String email,
     required String password,
     required String phoneNumber,
-    required String userVerificationStatus,
+    required String authMethodType,
+    required bool isVerified,
   }) async {
     try {
       final formattedPhoneNumber = formatPhoneNumber(phoneNumber);
@@ -72,7 +75,8 @@ class AuthenticationRepository {
         username,
         email,
         formattedPhoneNumber,
-        userVerificationStatus,
+        authMethodType,
+        isVerified,
       );
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
@@ -93,7 +97,7 @@ class AuthenticationRepository {
     }
   }
 
-  Future<void> logInWithGoogle() async {
+  Future<String> logInWithGoogle() async {
     try {
       late final firebase_auth.AuthCredential googleCredential;
       if (isWeb) {
@@ -111,22 +115,24 @@ class AuthenticationRepository {
         );
         final email = googleUser.email;
 
-        final emailCredential =
+        final existingUser =
             await _firebaseAuth.fetchSignInMethodsForEmail(email);
 
-        if (emailCredential.isNotEmpty) {
-          final user = _firebaseAuth.currentUser;
-
-          await user?.linkWithCredential(googleCredential);
+        if (existingUser.isNotEmpty) {
+          _existingEmail = email;
+          await _firebaseAuth.signInWithCredential(googleCredential);
+          getGoogleSignInStatus();
+          await _prefs.setString('authMethod', 'google');
         } else {
           await _firebaseAuth.signInWithCredential(googleCredential);
 
           final userId = _firebaseAuth.currentUser?.uid;
 
           await _firestoreRepository.setUserData(
-              userId!, googleUser.displayName!, email, '-', 'verified');
+              userId!, googleUser.displayName!, email, '-', 'google', true);
         }
       }
+      return _existingEmail;
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw LogInWithGoogleFailure.fromCode(e.code);
     } catch (_) {
@@ -134,7 +140,42 @@ class AuthenticationRepository {
     }
   }
 
-  Future<dynamic> logInWithEmailAndPassword(
+  Future<bool?> getGoogleSignInStatus() async {
+    final userId = _firebaseAuth.currentUser?.uid;
+    final isVerified =
+        await _firestoreRepository.getLinkedAuthMethod(userId!, 'google');
+
+    return isVerified;
+  }
+
+  Future<void> googleSignIn(String password) async {
+    try {
+      final emailCredential = await logInWithGoogle();
+
+      if (emailCredential.isNotEmpty) {
+        await _firebaseAuth.signInWithEmailAndPassword(
+            email: _existingEmail, password: password);
+      }
+      late final firebase_auth.AuthCredential googleCredential;
+      final user = _firebaseAuth.currentUser;
+      final userId = _firebaseAuth.currentUser?.uid;
+      final googleUser = await _googleSignIn.signIn();
+      final googleAuth = await googleUser!.authentication;
+      googleCredential = firebase_auth.GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      if (user != null) {
+        user.linkWithCredential(googleCredential);
+        await _firestoreRepository.addLinkedAuthMethod(userId!, 'google', true);
+        await _prefs.setString('authMethod', 'google');
+      }
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<bool?> logInWithEmailAndPassword(
       {required String email, required String password}) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
@@ -142,15 +183,34 @@ class AuthenticationRepository {
 
       final userId = _firebaseAuth.currentUser?.uid;
 
-      final userDoc = await _firestoreRepository.getUserData(userId!);
+      final isVerified =
+          await _firestoreRepository.getLinkedAuthMethod(userId!, 'email');
 
-      final userVerificationStatus = userDoc?['userVerificationStatus'];
+      await _prefs.setString('authMethod', 'email');
 
-      return userVerificationStatus;
+      return isVerified;
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw LogInWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
       throw const LogInWithEmailAndPasswordFailure();
+    }
+  }
+
+  Future<bool?> getUserVerificationStatus() async {
+    try {
+      final userId = _firebaseAuth.currentUser?.uid;
+
+      final currentAuthMethodType = _prefs.getString('authMethod');
+
+      if (currentAuthMethodType != null) {
+        final isVerified = await _firestoreRepository.getLinkedAuthMethod(
+            userId!, currentAuthMethodType);
+        return isVerified;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
@@ -184,14 +244,16 @@ class AuthenticationRepository {
     try {
       final user = _firebaseAuth.currentUser;
       final userId = _firebaseAuth.currentUser?.uid;
-      final userDoc = await _firestoreRepository.getUserData(userId!);
+
       if (_verificationId != null) {
         final credential = firebase_auth.PhoneAuthProvider.credential(
             verificationId: _verificationId!, smsCode: code);
         if (user != null) {
           await user.linkWithCredential(credential);
-          userDoc?['userVerificationStatus'] = 'verified';
-          await _firestoreRepository.updateUserData(userId, userDoc!);
+
+          await _firestoreRepository
+              .updateLinkedAuthMethod(userId!, 'email', {'isVerified': true});
+          // await _prefs.setString('authMethod', 'email');
         }
         return true;
       } else {

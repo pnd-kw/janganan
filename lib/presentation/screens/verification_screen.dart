@@ -122,7 +122,16 @@ class _VerificationScreenState extends State<VerificationScreen> {
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              child: const Text('Tutup'),
+                              child: Text(
+                                'Tutup',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onBackground),
+                              ),
                             ),
                           ],
                         ),
@@ -162,7 +171,17 @@ class _VerificationScreenState extends State<VerificationScreen> {
                                                       Navigator.of(context)
                                                           .pop();
                                                     },
-                                                    child: const Text('Tutup'),
+                                                    child: Text(
+                                                      'Tutup',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .titleMedium!
+                                                          .copyWith(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .colorScheme
+                                                                  .onBackground),
+                                                    ),
                                                   ),
                                                 ],
                                               ),

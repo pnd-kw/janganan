@@ -16,8 +16,10 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   bool _isPasswordVisible = false;
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
   final _loginFormKey = GlobalKey<FormState>();
 
   @override
@@ -82,7 +84,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             return null;
                           },
                           label: 'Password',
-                          hint: '8 karakter, angka, huruf kapital'),
+                          hint: 'Min 8 karakter, angka, huruf kapital'),
                     ],
                   ),
                 ),
@@ -112,26 +114,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                   '/screen-navigation', (route) => false);
                             }
                           }
-                          // print('success');
-                          // if (signInState.usersStatus ==
-                          //     UsersStatus.verifiedUser) {
-                          //   print('verified');
-                          // }
-                          // if (signInState.method ==
-                          //     SignInMethod.emailAndPassword) {
-                          //   print('email and password');
-                          // }
-                          // } else if (signInState.userStatus ==
-                          //     UsersStatus.unverifiedUser) {
-                          //   Navigator.of(context)
-                          //       .pushReplacementNamed('/verification-screen');
-                          // }
-                          // verifiedUser == false) {
-                          // if (signInState.method ==
-                          //     SignInMethod.emailAndPassword) {
-                          //   Navigator.of(context)
-                          //       .pushReplacementNamed('/verification-screen');
-                          // }
                         } else if (signInState.status == SignInStatus.failure) {
                           showDialog(
                             context: context,
@@ -144,7 +126,16 @@ class _SignInScreenState extends State<SignInScreen> {
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Tutup'),
+                                  child: Text(
+                                    'Tutup',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground),
+                                  ),
                                 ),
                               ],
                             ),
@@ -181,69 +172,6 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                       ),
                     ),
-                    // child: BlocListener<SignInCubit, SignInState>(
-                    //   listener: (context, signInState) {
-                    //     if (signInState.status == SignInStatus.sendingRequest) {
-                    //       showDialog(
-                    //         context: context,
-                    //         builder: (context) =>
-                    //             const ReusableProgressDialog(),
-                    //       );
-                    //     } else if (signInState.status == SignInStatus.success) {
-                    //       if (signInState.method ==
-                    //           SignInMethod.emailAndPassword) {
-                    //         Navigator.of(context)
-                    //             .pushReplacementNamed('/verification-screen');
-                    //       }
-                    //     } else if (signInState.status == SignInStatus.failure) {
-                    //       showDialog(
-                    //         context: context,
-                    //         builder: (context) => ReusableAlertDialog(
-                    //           title: 'Terdapat Kesalahan',
-                    //           content:
-                    //               'Otentikasi gagal, periksa kembali alamat email, password, dan koneksi internet.',
-                    //           actions: [
-                    //             TextButton(
-                    //               onPressed: () {
-                    //                 Navigator.of(context).pop();
-                    //               },
-                    //               child: const Text('Tutup'),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //       );
-                    //     }
-                    //   },
-                    //   child: ElevatedButton(
-                    //     onPressed: _emailController.text.isNotEmpty &&
-                    //             _passwordController.text.isNotEmpty
-                    //         ? () {
-                    //             if (_loginFormKey.currentState!.validate()) {
-                    //               signInCubit.logInWithCredentials(
-                    //                 _emailController.text,
-                    //                 _passwordController.text,
-                    //               );
-                    //             }
-                    //           }
-                    //         : null,
-                    //     style: ElevatedButton.styleFrom(
-                    //       backgroundColor: AppColor.secondaryColor,
-                    //       shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(20),
-                    //       ),
-                    //       elevation: 2,
-                    //     ),
-                    //     child: Text(
-                    //       'LOGIN',
-                    //       style: Theme.of(context)
-                    //           .textTheme
-                    //           .titleMedium!
-                    //           .copyWith(
-                    //               color:
-                    //                   Theme.of(context).colorScheme.background),
-                    //     ),
-                    //   ),
-                    // ),
                   ),
                 ),
                 Padding(
@@ -292,8 +220,16 @@ class _SignInScreenState extends State<SignInScreen> {
                         if (googleSignInState.status == SignInStatus.success) {
                           if (googleSignInState.method ==
                               SignInMethod.googleSignIn) {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/screen-navigation', (route) => false);
+                            if (googleSignInState.userVerificationStatus ==
+                                UserVerificationStatus.unverifiedUser) {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/link-google-screen', (route) => false);
+                            } else if (googleSignInState
+                                    .userVerificationStatus ==
+                                UserVerificationStatus.verifiedUser) {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/screen-navigation', (route) => false);
+                            }
                           }
                         } else if (googleSignInState.status ==
                             SignInStatus.failure) {
@@ -308,7 +244,16 @@ class _SignInScreenState extends State<SignInScreen> {
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Tutup'),
+                                  child: Text(
+                                    'Tutup',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onBackground),
+                                  ),
                                 ),
                               ],
                             ),

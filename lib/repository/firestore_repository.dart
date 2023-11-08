@@ -11,18 +11,26 @@ class FirestoreRepository {
     String username,
     String email,
     String phoneNumber,
-    String userVerificationStatus,
+    String authMethodType,
+    bool isVerified,
   ) async {
     final userData = {
-      // 'userId': userId,
       'username': username,
       'email': email,
       'phoneNumber': phoneNumber,
-      'userVerificationStatus': userVerificationStatus,
     };
 
     try {
       await _firebaseFirestore.collection('users').doc(userId).set(userData);
+
+      await _firebaseFirestore
+          .collection('users')
+          .doc(userId)
+          .collection('linkedAuthMethods')
+          .add({
+        'authMethodType': authMethodType,
+        'isVerified': isVerified,
+      });
     } catch (e) {
       throw 'Failed to store user data.';
     }
@@ -33,7 +41,17 @@ class FirestoreRepository {
       final userDoc =
           await _firebaseFirestore.collection('users').doc(userId).get();
       if (userDoc.exists) {
-        return userDoc.data() as Map<String, dynamic>;
+        final userData = userDoc.data() as Map<String, dynamic>;
+
+        final linkedAuthMethodsCollection =
+            userDoc.reference.collection('linkedAuthMethods');
+        final linkedAuthMethodsDocs = await linkedAuthMethodsCollection.get();
+
+        final linkedAuthMethodsData =
+            linkedAuthMethodsDocs.docs.map((doc) => doc.data()).toList();
+        userData['linkedAuthMethods'] = linkedAuthMethodsData;
+
+        return userData;
       } else {
         return null;
       }
@@ -54,29 +72,60 @@ class FirestoreRepository {
     }
   }
 
-  // Future<QuerySnapshot> checkIfEmailExists(String email) async {
-  //   try {
-  //     final querySnapshot = await _firebaseFirestore
-  //         .collection('users')
-  //         .where('email', isEqualTo: email)
-  //         .get();
+  Future<bool?> getLinkedAuthMethod(
+      String userId, String authMethodType) async {
+    try {
+      final userRef = _firebaseFirestore.collection('users').doc(userId);
+      final linkedAuthMethodsCollection =
+          userRef.collection('linkedAuthMethods');
+      final querySnapshot = await linkedAuthMethodsCollection
+          .where('authMethodType', isEqualTo: authMethodType)
+          .get();
 
-  //     return querySnapshot;
-  //   } catch (e) {
-  //     throw 'Failed to check if email exists.';
-  //   }
-  // }
+      if (querySnapshot.docs.isNotEmpty) {
+        final docSnapshot = querySnapshot.docs.first;
+        final data = docSnapshot.data();
+        final isVerified = data['isVerified'] as bool;
+        return isVerified;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      throw 'Failed to getLinkedAuthMethod.';
+    }
+  }
 
-  // Future<QuerySnapshot> getUserIdByEmail(String email) async {
-  //   try {
-  //     final querySnapshot = await _firebaseFirestore
-  //         .collection('users')
-  //         .where('email', isEqualTo: email)
-  //         .get();
+  Future<void> addLinkedAuthMethod(
+      String userId, String authMethodType, bool isVerified) async {
+    try {
+      final userRef = _firebaseFirestore.collection('users').doc(userId);
+      final linkedAuthMethodsCollection =
+          userRef.collection('linkedAuthMethods');
+      await linkedAuthMethodsCollection.add({
+        'authMethodType': authMethodType,
+        'isVerified': isVerified,
+      });
+    } catch (e) {
+      throw 'Failed to add linkedAuthMethods data.';
+    }
+  }
 
-  //     return querySnapshot;
-  //   } catch (e) {
-  //     throw 'Failed to get userId by email.';
-  //   }
-  // }
+  Future<void> updateLinkedAuthMethod(String userId, String authMethodType,
+      Map<String, dynamic> updateData) async {
+    try {
+      final userRef = _firebaseFirestore.collection('users').doc(userId);
+      final linkedAuthMethodsCollection =
+          userRef.collection('linkedAuthMethods');
+
+      final querySnapshot = await linkedAuthMethodsCollection
+          .where('authMethodType', isEqualTo: authMethodType)
+          .get();
+
+      for (final doc in querySnapshot.docs) {
+        await doc.reference.update(updateData);
+      }
+    } catch (e) {
+      throw 'Failed to update linkedAuthMethod.';
+    }
+  }
 }

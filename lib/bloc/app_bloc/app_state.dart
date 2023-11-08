@@ -7,6 +7,7 @@ enum AppStatus {
 
 class AppState extends Equatable {
   final AppStatus status;
+
   final User user;
 
   const AppState._({
