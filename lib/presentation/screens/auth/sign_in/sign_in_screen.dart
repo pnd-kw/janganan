@@ -63,7 +63,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           return null;
                         },
                         label: 'Email',
-                        hint: 'johndoe@gmail.com',
+                        hint: 'johndoe@example.com',
                       ),
                       ReusableFormField(
                         controller: _loginPasswordController,
@@ -315,7 +315,10 @@ class _SignInScreenState extends State<SignInScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed('/forgot-password-screen');
+                          },
                           child: Text(
                             'Lupa Password',
                             style: Theme.of(context)

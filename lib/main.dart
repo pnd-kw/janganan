@@ -14,6 +14,7 @@ import 'package:janganan/bloc/janganan/janganan_bloc.dart';
 
 import 'package:janganan/config/theme.dart';
 import 'package:janganan/firebase_options.dart';
+import 'package:janganan/presentation/screens/forgot_password_screen.dart';
 import 'package:janganan/presentation/screens/link_google_screen.dart';
 
 import 'package:janganan/repository/auth_repository.dart';
@@ -108,6 +109,8 @@ class Janganan extends StatelessWidget {
             },
             '/sign-in-screen': (context) => const SignInScreen(),
             '/sign-up-screen': (context) => const SignUpScreen(),
+            '/forgot-password-screen': (context) =>
+                const ForgotPasswordScreen(),
             '/verification-screen': (context) => const VerificationScreen(),
             '/link-google-screen': (context) => const LinkGoogleScreen(),
             '/screen-navigation': (context) => const ScreenNavigation(),

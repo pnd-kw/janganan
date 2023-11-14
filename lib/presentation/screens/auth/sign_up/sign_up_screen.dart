@@ -82,7 +82,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return null;
                         },
                         label: 'Email',
-                        hint: 'johndoe@gmail.com',
+                        hint: 'johndoe@example.com',
                       ),
                       ReusableFormField(
                         controller: _phoneController,
