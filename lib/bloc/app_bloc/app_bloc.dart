@@ -15,7 +15,6 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   AppBloc({
     required AuthenticationRepository authenticationRepository,
-    // required String initialUserId,
   })  : _authenticationRepository = authenticationRepository,
         super(
           authenticationRepository.currentUser.isNotEmpty

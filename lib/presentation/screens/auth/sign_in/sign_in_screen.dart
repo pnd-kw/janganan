@@ -15,10 +15,11 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  bool _isPasswordVisible = false;
+  bool _isLoginPasswordVisible = false;
+  bool _isButtonEnabled = false;
 
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _loginEmailController = TextEditingController();
+  final _loginPasswordController = TextEditingController();
 
   final _loginFormKey = GlobalKey<FormState>();
 
@@ -50,7 +51,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: Column(
                     children: [
                       ReusableFormField(
-                        controller: _emailController,
+                        controller: _loginEmailController,
                         obscureText: false,
                         validator: (text) {
                           if (text == null || text.isEmpty) {
@@ -65,110 +66,129 @@ class _SignInScreenState extends State<SignInScreen> {
                         hint: 'johndoe@gmail.com',
                       ),
                       ReusableFormField(
-                          controller: _passwordController,
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _isPasswordVisible = !_isPasswordVisible;
-                              });
-                            },
-                            icon: Icon(_isPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off),
-                          ),
-                          obscureText: !_isPasswordVisible,
-                          validator: (text) {
-                            if (text == null || text.isEmpty) {
-                              return 'Bidang ini tidak boleh kosong.';
-                            }
-                            return null;
+                        controller: _loginPasswordController,
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _isLoginPasswordVisible =
+                                  !_isLoginPasswordVisible;
+                            });
                           },
-                          label: 'Password',
-                          hint: 'Min 8 karakter, angka, huruf kapital'),
+                          icon: Icon(
+                            _isLoginPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                        ),
+                        obscureText: !_isLoginPasswordVisible,
+                        validator: (text) {
+                          if (text == null || text.isEmpty) {
+                            return 'Bidang ini tidak boleh kosong.';
+                          }
+                          if (!validPassword.hasMatch(text)) {
+                            return msgInvalidPassword;
+                          }
+                          return null;
+                        },
+                        onChanged: (text) {
+                          if (text.length >= 8) {
+                            setState(() {
+                              _isButtonEnabled = true;
+                            });
+                          }
+                        },
+                        label: 'Password',
+                        hint: 'Min 8 karakter, angka, huruf kapital',
+                      ),
                     ],
                   ),
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: BlocListener<SignInCubit, SignInState>(
-                      listener: (context, signInState) {
-                        if (signInState.status == SignInStatus.sendingRequest) {
-                          showDialog(
-                            context: context,
-                            builder: (context) =>
-                                const ReusableProgressDialog(),
-                          );
-                        } else if (signInState.status == SignInStatus.success) {
-                          if (signInState.method ==
-                              SignInMethod.emailAndPassword) {
-                            if (signInState.userVerificationStatus ==
-                                UserVerificationStatus.unverifiedUser) {
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                  '/verification-screen', (route) => false);
-                            } else if (signInState.userVerificationStatus ==
-                                UserVerificationStatus.verifiedUser) {
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                  '/screen-navigation', (route) => false);
-                            }
-                          }
-                        } else if (signInState.status == SignInStatus.failure) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => ReusableAlertDialog(
-                              title: 'Terdapat Kesalahan',
-                              content:
-                                  'Otentikasi gagal, periksa kembali alamat email, password, dan koneksi internet.',
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text(
-                                    'Tutup',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onBackground),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      },
-                      child: ElevatedButton(
-                        onPressed: _emailController.text.isNotEmpty &&
-                                _passwordController.text.isNotEmpty
-                            ? () {
-                                if (_loginFormKey.currentState!.validate()) {
-                                  signInCubit.logInWithCredentials(
-                                    _emailController.text,
-                                    _passwordController.text,
-                                  );
-                                }
+                Builder(
+                  builder: (context) => Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 10),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: BlocListener<SignInCubit, SignInState>(
+                        listener: (context, signInState) {
+                          if (signInState.status ==
+                              SignInStatus.sendingRequest) {
+                            showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  const ReusableProgressDialog(),
+                            );
+                          } else if (signInState.status ==
+                              SignInStatus.success) {
+                            if (signInState.method ==
+                                SignInMethod.emailAndPassword) {
+                              if (signInState.userVerificationStatus ==
+                                  UserVerificationStatus.unverifiedUser) {
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    '/verification-screen', (route) => false);
+                              } else if (signInState.userVerificationStatus ==
+                                  UserVerificationStatus.verifiedUser) {
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    '/screen-navigation', (route) => false);
                               }
-                            : null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColor.secondaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                            }
+                          } else if (signInState.status ==
+                              SignInStatus.failure) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => ReusableAlertDialog(
+                                title: 'Terdapat Kesalahan',
+                                content:
+                                    'Otentikasi gagal, periksa kembali alamat email, password, dan koneksi internet.',
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      'Tutup',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        },
+                        child: ElevatedButton(
+                          onPressed: _isButtonEnabled
+                              ? () {
+                                  if (_loginFormKey.currentState!.validate()) {
+                                    signInCubit.logInWithCredentials(
+                                      _loginEmailController.text,
+                                      _loginPasswordController.text,
+                                    );
+                                  }
+                                }
+                              : null,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.secondaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            elevation: 2,
                           ),
-                          elevation: 2,
-                        ),
-                        child: Text(
-                          'LOGIN',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.background),
+                          child: Text(
+                            'LOGIN',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .background),
+                          ),
                         ),
                       ),
                     ),

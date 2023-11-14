@@ -4,16 +4,18 @@ class ReusableFormField extends StatelessWidget {
   const ReusableFormField({
     super.key,
     required this.controller,
-    this.obscureText = true,
+    this.obscureText,
     required this.validator,
+    this.onChanged,
     this.suffixIcon,
     required this.label,
     required this.hint,
   });
 
   final TextEditingController controller;
-  final bool obscureText;
+  final bool? obscureText;
   final String? Function(String?) validator;
+  final void Function(String)? onChanged;
   final Widget? suffixIcon;
   final String label;
   final String hint;
@@ -24,8 +26,9 @@ class ReusableFormField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: TextFormField(
         controller: controller,
-        obscureText: obscureText,
+        obscureText: obscureText ?? true,
         validator: validator,
+        onChanged: onChanged,
         decoration: InputDecoration(
           suffixIcon: suffixIcon,
           labelText: label,

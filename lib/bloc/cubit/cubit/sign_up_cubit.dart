@@ -41,7 +41,6 @@ class SignUpCubit extends Cubit<SignUpState> {
         email: email,
         password: password,
         phoneNumber: phoneNumber,
-        // userVerificationStatus: 'unverified',
         authMethodType: 'email',
         isVerified: false,
       );

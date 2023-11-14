@@ -64,8 +64,6 @@ class Janganan extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // String initialUserId = "";
-
     return RepositoryProvider.value(
       value: _authenticationRepository,
       child: MultiBlocProvider(
@@ -73,9 +71,7 @@ class Janganan extends StatelessWidget {
           BlocProvider(
               create: (context) => AppBloc(
                     authenticationRepository: _authenticationRepository,
-                  )
-              // initialUserId: initialUserId),
-              ),
+                  )),
           BlocProvider(
             create: (context) => SignUpCubit(_authenticationRepository),
           ),

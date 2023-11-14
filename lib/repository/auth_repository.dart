@@ -253,7 +253,6 @@ class AuthenticationRepository {
 
           await _firestoreRepository
               .updateLinkedAuthMethod(userId!, 'email', {'isVerified': true});
-          // await _prefs.setString('authMethod', 'email');
         }
         return true;
       } else {

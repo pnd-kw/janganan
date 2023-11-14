@@ -23,13 +23,6 @@ void main() {
     await tester.pumpWidget(Janganan(
       authenticationRepository: AuthenticationRepository(
         prefs: prefs,
-        // otpUtil: OtpUtil(
-        //     firebaseAuth: firebase_auth.FirebaseAuth.instance,
-        //     firestoreRepository: FirestoreRepository())),
-        // verificationCubit: VerificationCubit(
-        //     otpUtil: OtpUtil(
-        //         firebaseAuth: firebase_auth.FirebaseAuth.instance,
-        //         firestoreRepository: FirestoreRepository())),
       ),
     ));
 
@@ -44,5 +37,26 @@ void main() {
     // Verify that our counter has incremented.
     expect(find.text('0'), findsNothing);
     expect(find.text('1'), findsOneWidget);
+
+    // Ensure the login button is initially disabled.
+    // expect(find.byType(ElevatedButton), findsOneWidget);
+    // expect(tester.widget<ElevatedButton>(find.byType(ElevatedButton)).enabled,
+    //     isFalse);
+
+    // // Enter valid email and password.
+    // await tester.enterText(
+    //     find.byType(TextFormField).at(0), 'bloodyraven7@gmail.com');
+    // await tester.enterText(find.byType(TextFormField).at(1), 'Pandu1992');
+
+    // // Pump the widget again.
+    // await tester.pump();
+
+    // // Ensure the login button is enabled.
+    // expect(tester.widget<ElevatedButton>(find.byType(ElevatedButton)).enabled,
+    //     isTrue);
+
+    // // Tap the login button.
+    // await tester.tap(find.byType(ElevatedButton));
+    // await tester.pump();
   });
 }
