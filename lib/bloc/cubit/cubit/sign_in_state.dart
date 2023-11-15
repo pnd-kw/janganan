@@ -62,7 +62,7 @@ class SignInState extends Equatable {
   final GetExistingUserStatus getExistingUserStatus;
   final LinkStatus linkStatus;
 
-  bool get isValid => email.isNotEmpty && password.isNotEmpty;
+  // bool get isValid => email.isNotEmpty && password.isNotEmpty;
 
   SignInState copyWith({
     String? email,

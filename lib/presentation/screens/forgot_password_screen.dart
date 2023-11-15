@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:janganan/bloc/cubit/cubit/reset_password_cubit.dart';
+import 'package:janganan/presentation/widgets/reusable_alert_dialog.dart';
 import 'package:janganan/presentation/widgets/reusable_form_field.dart';
 import 'package:janganan/utils/constants/colors.dart';
 import 'package:janganan/utils/regex_validator.dart';
@@ -11,10 +14,14 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  bool _isButtonEnabled = false;
+
   final _forgotPasswordEmailController = TextEditingController();
   final _forgotPasswordFormKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final resetPasswordCubit = BlocProvider.of<ResetPasswordCubit>(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Center(
@@ -57,6 +64,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     autovalidateMode: AutovalidateMode.always,
                     child: ReusableFormField(
                       controller: _forgotPasswordEmailController,
+                      obscureText: false,
                       validator: (text) {
                         if (text == null || text.isEmpty) {
                           return 'Bidang ini tidak boleh kosong';
@@ -66,37 +74,93 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         }
                         return null;
                       },
+                      onChanged: (text) {
+                        setState(() {
+                          _isButtonEnabled = true;
+                        });
+                      },
                       label: 'Email',
                       hint: 'johndoe@example.com',
                     ),
                   ),
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColor.secondaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                Builder(builder: (context) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 10),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child:
+                          BlocListener<ResetPasswordCubit, ResetPasswordState>(
+                        listener: (context, resetPasswordState) {
+                          if (resetPasswordState.resetStatus ==
+                              ResetPasswordStatus.sendingRequest) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content:
+                                    Text('Mengirimkan email reset password...'),
+                              ),
+                            );
+                          } else if (resetPasswordState.resetStatus ==
+                              ResetPasswordStatus.resetPasswordSuccess) {
+                            print('Reset success');
+                          } else if (resetPasswordState.resetStatus ==
+                              ResetPasswordStatus.resetPasswordFailed) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => ReusableAlertDialog(
+                                title: 'Terdapat Kesalahan',
+                                content: resetPasswordState.errorMessage!,
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      'Tutup',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        },
+                        child: ElevatedButton(
+                          onPressed: _isButtonEnabled
+                              ? () {
+                                  resetPasswordCubit.resetPassword(
+                                      _forgotPasswordEmailController.text);
+                                }
+                              : null,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.secondaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            elevation: 2,
+                          ),
+                          child: Text(
+                            'RESET PASSWORD',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .background),
+                          ),
                         ),
-                        elevation: 2,
-                      ),
-                      child: Text(
-                        'RESET PASSWORD',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(
-                                color:
-                                    Theme.of(context).colorScheme.background),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                }),
               ],
             ),
           ),

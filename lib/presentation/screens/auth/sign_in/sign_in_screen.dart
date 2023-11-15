@@ -134,31 +134,34 @@ class _SignInScreenState extends State<SignInScreen> {
                             }
                           } else if (signInState.status ==
                               SignInStatus.failure) {
-                            showDialog(
-                              context: context,
-                              builder: (context) => ReusableAlertDialog(
-                                title: 'Terdapat Kesalahan',
-                                content:
-                                    'Otentikasi gagal, periksa kembali alamat email, password, dan koneksi internet.',
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text(
-                                      'Tutup',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onBackground),
+                            if (signInState.method ==
+                                SignInMethod.emailAndPassword) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => ReusableAlertDialog(
+                                  title: 'Terdapat Kesalahan',
+                                  content: signInState.errorMessage!,
+                                  // 'Otentikasi gagal, periksa kembali alamat email, password, dan koneksi internet.',
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text(
+                                        'Tutup',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium!
+                                            .copyWith(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onBackground),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            );
+                                  ],
+                                ),
+                              );
+                            }
                           }
                         },
                         child: ElevatedButton(
@@ -253,31 +256,34 @@ class _SignInScreenState extends State<SignInScreen> {
                           }
                         } else if (googleSignInState.status ==
                             SignInStatus.failure) {
-                          showDialog(
-                            context: context,
-                            builder: (context) => ReusableAlertDialog(
-                              title: 'Terdapat Kesalahan',
-                              content:
-                                  'Masalah kredensial atau sambungan internet.',
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text(
-                                    'Tutup',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium!
-                                        .copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onBackground),
+                          if (googleSignInState.method ==
+                              SignInMethod.googleSignIn) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => ReusableAlertDialog(
+                                title: 'Terdapat Kesalahan',
+                                content: googleSignInState.errorMessage!,
+                                // 'Masalah kredensial atau sambungan internet.',
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      'Tutup',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
+                                ],
+                              ),
+                            );
+                          }
                         }
                       },
                       child: TextButton.icon(

@@ -263,6 +263,22 @@ class AuthenticationRepository {
     }
   }
 
+  Future<void> resetPassword(String email) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      throw const ResetPasswordFailure();
+    }
+  }
+
+  Future<void> updatePassword(String newPassword) async {
+    try {
+      await _firebaseAuth.currentUser!.updatePassword(newPassword);
+    } catch (e) {
+      throw const UpdatePasswordFailure();
+    }
+  }
+
   Future<void> logOut() async {
     try {
       await Future.wait([

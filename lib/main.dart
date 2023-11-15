@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:janganan/bloc/app_bloc/app_bloc.dart';
 import 'package:janganan/bloc/bottom_navigation/bottom_navigation_bloc.dart';
+import 'package:janganan/bloc/cubit/cubit/reset_password_cubit.dart';
 import 'package:janganan/bloc/cubit/cubit/sign_in_cubit.dart';
 import 'package:janganan/bloc/cubit/cubit/sign_up_cubit.dart';
 import 'package:janganan/bloc/cubit/cubit/verification_cubit.dart';
@@ -81,6 +82,9 @@ class Janganan extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => VerificationCubit(_authenticationRepository),
+          ),
+          BlocProvider(
+            create: (context) => ResetPasswordCubit(_authenticationRepository),
           ),
           BlocProvider(
             create: (context) => BottomNavigationBloc(),

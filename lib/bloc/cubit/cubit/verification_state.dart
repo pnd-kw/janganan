@@ -27,7 +27,7 @@ class VerificationState extends Equatable {
   final int remainingTime;
   final String countdownText;
 
-  bool get isValid => code.isNotEmpty;
+  // bool get isValid => code.isNotEmpty;
 
   VerificationState copyWith({
     String? code,

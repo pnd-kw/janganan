@@ -115,8 +115,8 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         context: context,
                         builder: (context) => ReusableAlertDialog(
                           title: 'Verification Failed',
-                          content:
-                              'Verifikasi gagal kredensial tidak cocok, periksa kembali kode otp atau koneksi internet.',
+                          content: verificationState.errorMessage!,
+                          // 'Verifikasi gagal kredensial tidak cocok, periksa kembali kode otp atau koneksi internet.',
                           actions: [
                             TextButton(
                               onPressed: () {

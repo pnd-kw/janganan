@@ -26,7 +26,7 @@ class SignUpState extends Equatable {
   final SignUpStatus status;
   // final bool isLoading;
 
-  bool get isValid => email.isNotEmpty && password.isNotEmpty;
+  // bool get isValid => email.isNotEmpty && password.isNotEmpty;
 
   SignUpState copyWith({
     String? username,
