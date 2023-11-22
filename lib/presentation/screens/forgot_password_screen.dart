@@ -103,7 +103,34 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             );
                           } else if (resetPasswordState.resetStatus ==
                               ResetPasswordStatus.resetPasswordSuccess) {
-                            print('Reset success');
+                            Navigator.of(context).pop();
+                            Navigator.of(context)
+                                .pushReplacementNamed('/sign-in-screen');
+                            showDialog(
+                              context: context,
+                              builder: (context) => ReusableAlertDialog(
+                                title: 'Permintaan Berhasil',
+                                content:
+                                    'Silahkan cek email yang terdaftar dan ikuti link yang diberikan untuk merubah password.',
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text(
+                                      'Tutup',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
                           } else if (resetPasswordState.resetStatus ==
                               ResetPasswordStatus.resetPasswordFailed) {
                             showDialog(
