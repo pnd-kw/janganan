@@ -31,25 +31,4 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
       }
     }
   }
-
-  Future<void> updatePassword(String newPassword) async {
-    try {
-      emit(state.copyWith(updateStatus: UpdatePasswordStatus.initial));
-
-      await _authenticationRepository.updatePassword(newPassword);
-
-      emit(state.copyWith(
-          updateStatus: UpdatePasswordStatus.updatePasswordSuccess));
-    } catch (e) {
-      if (e is FirebaseAuthException) {
-        emit(state.copyWith(
-            updateStatus: UpdatePasswordStatus.updatePasswordFailed,
-            errorMessage: e.message));
-      } else {
-        emit(state.copyWith(
-            updateStatus: UpdatePasswordStatus.updatePasswordFailed,
-            errorMessage: 'Gagal memperbarui password.'));
-      }
-    }
-  }
 }
